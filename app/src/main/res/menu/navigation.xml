@@ -8,21 +8,21 @@
 
     <item
         android:id="@+id/bot_nav_workshops"
-        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:icon="@drawable/ic_workshops_24dp"
         android:title="@string/bot_nav_workshops_title" />
 
     <item
         android:id="@+id/bot_nav_passport"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_passport_24dp"
         android:title="@string/bot_nav_passport_title" />
 
     <item
         android:id="@+id/bot_nav_battles"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_monochrome_photos_black_24dp"
         android:title="@string/bot_nav_battles_title" />
 
     <item
         android:id="@+id/bot_nav_info"
-        android:icon="@drawable/ic_notifications_black_24dp"
+        android:icon="@drawable/ic_info_24dp"
         android:title="@string/bot_nav_info_title" />
 </menu>
