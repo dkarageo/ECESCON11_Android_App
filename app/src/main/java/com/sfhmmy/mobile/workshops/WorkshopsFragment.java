@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import com.sfhmmy.mobile.R;
 
@@ -67,6 +68,14 @@ public class WorkshopsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_workshops, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        WebView webView = view.findViewById(R.id.workshops_webview);
+        webView.loadUrl("https://sfhmmy.gr/%CF%84%CE%BF-%CF%83%CF%85%CE%BD%CE%AD%CE%B4%CF%81%CE%B9%CE%BF/workshops");
     }
 
     // TODO: Rename method, update argument and hook method into UI event

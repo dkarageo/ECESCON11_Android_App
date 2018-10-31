@@ -6,11 +6,9 @@
     android:orientation="vertical"
     tools:context=".workshops.WorkshopsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/workshopsTempText1"
+    <WebView
+        android:id="@+id/workshops_webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="TODO: Implement workshops fragment." />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

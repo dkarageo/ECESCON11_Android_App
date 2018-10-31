@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 
 /**
@@ -75,8 +76,17 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        WebView webView = view.findViewById(R.id.home_webview);
+        webView.loadUrl("https://sfhmmy.gr/");
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
 //        if (context instanceof OnFragmentInteractionListener) {
 //            mListener = (OnFragmentInteractionListener) context;
 //        } else {

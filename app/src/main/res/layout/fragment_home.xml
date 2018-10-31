@@ -6,17 +6,9 @@
     android:orientation="vertical"
     tools:context=".HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <TextView
-        android:id="@+id/homeTempText2"
+    <WebView
+        android:id="@+id/home_webview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TODO: Home Fragment" />
+        android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/homeTempText1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="This is going to be my homescreen." />
 </LinearLayout>

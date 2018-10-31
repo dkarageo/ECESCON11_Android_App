@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import com.sfhmmy.mobile.R;
 
@@ -67,6 +68,14 @@ public class PassportFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_passport, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        WebView webView = view.findViewById(R.id.passport_webview);
+        webView.loadUrl("https://sfhmmy.gr/%CE%B1%CF%85%CE%B8%CE%B5%CE%BD%CF%84%CE%B9%CE%BA%CE%BF%CF%80%CE%BF%CE%AF%CE%B7%CF%83%CE%B7/%CF%83%CF%8D%CE%BD%CE%B4%CE%B5%CF%83%CE%B7");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
