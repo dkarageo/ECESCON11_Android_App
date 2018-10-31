@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Ecescon</string>
 
-    <!-- Bottom Navigation -->
+    <!-- Bottom Navigation Titles-->
     <string name="bot_nav_home_title">Home</string>
     <string name="bot_nav_workshops_title">Workshops</string>
     <string name="bot_nav_passport_title">My Card</string>

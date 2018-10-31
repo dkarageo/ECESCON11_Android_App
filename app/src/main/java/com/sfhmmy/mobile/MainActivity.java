@@ -100,12 +100,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initially set activity's fragment to home.
-        Fragment homeFrag = new HomeFragment();
-        activeFragments.put("home", homeFrag);
-        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.add(R.id.main_fragment_container, homeFrag);
-        t.commit();
+        if (savedInstanceState == null) {
+            // Initially set activity's fragment to home.
+            Fragment homeFrag = new HomeFragment();
+            activeFragments.put("home", homeFrag);
+            FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+            t.add(R.id.main_fragment_container, homeFrag);
+            t.commit();
+        }
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
