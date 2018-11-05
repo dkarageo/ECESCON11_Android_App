@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements TopLevelFragmentEventsListener {
 
     // A map for all active fragments navigable from bottom navigation bar.
     private Map<String, Fragment> activeFragments = new HashMap<>();
@@ -144,5 +145,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         switchCausedByBackButton = false;
+    }
+
+    @Override
+    public void updateTitle(String newTitle) {
+        setTitle(newTitle);
     }
 }
