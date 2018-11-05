@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 
 import com.sfhmmy.mobile.R;
+import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +30,7 @@ public class InfoFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    private TopLevelFragmentEventsListener mTopListener;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -79,26 +80,36 @@ public class InfoFragment extends Fragment {
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+//        if (mListener != null) {
+//            mListener.onFragmentInteraction(uri);
+//        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (mTopListener != null) {
+            mTopListener.updateTitle(getString(R.string.info_title));
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
+
+        if (context instanceof TopLevelFragmentEventsListener) {
+            mTopListener = (TopLevelFragmentEventsListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implent TopLevelFragmentEventsListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mTopListener = null;
     }
 
     /**

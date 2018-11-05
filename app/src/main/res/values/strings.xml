@@ -8,6 +8,13 @@
     <string name="bot_nav_battles_title">Battles</string>
     <string name="bot_nav_info_title">Conference Info</string>
 
+    <!-- Fragment titles (as displayed on ActionBar of container Activity) -->
+    <string name="home_title">Home</string>
+    <string name="workshops_title">Workshops</string>
+    <string name="passport_title">My Conference Card</string>
+    <string name="battles_title">Photoshop Battles</string>
+    <string name="info_title">The Conference</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
