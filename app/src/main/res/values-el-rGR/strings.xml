@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ΣΦΗΜΜΥ 11</string>
+
+    <!-- Bottom Navigation Titles-->
+    <string name="bot_nav_home_title">Αρχική</string>
+    <string name="bot_nav_workshops_title">Δραστηριότητες</string>
+    <string name="bot_nav_passport_title">Κάρτα Συνεδρίου</string>
+    <string name="bot_nav_battles_title">Μάχες</string>
+    <string name="bot_nav_info_title">Πληροφορίες</string>
+
+    <!-- Fragment titles (as displayed on ActionBar of container Activity) -->
+    <string name="home_title">Το σφημμυ μου</string>
+    <string name="workshops_title">Οι δραστηριότητές μου</string>
+    <string name="passport_title">Κάρτα συνεδρίου</string>
+    <string name="battles_title">Photoshop Battles</string>
+    <string name="info_title">Το συνέδριό μας</string>
+</resources>
