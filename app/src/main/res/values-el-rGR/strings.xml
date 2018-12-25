@@ -15,4 +15,14 @@
     <string name="passport_title">Κάρτα συνεδρίου</string>
     <string name="battles_title">Photoshop Battles</string>
     <string name="info_title">Το συνέδριό μας</string>
+
+    <!-- Strings related to login -->
+    <string name="loginForm_logoDescription">ECESCON 11 Logo</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="error_invalid_email">Η διεύθυνση email δεν είναι έγκυρη</string>
+    <string name="error_invalid_password">Το password είναι πολύ σύντομο</string>
+    <string name="error_incorrect_password">Το password είναι λανθασμένο</string>
+    <string name="error_field_required">Το πεδίο είναι υποχρεωτικό</string>
+    <string name="error_login_failed">Αποτυχία εισόδου</string>
 </resources>
