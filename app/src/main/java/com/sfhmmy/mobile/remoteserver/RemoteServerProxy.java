@@ -15,7 +15,8 @@ public class RemoteServerProxy {
             Thread.sleep(2000);
         } catch (InterruptedException e) {}
 
-        if (email.equals("user@gmail.com") && password.equals("user")) return "abcdef123";
+        if (email.equals("user@gmail.com") && password.equals("user")) return "user123token";
+        else if(email.equals("secretary@gmail.com") && password.equals("secretary")) return "secretary123token";
         else return null;
     }
 
@@ -44,6 +45,19 @@ public class RemoteServerProxy {
             Thread.sleep(1000);
         } catch (InterruptedException e) {}
 
-        return new User(1001, "user@gmail.com", "Kostas Dimitriou");
+        User u = null;
+
+        if (accessToken.equals("secretary123token")) {
+            u = new User(5, "secretary@gmail.com", "Fat Elephant");
+            u.setToken(accessToken);
+            u.setRole(User.USER_ROLE_SECRETARY);
+
+        } else if (accessToken.equals("user123token")) {
+            u = new User(1001, "user@gmail.com", "Kostas Dimitriou");
+            u.setToken(accessToken);
+            u.setRole(User.USER_ROLE_VISITOR);
+        }
+
+        return u;
     }
 }

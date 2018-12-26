@@ -26,6 +26,7 @@ public class UserManager {
     private static String USER_PREFERENCES_NAME_ID = "com.sfhmmy.mobile.users.name";
     private static String USER_PREFERENCES_EMAIL_ID = "com.sfhmmy.mobile.users.email";
     private static String USER_PREFERENCES_UID_ID = "com.sfhmmy.mobile.users.id";
+    private static String USER_PREFERENCES_ROLE_ID = "com.sfhmmy.mobile.users.role";
 
     // Singleton reference of UserManager.
     private static UserManager mUserManager = null;
@@ -114,6 +115,12 @@ public class UserManager {
         return authenticationListeners.remove(l);
     }
 
+    public boolean isCurrentUserSecretary() {
+        if (mCurrentUser != null && mCurrentUser.getRole().equals(User.USER_ROLE_SECRETARY)) {
+            return true;
+        } else return false;
+    }
+
     /**
      *
      */
@@ -136,6 +143,7 @@ public class UserManager {
         if (u.getName() != null) spe.putString(USER_PREFERENCES_NAME_ID, u.getName());
         if (u.getEmail() != null) spe.putString(USER_PREFERENCES_EMAIL_ID, u.getEmail());
         if (u.getToken() != null) spe.putString(USER_PREFERENCES_TOKEN_ID, u.getToken());
+        if (u.getRole() != null) spe.putString(USER_PREFERENCES_ROLE_ID, u.getRole());
         if (u.getUid() > 0) spe.putLong(USER_PREFERENCES_UID_ID, u.getUid());
 
         spe.apply();
@@ -159,6 +167,7 @@ public class UserManager {
             u.setToken(sp.getString(USER_PREFERENCES_TOKEN_ID, ""));
             u.setName(sp.getString(USER_PREFERENCES_NAME_ID, ""));
             u.setEmail(sp.getString(USER_PREFERENCES_EMAIL_ID, ""));
+            u.setRole(sp.getString(USER_PREFERENCES_ROLE_ID, ""));
         }
 
         return u;
