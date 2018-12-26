@@ -1,6 +1,7 @@
 package com.sfhmmy.mobile;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class MainMenuFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private TopLevelFragmentEventsListener mTopListener;
 
     public MainMenuFragment() {
         // Required empty public constructor
@@ -47,6 +49,18 @@ public class MainMenuFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof TopLevelFragmentEventsListener) {
+            mTopListener = (TopLevelFragmentEventsListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement TopLevelFragmentEventsListener");
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -62,4 +76,18 @@ public class MainMenuFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_main_menu, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (mTopListener != null) {
+            mTopListener.updateTitle(getString(R.string.profile_menu_tile));
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mTopListener = null;
+    }
 }
