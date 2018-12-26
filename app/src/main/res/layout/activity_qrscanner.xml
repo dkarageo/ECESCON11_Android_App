@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".qr.QRScannerActivity">
 
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/qrscanner_demo_text"
+        android:text="This is QR Scanner Activity. Only accessible from secretary users." />
+
 </android.support.constraint.ConstraintLayout>

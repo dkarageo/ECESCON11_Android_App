@@ -17,6 +17,7 @@
 
     <!-- Main Action Bar Titles -->
     <string name="mainactivity_actionbar_menu_profile_title">Profile</string>
+    <string name="mainactivity_actionbar_scanner_title">QR Scanner</string>
 
     <!-- Strings related to login -->
     <string name="loginForm_logoDescription">ECESCON 11 Logo</string>

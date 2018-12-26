@@ -1,5 +1,6 @@
 package com.sfhmmy.mobile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -14,7 +15,9 @@ import android.view.View;
 
 import com.sfhmmy.mobile.battles.BattlesFragment;
 import com.sfhmmy.mobile.promo.InfoFragment;
+import com.sfhmmy.mobile.qr.QRScannerActivity;
 import com.sfhmmy.mobile.users.PassportFragment;
+import com.sfhmmy.mobile.users.UserManager;
 import com.sfhmmy.mobile.workshops.WorkshopsFragment;
 
 import java.util.HashMap;
@@ -169,10 +172,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Enable Scanner button for users with Secretary privileges.
+        MenuItem scannerButton = menu.findItem(R.id.mainactivity_actionbar_scanner);
+        if (UserManager.getUserManager().isCurrentUserSecretary()) scannerButton.setVisible(true);
+        else scannerButton.setVisible(false);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.mainactivity_actionbar_menu_profile:
                 displayProfileMenu(!isProfileMenuEnabled);
+                break;
+
+            case R.id.mainactivity_actionbar_scanner:
+                startActivity(new Intent(this, QRScannerActivity.class));
                 break;
 
             default:
