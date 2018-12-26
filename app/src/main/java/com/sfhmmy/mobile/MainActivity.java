@@ -7,7 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.sfhmmy.mobile.battles.BattlesFragment;
 import com.sfhmmy.mobile.promo.InfoFragment;
@@ -21,11 +24,16 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity
         implements TopLevelFragmentEventsListener {
 
+    BottomNavigationView navBar;
+
     // A map for all active fragments navigable from bottom navigation bar.
     private Map<String, Fragment> activeFragments = new HashMap<>();
     // An indicator set to true when a fragment change is caused by a press to back button (and
     // e.g. not from a click to navigation bar buttons).
     private boolean switchCausedByBackButton = false;
+    // An indicator set to true when profile menu is open (i.e. MainMenuFragment
+    // is the current one).
+    private boolean isProfileMenuEnabled = false;
 
     // Listener for clicks on bottom navigation bar items.
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -110,12 +118,20 @@ public class MainActivity extends AppCompatActivity
             t.commit();
         }
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navBar = (BottomNavigationView) findViewById(R.id.navigation);
+        if (navBar == null) throw new RuntimeException("Failed to acquire bottom navigation bar");
+        navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     @Override
     public void onBackPressed() {
+
+        // When profile menu is enabled, the back button should hide the menu and not switch
+        // between main fragments.
+        if (isProfileMenuEnabled) {
+            displayProfileMenu(false);
+            return;
+        }
 
         FragmentManager fm = getSupportFragmentManager();
         switchCausedByBackButton = true;
@@ -135,8 +151,6 @@ public class MainActivity extends AppCompatActivity
                 menuItemId = R.id.bot_nav_home;
             }
 
-            BottomNavigationView navBar = findViewById(R.id.navigation);
-            if (navBar == null) throw new RuntimeException("Failed to acquire bottom navigation bar");
             navBar.setSelectedItemId(menuItemId);
 
             fm.popBackStack();
@@ -148,7 +162,62 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mainactivity_actionbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.mainactivity_actionbar_menu_profile:
+                displayProfileMenu(!isProfileMenuEnabled);
+                break;
+
+            default:
+                return false;
+        }
+
+        return true;
+    }
+
+    @Override
     public void updateTitle(String newTitle) {
         setTitle(newTitle);
+    }
+
+    /**
+     * Displays/Hides the profile menu of the application.
+     */
+    private void displayProfileMenu(boolean display) {
+        if (display && !isProfileMenuEnabled) {
+            MainMenuFragment menuFrag;
+
+            if (!activeFragments.containsKey("profile_menu")) {
+                menuFrag = new MainMenuFragment();
+                activeFragments.put("profile_menu", menuFrag);
+            } else {
+                menuFrag = (MainMenuFragment) activeFragments.get("profile_menu");
+            }
+
+            FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+            t.replace(R.id.main_fragment_container, menuFrag);
+            t.addToBackStack("profile_menu");
+            t.commit();
+
+            // Bottom nav bar should be hidden during menu display.
+            navBar.setVisibility(View.GONE);
+
+            isProfileMenuEnabled = true;
+
+        } else if (!display && isProfileMenuEnabled) {
+            getSupportFragmentManager().popBackStack(
+                    "profile_menu", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            navBar.setVisibility(View.VISIBLE);
+
+            isProfileMenuEnabled = false;
+        }
     }
 }
