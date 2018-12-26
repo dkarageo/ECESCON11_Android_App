@@ -6,7 +6,7 @@
     <string name="bot_nav_workshops_title">Workshops</string>
     <string name="bot_nav_passport_title">My Card</string>
     <string name="bot_nav_battles_title">Battles</string>
-    <string name="bot_nav_info_title">Conference Info</string>
+    <string name="bot_nav_info_title">Info</string>
 
     <!-- Fragment titles (as displayed on ActionBar of container Activity) -->
     <string name="home_title">Home</string>
