@@ -7,31 +7,39 @@
     android:padding="8dp"
     tools:context=".users.LoginActivity">
 
-    <!-- TODO: Add an image of ECESCON 11 logo. -->
     <ImageView
         android:id="@+id/loginForm_logo"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
         android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="48dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:scaleType="centerInside"
         android:contentDescription="@string/loginForm_logoDescription"
+        android:src="@drawable/full_logo_light_224_140"
+        android:background="@drawable/login_rounded_logo_background"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorAccent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/loginForm_credentialsWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginForm_logo">
+        app:layout_constraintTop_toBottomOf="@id/loginForm_logo">
 
         <!-- TextInputLayout seems to be broken at SDK version 28.0 -->
         <!--<android.support.design.widget.TextInputLayout
