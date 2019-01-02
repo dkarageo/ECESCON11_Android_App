@@ -30,4 +30,8 @@
     <string name="error_incorrect_password">Το password είναι λανθασμένο</string>
     <string name="error_field_required">Το πεδίο είναι υποχρεωτικό</string>
     <string name="error_login_failed">Αποτυχία εισόδου</string>
+
+    <!-- String related to passport -->
+    <string name="passport_profile_img_desc">Εικόνα Προφίλ</string>
+    <string name="passport_qrcode_img_desc">QR Code</string>
 </resources>

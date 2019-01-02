@@ -1,67 +1,74 @@
+/**
+ * PassportFragment.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
 package com.sfhmmy.mobile.users;
 
 import android.content.Context;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PassportFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PassportFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * PassportFragment provides a view of user's conference card.
+ *
+ * It displays a QRCode suitable for check-in system along with basic user information.
+ *
+ * It can be used as the main content of an activity, by setting that activity as a
+ * TopLevelFragmentEventsListener.
  */
 public class PassportFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private TopLevelFragmentEventsListener mTopListener;
+
+    private ImageView mQRCode;
+    private ImageView mProfilePicture;
+    private TextView  mUserName;
+    private TextView  mUserEmail;
+    private TextView  mUserOrg;
+
+    private Bitmap qrImg = null;  // Bitmap of QR Code, generated once upon fragment's creation.
+
 
     public PassportFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PassportFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PassportFragment newInstance(String param1, String param2) {
-        PassportFragment fragment = new PassportFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof TopLevelFragmentEventsListener) {
+            mTopListener = (TopLevelFragmentEventsListener) context;
+        } else {
+            throw new RuntimeException(context.toString() +
+                                       " must implement TopLevelFragmentEventsListener");
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
@@ -75,35 +82,40 @@ public class PassportFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        WebView webView = view.findViewById(R.id.passport_webview);
-        webView.loadUrl("https://sfhmmy.gr/%CE%B1%CF%85%CE%B8%CE%B5%CE%BD%CF%84%CE%B9%CE%BA%CE%BF%CF%80%CE%BF%CE%AF%CE%B7%CF%83%CE%B7/%CF%83%CF%8D%CE%BD%CE%B4%CE%B5%CF%83%CE%B7");
-    }
+        // Acquire handlers to UI elements.
+        mQRCode         = (ImageView) getActivity().findViewById(R.id.passport_qrcode);
+        mProfilePicture = (ImageView) getActivity().findViewById(R.id.passport_profile_img);
+        mUserName       = (TextView)  getActivity().findViewById(R.id.passport_name);
+        mUserEmail      = (TextView)  getActivity().findViewById(R.id.passport_email);
+        mUserOrg        = (TextView)  getActivity().findViewById(R.id.passport_organization);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
+        // Fill UI elements with content.
+        User curUser = UserManager.getUserManager().getCurrentUser();
+        if (curUser != null) {
+            String email = curUser.getEmail();
+            String name  = curUser.getName();
+            String org   = curUser.getOrganization();
+            Bitmap prImg = curUser.getProfilePicture();
+
+            // The first time fragment is created, generate a QRCode Bitmap.
+            // TODO: Decouple QR Bitmap generation from fragment's lifecycle.
+            if (qrImg == null) qrImg = email != null ? generateQRCodeBitmap(email) : null;
+
+            if (prImg != null) mProfilePicture.setImageBitmap(prImg);
+            if (qrImg != null) mQRCode.setImageBitmap(qrImg);
+            if (name  != null) mUserName.setText(name);
+            if (email != null) mUserEmail.setText(curUser.getEmail());
+            if (org   != null) mUserOrg.setText(org);
+        }
+
+        // Make sure that profile picture is not hidden by qr code wrapper.
+        mProfilePicture.bringToFront();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        if (mTopListener != null) {
-            mTopListener.updateTitle(getString(R.string.passport_title));
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof TopLevelFragmentEventsListener) {
-            mTopListener = (TopLevelFragmentEventsListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement TopLevelFragmentEventsListener");
-        }
+        if (mTopListener != null) mTopListener.updateTitle(getString(R.string.passport_title));
     }
 
     @Override
@@ -113,17 +125,24 @@ public class PassportFragment extends Fragment {
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * Generates a QRCode Bitmap encoding the provided content.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private Bitmap generateQRCodeBitmap(String content) {
+        Bitmap qrCodeBmp = null;
+
+        QRCodeWriter writer = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = writer.encode(content, BarcodeFormat.QR_CODE, 512, 512);
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+            qrCodeBmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    qrCodeBmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+        } catch (WriterException e) {}
+
+        return qrCodeBmp;
     }
 }
