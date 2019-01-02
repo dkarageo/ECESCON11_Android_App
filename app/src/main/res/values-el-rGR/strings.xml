@@ -25,6 +25,7 @@
     <string name="loginForm_logoDescription">ECESCON 11 Logo</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Είσοδος</string>
     <string name="error_invalid_email">Η διεύθυνση email δεν είναι έγκυρη</string>
     <string name="error_invalid_password">Το password είναι πολύ σύντομο</string>
     <string name="error_incorrect_password">Το password είναι λανθασμένο</string>
