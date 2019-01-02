@@ -3,6 +3,7 @@ package com.sfhmmy.mobile.users;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -24,6 +25,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -103,6 +105,11 @@ public class LoginActivity
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                    // Hide keyboard before starting login process.
+                    InputMethodManager imm =
+                            (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mCredentialsContainerView.getWindowToken(), 0);
+
                     attemptLogin();
                     return true;
                 }
@@ -114,6 +121,11 @@ public class LoginActivity
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Hide keyboard before starting login process.
+                InputMethodManager imm =
+                        (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(mCredentialsContainerView.getWindowToken(), 0);
+
                 attemptLogin();
             }
         });
