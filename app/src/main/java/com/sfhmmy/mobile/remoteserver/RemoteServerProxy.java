@@ -51,11 +51,13 @@ public class RemoteServerProxy {
             u = new User(5, "secretary@gmail.com", "Fat Elephant");
             u.setToken(accessToken);
             u.setRole(User.USER_ROLE_SECRETARY);
+            u.setOrganization("ECESCON11 Organizing Committee");
 
         } else if (accessToken.equals("user123token")) {
             u = new User(1001, "user@gmail.com", "Kostas Dimitriou");
             u.setToken(accessToken);
             u.setRole(User.USER_ROLE_VISITOR);
+            u.setOrganization("Aristotle University Of Thessaloniki");
         }
 
         return u;
