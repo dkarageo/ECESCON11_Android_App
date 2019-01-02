@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#ef6c00</color>
-    <color name="colorPrimaryDark">#e65100</color>
+    <!-- Primary Color Palette -->
+    <color name="colorPrimary">#ff4e00</color>
+    <color name="colorPrimaryDark">#d24000</color>
+    <color name="colorTextOnPrimary">#000000</color>
+    <color name="colorTextOnPrimaryDark">#ffffff</color>
+
+    <!-- Secondary Color Palette -->
+    <color name="colorSecondary">#424242</color>
+    <color name="colorSecondaryDark">#1b1b1b</color>
+    <color name="colorTextOnSecondary">#ffffff</color>
+    <color name="colorTextOnSecondaryDark">#ffffff</color>
+
+    <color name="colorLightUIBackground">#fbe9e7</color>
+    <color name="colorUIOverlay">#ffffff</color>
+
     <color name="colorAccent">#ff1744</color>
+
+    <!-- Generic colors -->
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
 </resources>
