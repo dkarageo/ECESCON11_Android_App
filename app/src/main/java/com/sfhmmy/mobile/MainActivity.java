@@ -15,7 +15,7 @@ import android.view.View;
 
 import com.sfhmmy.mobile.battles.BattlesFragment;
 import com.sfhmmy.mobile.promo.InfoFragment;
-import com.sfhmmy.mobile.qr.QRScannerActivity;
+import com.sfhmmy.mobile.checkins.CheckInActivity;
 import com.sfhmmy.mobile.users.PassportFragment;
 import com.sfhmmy.mobile.users.UserManager;
 import com.sfhmmy.mobile.workshops.WorkshopsFragment;
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.mainactivity_actionbar_scanner:
-                startActivity(new Intent(this, QRScannerActivity.class));
+                startActivity(new Intent(this, CheckInActivity.class));
                 break;
 
             default:

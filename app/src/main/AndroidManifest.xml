@@ -27,7 +27,7 @@
             android:label="@string/app_name">
         </activity>
 
-        <activity android:name=".qr.QRScannerActivity" />
+        <activity android:name=".checkins.CheckInActivity" />
 
         <activity
             android:name=".settings.SettingsActivity"
