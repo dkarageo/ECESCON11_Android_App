@@ -35,4 +35,8 @@
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Εικόνα Προφίλ</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
+
+    <!-- Camera scanner strings -->
+    <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
+    <string name="camera_scanner_permission_grant_button_text">Παραχώρηση Πρόσβασης</string>
 </resources>

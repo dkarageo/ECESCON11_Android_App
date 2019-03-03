@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.sfhmmy.mobile.R;
 
@@ -28,22 +29,38 @@ import com.sfhmmy.mobile.R;
  */
 public class CheckInActivity extends AppCompatActivity {
 
+    // Fragments of the PagerAdapter.
+    CameraScannerFragment mScannerFragment;
+    UsersListFragment     mUsersFragment;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin);
 
+        // Create and setup a new camera scanner fragment.
+        mScannerFragment = new CameraScannerFragment();
+        mScannerFragment.registerOnCodeFoundEventListener(
+                new CameraScannerFragment.OnCodeFoundEventListener() {
+            @Override
+            public void onCodeFound(String value) {
+                Toast.makeText(CheckInActivity.this, value, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Create and setup a new users list fragment.
+        mUsersFragment = new UsersListFragment();
+
+        // Setup view pager with scanner and users list fragments.
         QRScannerPagerAdapter pagerAdapter = null;
         ViewPager viewPager;
-
         try {
             pagerAdapter = new QRScannerPagerAdapter(getSupportFragmentManager());
         } catch (NullPointerException e) { e.printStackTrace(); }
-
         viewPager = findViewById(R.id.qrscanner_viewpager);
         viewPager.setAdapter(pagerAdapter);
     }
-
 
     public class QRScannerPagerAdapter extends FragmentPagerAdapter {
         QRScannerPagerAdapter(FragmentManager fm) {
@@ -54,9 +71,9 @@ public class CheckInActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new CameraScannerFragment();
+                    return mScannerFragment;
                 case 1:
-                    return new UsersListFragment();
+                    return mUsersFragment;
                 default:
                     return null;
             }

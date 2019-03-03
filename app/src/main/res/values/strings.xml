@@ -37,6 +37,10 @@
     <string name="passport_profile_img_desc">Profile Picture</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
 
+    <!-- Camera scanner strings -->
+    <string name="camera_scanner_permission_missing_warning_text">Access to camera is required in order to use QR Code Scanner.</string>
+    <string name="camera_scanner_permission_grant_button_text">Grant Permission</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
