@@ -12,6 +12,12 @@
     <color name="colorTextOnSecondary">#ffffff</color>
     <color name="colorTextOnSecondaryDark">#ffffff</color>
 
+    <!-- Error colors -->
+    <color name="warningBackgroundColor">#ffffbf</color>
+    <color name="warningTextOnWarningBackgroundColor">#000000</color>
+    <color name="errorBackgroundColor">#d50000</color>
+    <color name="errorTextOnErrorBackgroundColor">#ffffff</color>
+
     <color name="colorLightUIBackground">#fbe9e7</color>
     <color name="colorUIOverlay">#ffffff</color>
 
