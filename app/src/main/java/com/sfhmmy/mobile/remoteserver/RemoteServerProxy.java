@@ -1,9 +1,15 @@
 package com.sfhmmy.mobile.remoteserver;
 
+import android.os.Bundle;
+
 import com.sfhmmy.mobile.users.User;
 
 
 public class RemoteServerProxy {
+
+    public static final int RESPONSE_SUCCESS = 0;
+    public static final int RESPONSE_ERROR = 1;
+    public static final int RESPONSE_WARNING = 2;
 
     String baseUrl = "https://sfhmmy.gr/";
     String clientKey = "";
@@ -63,5 +69,44 @@ public class RemoteServerProxy {
         }
 
         return u;
+    }
+
+    public ResponseContainer checkInUser(String accessToken, String codeValue) {
+        ResponseContainer rc = new ResponseContainer();
+
+        try {
+            Thread.sleep(2000);
+        } catch(InterruptedException ex) {}
+
+        if (codeValue.equals("ecescon11://user")) {
+            rc.setObject(getUserProfile("user123token"));
+            rc.setMessage("User has already checked in today");
+            rc.setCode(RESPONSE_WARNING);
+        } else if (codeValue.equals("ecescon11://secretary")) {
+            rc.setObject(getUserProfile("secretary123token"));
+            rc.setMessage("Success");
+            rc.setCode(RESPONSE_SUCCESS);
+        } else {
+            rc.setObject(null);
+            rc.setMessage("Invalid code.");
+            rc.setCode(RESPONSE_ERROR);
+        }
+
+        return rc;
+    }
+
+
+    public class ResponseContainer {
+        private Object mObject;
+        private int    mCode;
+        private String mMessage;
+
+        public Object getObject() { return mObject; }
+        public int getCode() { return mCode; }
+        public String getMessage() { return mMessage; }
+
+        public void setObject(Object object) { mObject = object; }
+        public void setCode(int code) { mCode = code; }
+        public void setMessage(String message) { mMessage = message; }
     }
 }
