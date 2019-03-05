@@ -48,13 +48,15 @@ public class RemoteServerProxy {
         User u = null;
 
         if (accessToken.equals("secretary123token")) {
-            u = new User(5, "secretary@gmail.com", "Fat Elephant");
+            u = new User(5, "secretary@gmail.com", "Fat");
+            u.setSurname("Elephant");
             u.setToken(accessToken);
             u.setRole(User.USER_ROLE_SECRETARY);
             u.setOrganization("ECESCON11 Organizing Committee");
 
         } else if (accessToken.equals("user123token")) {
-            u = new User(1001, "user@gmail.com", "Kostas Dimitriou");
+            u = new User(1001, "user@gmail.com", "Kostas");
+            u.setSurname("Dimitriou");
             u.setToken(accessToken);
             u.setRole(User.USER_ROLE_VISITOR);
             u.setOrganization("Aristotle University Of Thessaloniki");
