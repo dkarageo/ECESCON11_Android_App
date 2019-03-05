@@ -114,7 +114,7 @@ public class CameraScannerFragment extends Fragment {
         mCodeScannerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCodeScanner.startPreview();
+                startScanner();
             }
         });
         displayCameraScanner();
@@ -125,7 +125,7 @@ public class CameraScannerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mCodeScanner.startPreview();
+        startScanner();
     }
 
     @Override
@@ -159,6 +159,8 @@ public class CameraScannerFragment extends Fragment {
     public void notifyOnCodeFoundEventListeners(String code) {
         for (OnCodeFoundEventListener l : mCodeFoundListeners) l.onCodeFound(code);
     }
+
+    public void startScanner() { mCodeScanner.startPreview(); }
 
     private void requestCameraPermission() {
         requestPermissions(new String[] {Manifest.permission.CAMERA}, 0);
