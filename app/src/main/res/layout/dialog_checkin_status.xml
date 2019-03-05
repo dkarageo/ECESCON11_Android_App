@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
+
+    <fr.castorflex.android.circularprogressbar.CircularProgressBar
+        android:id="@+id/checkin_status_loading_spinner"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:indeterminate="true"
+        app:cpb_color="@color/colorPrimary"
+        app:cpb_rotation_speed="1.0"
+        app:cpb_sweep_speed="1.0"
+        app:cpb_stroke_width="4dp"
+        app:cpb_min_sweep_angle="10"
+        app:cpb_max_sweep_angle="300"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
+
+    <FrameLayout
+        android:id="@+id/checkin_status_warning_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
+        android:background="@color/errorBackgroundColor"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/checkin_status_warning_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/errorTextOnErrorBackgroundColor"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/labels_text_size" />
+    </FrameLayout>
+
+    <GridLayout
+        android:id="@+id/checkin_status_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:columnCount="2"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/checkin_status_warning_area"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" >
+
+        <cdflynn.android.library.checkview.CheckView
+            android:id="@+id/checkin_status_checkmark"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:checkView_strokeColor="@color/green"
+            app:checkView_strokeWidth="2dp"
+            android:visibility="visible"
+            android:layout_columnSpan="2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_name_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkin_status_user_name_label_text"
+            android:layout_marginTop="16dp"
+            android:textSize="@dimen/labels_text_size" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/checkin_status_user_name_label_text"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
+            android:textSize="@dimen/labels_text_size" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_surname_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkin_status_user_surname_label_text"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/labels_text_size" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/checkin_status_user_surname_label_text"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="@dimen/labels_text_size" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_email_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkin_status_user_email_label_text"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/labels_text_size" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/checkin_status_user_email_label_text"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="@dimen/labels_text_size" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_org_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkin_status_user_org_label_text"
+            android:layout_marginTop="8dp"
+            android:textSize="@dimen/labels_text_size" />
+
+        <TextView
+            android:id="@+id/checkin_status_user_org"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/checkin_status_user_org_label_text"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="@dimen/labels_text_size" />
+    </GridLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

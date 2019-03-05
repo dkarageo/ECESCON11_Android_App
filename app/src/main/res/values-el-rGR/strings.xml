@@ -39,4 +39,11 @@
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
     <string name="camera_scanner_permission_grant_button_text">Παραχώρηση Πρόσβασης</string>
+
+    <!-- Check in status dialog strings -->
+    <string name="checkin_status_user_name_label_text">Όνομα:</string>
+    <string name="checkin_status_user_surname_label_text">Επίθετο:</string>
+    <string name="checkin_status_user_email_label_text">Email:</string>
+    <string name="checkin_status_user_org_label_text">Οργανισμός:</string>
+    <string name="checkin_status_done_button_text">OK</string>
 </resources>
