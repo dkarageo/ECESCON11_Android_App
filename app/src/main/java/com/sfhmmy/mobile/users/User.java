@@ -15,6 +15,8 @@ public class User {
     private String mToken;
     private String mRole;
     private Bitmap mProfilePicture;
+    private String mPassportValue;
+
 
     public User() {}
 
@@ -32,6 +34,7 @@ public class User {
     public String getRole() { return mRole; }
     public Bitmap getProfilePicture() { return mProfilePicture; }
     public String getOrganization() { return mOrganization; }
+    public String getPassportValue() { return mPassportValue; }
 
     public void setUid(long uid) { mUid = uid; }
     public void setEmail(String email) { mEmail = email; }
@@ -41,4 +44,5 @@ public class User {
     public void setRole(String role) { mRole = role; }
     public void setProfilePicture(Bitmap profilePicture) { mProfilePicture = profilePicture; }
     public void setOrganization(String organization) { mOrganization = organization; }
+    public void setPassportValue(String passportValue) { mPassportValue = passportValue; }
 }
