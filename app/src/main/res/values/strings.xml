@@ -48,6 +48,12 @@
     <string name="checkin_status_user_org_label_text">Organization:</string>
     <string name="checkin_status_done_button_text">OK</string>
 
+    <!-- Check in users list related strings -->
+    <string name="checkin_users_search_bar_hint">Enter user\'s name or email...</string>
+    <string name="checkin_users_list_item_name_surname_hint">Name Surname</string>
+    <string name="checkin_users_list_item_email_hint">Email</string>
+    <string name="checkin_users_list_item_checkin_button_text">Check In</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
