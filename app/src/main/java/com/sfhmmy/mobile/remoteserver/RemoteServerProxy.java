@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import com.sfhmmy.mobile.users.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class RemoteServerProxy {
 
@@ -59,6 +62,7 @@ public class RemoteServerProxy {
             u.setToken(accessToken);
             u.setRole(User.USER_ROLE_SECRETARY);
             u.setOrganization("ECESCON11 Organizing Committee");
+            u.setPassportValue("ecescon11://secretary");
 
         } else if (accessToken.equals("user123token")) {
             u = new User(1001, "user@gmail.com", "Kostas");
@@ -66,9 +70,36 @@ public class RemoteServerProxy {
             u.setToken(accessToken);
             u.setRole(User.USER_ROLE_VISITOR);
             u.setOrganization("Aristotle University Of Thessaloniki");
+            u.setPassportValue("ecescon11://user");
         }
 
         return u;
+    }
+
+    public ResponseContainer getUsersList(String accessToken) {
+
+        ResponseContainer rc = new ResponseContainer();
+
+        if (accessToken.equals("secretary123token")) {
+            List<User> users = new ArrayList<>();
+            users.add(getUserProfile("secretary123token"));
+            users.add(getUserProfile("user123token"));
+
+            rc.setObject(users);
+            rc.setCode(RESPONSE_SUCCESS);
+            rc.setMessage("Success");
+
+        } else if (accessToken.equals("user123token")) {
+            rc.setObject(new ArrayList<User>());
+            rc.setCode(RESPONSE_SUCCESS);
+            rc.setMessage("Success");
+        }
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {}
+
+        return rc;
     }
 
     public ResponseContainer checkInUser(String accessToken, String codeValue) {
