@@ -23,8 +23,7 @@
         android:paddingRight="8dp"
         android:scaleType="centerInside"
         android:contentDescription="@string/loginForm_logoDescription"
-        android:src="@drawable/full_logo_light_224_140"
-        android:background="@drawable/login_rounded_logo_background"
+        android:src="@drawable/full_logo_dark_224_114"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
