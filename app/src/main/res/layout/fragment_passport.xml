@@ -45,6 +45,15 @@
             android:paddingBottom="16dp" >
 
             <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:src="@drawable/full_logo_dark_224_114" />
+
+            <ImageView
                 android:id="@+id/passport_qrcode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
