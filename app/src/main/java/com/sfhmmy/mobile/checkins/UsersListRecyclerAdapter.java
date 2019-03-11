@@ -84,7 +84,6 @@ public class UsersListRecyclerAdapter
         // Update contents of given user.
         holder.mNameSurname.setText(String.format("%s %s", curUser.getName(), curUser.getSurname()));
         holder.mEmail.setText(curUser.getEmail());
-
         holder.mItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +92,6 @@ public class UsersListRecyclerAdapter
                         content.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
             }
         });
-
         holder.mCheckInButton.setOnClickListener(new CheckInButtonListener(curUser));
     }
 
@@ -166,7 +164,6 @@ public class UsersListRecyclerAdapter
             notifyDataSetChanged();
         }
     }
-
 
     private class CheckInButtonListener implements View.OnClickListener {
         User mAttachedUser;

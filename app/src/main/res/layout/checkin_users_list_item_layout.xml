@@ -67,11 +67,8 @@
                     android:text="@string/checkin_users_list_item_checkin_button_text"
                     android:layout_marginTop="4dp"
                     android:visibility="visible"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end" />
             </LinearLayout>
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
