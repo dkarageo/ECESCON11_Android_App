@@ -19,12 +19,16 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
+import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.users.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +53,7 @@ public class UsersListRecyclerAdapter
         public TextView mEmail;
         public Button   mCheckInButton;
         public View     mContentArea;
+        public TextView mLastCheckIn;
 
         public UserViewHolder(View v) {
             super(v);
@@ -57,6 +62,7 @@ public class UsersListRecyclerAdapter
             mEmail         = v.findViewById(R.id.checkin_users_list_item_email);
             mCheckInButton = v.findViewById(R.id.checkin_users_list_item_checkin_button);
             mContentArea   = v.findViewById(R.id.checkin_users_list_item_content);
+            mLastCheckIn   = v.findViewById(R.id.checkin_users_list_item_last_checkin_date_text);
         }
     }
 
@@ -78,12 +84,21 @@ public class UsersListRecyclerAdapter
     }
 
     @Override
-    public void onBindViewHolder(UserViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User curUser = mUsersToDisplay.get(position);
 
         // Update contents of given user.
         holder.mNameSurname.setText(String.format("%s %s", curUser.getName(), curUser.getSurname()));
         holder.mEmail.setText(curUser.getEmail());
+
+        Date lastCheckInDate = curUser.getLastCheckInDate();
+        holder.mLastCheckIn.setText(
+                lastCheckInDate == null ?
+                        App.getAppResources().getString(R.string.checkin_users_list_item_no_checkin) :
+                        new SimpleDateFormat("hh:mm dd-MM-yyyy")
+                                .format(curUser.getLastCheckInDate())
+        );
+
         holder.mItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +107,7 @@ public class UsersListRecyclerAdapter
                         content.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
             }
         });
+
         holder.mCheckInButton.setOnClickListener(new CheckInButtonListener(curUser));
     }
 
@@ -164,6 +180,7 @@ public class UsersListRecyclerAdapter
             notifyDataSetChanged();
         }
     }
+
 
     private class CheckInButtonListener implements View.OnClickListener {
         User mAttachedUser;

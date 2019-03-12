@@ -5,6 +5,9 @@ import android.os.Bundle;
 import com.sfhmmy.mobile.users.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -71,6 +74,10 @@ public class RemoteServerProxy {
             u.setRole(User.USER_ROLE_VISITOR);
             u.setOrganization("Aristotle University Of Thessaloniki");
             u.setPassportValue("ecescon11://user");
+
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.set(2019, 2, 8);
+            u.setLastCheckInDate(cal.getTime());
         }
 
         return u;

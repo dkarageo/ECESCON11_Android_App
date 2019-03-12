@@ -53,6 +53,8 @@
     <string name="checkin_users_list_item_name_surname_hint">Name Surname</string>
     <string name="checkin_users_list_item_email_hint">Email</string>
     <string name="checkin_users_list_item_checkin_button_text">Check In</string>
+    <string name="checkin_users_list_item_no_checkin">No check-in yet</string>
+    <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
