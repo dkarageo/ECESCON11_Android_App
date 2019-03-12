@@ -2,12 +2,14 @@ package com.sfhmmy.mobile.users;
 
 import android.graphics.Bitmap;
 
+import java.util.Date;
+
 public class User {
 
     public static String USER_ROLE_VISITOR = "visitor";
     public static String USER_ROLE_SECRETARY = "secretary";
 
-    private long mUid;
+    private long   mUid;
     private String mEmail;
     private String mName;
     private String mSurname;
@@ -16,7 +18,7 @@ public class User {
     private String mRole;
     private Bitmap mProfilePicture;
     private String mPassportValue;
-
+    private Date   mLastCheckInDate;
 
     public User() {}
 
@@ -35,6 +37,8 @@ public class User {
     public Bitmap getProfilePicture() { return mProfilePicture; }
     public String getOrganization() { return mOrganization; }
     public String getPassportValue() { return mPassportValue; }
+    public Date getLastCheckInDate() { return mLastCheckInDate; }
+
 
     public void setUid(long uid) { mUid = uid; }
     public void setEmail(String email) { mEmail = email; }
@@ -45,4 +49,5 @@ public class User {
     public void setProfilePicture(Bitmap profilePicture) { mProfilePicture = profilePicture; }
     public void setOrganization(String organization) { mOrganization = organization; }
     public void setPassportValue(String passportValue) { mPassportValue = passportValue; }
+    public void setLastCheckInDate(Date lastCheckInDate) { mLastCheckInDate = lastCheckInDate; }
 }
