@@ -111,9 +111,10 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object[] args) {
-            RemoteServerProxy.ResponseContainer rc = (RemoteServerProxy.ResponseContainer) args[0];
+            RemoteServerProxy.ResponseContainer<List<ImagePost>> rc =
+                    (RemoteServerProxy.ResponseContainer<List<ImagePost>>) args[0];
             HomeFragment fragToUpdate = (HomeFragment) args[1];
-            List<ImagePost> imagePosts = (List<ImagePost>) rc.getObject();
+            List<ImagePost> imagePosts = rc.getObject();
             if (imagePosts != null) fragToUpdate.updateImagePosts(imagePosts);
         }
     }

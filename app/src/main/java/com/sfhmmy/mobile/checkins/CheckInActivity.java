@@ -193,11 +193,12 @@ public class CheckInActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Object[] args) {
-            RemoteServerProxy.ResponseContainer rc = (RemoteServerProxy.ResponseContainer) args[0];
+            RemoteServerProxy.ResponseContainer<List<User>> rc =
+                    (RemoteServerProxy.ResponseContainer<List<User>>) args[0];
             UsersListFragment ulFrag = (UsersListFragment) args[1];
 
             // Let any null object (in case of error) to be handled by UsersListFragment.
-            ulFrag.updateUsersList((List<User>) rc.getObject());
+            ulFrag.updateUsersList(rc.getObject());
 
             // In case of an erroneous situation, display appropriate message.
             switch(rc.getCode()) {

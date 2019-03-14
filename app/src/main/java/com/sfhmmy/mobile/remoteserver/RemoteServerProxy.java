@@ -87,9 +87,9 @@ public class RemoteServerProxy {
         return u;
     }
 
-    public ResponseContainer getUsersList(String accessToken) {
+    public ResponseContainer<List<User>> getUsersList(String accessToken) {
 
-        ResponseContainer rc = new ResponseContainer();
+        ResponseContainer<List<User>> rc = new ResponseContainer<>();
 
         if (accessToken.equals("secretary123token")) {
             List<User> users = new ArrayList<>();
@@ -113,8 +113,8 @@ public class RemoteServerProxy {
         return rc;
     }
 
-    public ResponseContainer checkInUser(String accessToken, String codeValue) {
-        ResponseContainer rc = new ResponseContainer();
+    public ResponseContainer<User> checkInUser(String accessToken, String codeValue) {
+        ResponseContainer<User> rc = new ResponseContainer<>();
 
         try {
             Thread.sleep(2000);
@@ -137,8 +137,8 @@ public class RemoteServerProxy {
         return rc;
     }
 
-    public ResponseContainer getPhotoWallPosts(String accessToken) {
-        ResponseContainer rc = new ResponseContainer();
+    public ResponseContainer<List<ImagePost>> getPhotoWallPosts(String accessToken) {
+        ResponseContainer<List<ImagePost>> rc = new ResponseContainer<>();
 
         List<ImagePost> imagePosts = new ArrayList<>();
 
@@ -170,16 +170,16 @@ public class RemoteServerProxy {
         return rc;
     }
 
-    public class ResponseContainer {
-        private Object mObject;
+    public class ResponseContainer<T> {
+        private T      mObject;
         private int    mCode;
         private String mMessage;
 
-        public Object getObject() { return mObject; }
+        public T getObject() { return mObject; }
         public int getCode() { return mCode; }
         public String getMessage() { return mMessage; }
 
-        public void setObject(Object object) { mObject = object; }
+        public void setObject(T object) { mObject = object; }
         public void setCode(int code) { mCode = code; }
         public void setMessage(String message) { mMessage = message; }
     }
