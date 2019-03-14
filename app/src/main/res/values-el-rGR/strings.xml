@@ -54,4 +54,19 @@
     <string name="checkin_users_list_item_checkin_button_text">Check In</string>
     <string name="checkin_users_list_item_no_checkin">Δεν έχει πραγματοποιηθεί ακόμη</string>
     <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
+
+    <!-- Elapsed time related strings -->
+    <string name="utils_elapsed_time_format">%s %s πριν</string>
+    <string name="utils_elapsed_time_secs_single">δευτερόλεπτο</string>
+    <string name="utils_elapsed_time_secs_plural">δευτερόλεπτα</string>
+    <string name="utils_elapsed_time_mins_single">λεπτό</string>
+    <string name="utils_elapsed_time_mins_plural">λεπτά</string>
+    <string name="utils_elapsed_time_hours_single">ώρα</string>
+    <string name="utils_elapsed_time_hours_plural">ώρες</string>
+    <string name="utils_elapsed_time_days_single">ημέρα</string>
+    <string name="utils_elapsed_time_days_plural">ημέρες</string>
+    <string name="utils_elapsed_time_months_single">μήνα</string>
+    <string name="utils_elapsed_time_months_plural">μήνες</string>
+    <string name="utils_elapsed_time_years_single">χρόνο</string>
+    <string name="utils_elapsed_time_years_plural">χρόνια</string>
 </resources>
