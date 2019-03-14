@@ -33,6 +33,13 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="permission_rationale">Sign in</string>
 
+    <!-- String related to home screen -->
+    <string name="home_photos_list_item_uploader_hint_text">Uploaded by</string>
+    <string name="home_photos_list_item_uploaded_date_hint_text">Uploaded on</string>
+    <string name="home_photos_list_item_description_hint_text">Dexcription</string>
+    <string name="home_photos_list_item_photo_load_error_text">Could not load image.</string>
+    <string name="home_photos_list_item_photo_content_desc">Φωτογραφία της δημοσίευσης.</string>
+
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Profile Picture</string>
     <string name="passport_qrcode_img_desc">QR Code</string>

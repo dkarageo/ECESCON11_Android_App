@@ -1,40 +1,48 @@
+/*
+ * HomeFragment.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
+
 package com.sfhmmy.mobile;
 
 import android.content.Context;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
+
+import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
 
     private TopLevelFragmentEventsListener mTopListener;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    private RecyclerView mRecyclerView;
 
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @param param1 Parameter 1.
-//     * @param param2 Parameter 2.
-//     * @return A new instance of fragment HomeFragment.
-//     */
-//    // TODO: Rename and change types and number of parameters
-//    public static HomeFragment newInstance(String param1, String param2) {
-//        HomeFragment fragment = new HomeFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+    private List<ImagePost> mImagePosts;  // Posts to be displayed on photo wall.
+    private HomeRecyclerViewAdapter mAdapter;
+
+
+    public HomeFragment() {
+        mImagePosts = new ArrayList<>();
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -49,30 +57,24 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
-    }
+        View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        mRecyclerView = root.findViewById(R.id.home_recyclerview);
+        if (mRecyclerView == null) {
+            throw new RuntimeException("Unable to fetch home screen recycler view.");
+        }
+        // Use a linear layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new HomeRecyclerViewAdapter(mImagePosts);
+        mRecyclerView.setAdapter(mAdapter);
 
-        // TODO: Implement native UI for HomeFragment.
-        WebView webView = view.findViewById(R.id.home_webview);
-        webView.loadUrl("https://sfhmmy.gr/");
+        // Ask to fetch latests posts.
+        new PhotoWallPostsFetcher().execute(this);
+
+        return root;
     }
 
     @Override
@@ -90,10 +92,29 @@ public class HomeFragment extends Fragment {
         mTopListener = null;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
+    private void updateImagePosts(List<ImagePost> imagePosts) {
+        mImagePosts.clear();
+        mImagePosts.addAll(imagePosts);
+        mAdapter.updateImagePosts(mImagePosts);
+    }
+
+
+    private static class PhotoWallPostsFetcher extends AsyncTask<HomeFragment, Void, Object[]> {
+
+        @Override
+        protected Object[] doInBackground(HomeFragment... homeFragments) {
+            RemoteServerProxy.ResponseContainer rc = new RemoteServerProxy().getPhotoWallPosts(
+                    com.sfhmmy.mobile.users.UserManager.getUserManager().getCurrentUser().getToken()
+            );
+            return new Object[] { rc, homeFragments[0] };
+        }
+
+        @Override
+        protected void onPostExecute(Object[] args) {
+            RemoteServerProxy.ResponseContainer rc = (RemoteServerProxy.ResponseContainer) args[0];
+            HomeFragment fragToUpdate = (HomeFragment) args[1];
+            List<ImagePost> imagePosts = (List<ImagePost>) rc.getObject();
+            if (imagePosts != null) fragToUpdate.updateImagePosts(imagePosts);
+        }
     }
 }

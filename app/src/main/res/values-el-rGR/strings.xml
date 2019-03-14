@@ -32,6 +32,13 @@
     <string name="error_field_required">Το πεδίο είναι υποχρεωτικό</string>
     <string name="error_login_failed">Αποτυχία εισόδου</string>
 
+    <!-- String related to home screen -->
+    <string name="home_photos_list_item_uploader_hint_text">Ανέβηκε από</string>
+    <string name="home_photos_list_item_uploaded_date_hint_text">Ανέβηκε</string>
+    <string name="home_photos_list_item_description_hint_text">Περιγραφή</string>
+    <string name="home_photos_list_item_photo_load_error_text">Αδυναμία φόρτωσης της εικόνας.</string>
+    <string name="home_photos_list_item_photo_content_desc">Photo of the post.</string>
+
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Εικόνα Προφίλ</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
