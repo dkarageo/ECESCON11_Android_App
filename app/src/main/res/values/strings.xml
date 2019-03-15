@@ -40,6 +40,14 @@
     <string name="home_photos_list_item_photo_load_error_text">Could not load image.</string>
     <string name="home_photos_list_item_photo_content_desc">Φωτογραφία της δημοσίευσης.</string>
 
+    <!-- String related to workshops screen -->
+    <string name="workshops_item_name_hint_text">Workshop Name</string>
+    <string name="workshops_item_image_content_desc">Workshop Image</string>
+    <string name="workshops_item_location_icon_content_desc">Location Icon</string>
+    <string name="workshops_item_location_hint_text">Location</string>
+    <string name="workshops_item_date_icon_content_desc">Date Icon</string>
+    <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
+
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Profile Picture</string>
     <string name="passport_qrcode_img_desc">QR Code</string>

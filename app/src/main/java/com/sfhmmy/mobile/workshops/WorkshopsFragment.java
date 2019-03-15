@@ -1,98 +1,49 @@
+/*
+ * WorkshopsFragment.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
+
 package com.sfhmmy.mobile.workshops;
 
 import android.content.Context;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
+import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
+import com.sfhmmy.mobile.users.UserManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link WorkshopsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link WorkshopsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WorkshopsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private TopLevelFragmentEventsListener mTopListener;
 
+    private RecyclerView             mRecyclerView;
+    private WorkshopsRecyclerAdapter mWorkshopsRecyclerAdapter;
+    private List<Workshop>           mWorkshops;
+
+
     public WorkshopsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WorkshopsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static WorkshopsFragment newInstance(String param1, String param2) {
-        WorkshopsFragment fragment = new WorkshopsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_workshops, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        WebView webView = view.findViewById(R.id.workshops_webview);
-        webView.loadUrl("https://sfhmmy.gr/%CF%84%CE%BF-%CF%83%CF%85%CE%BD%CE%AD%CE%B4%CF%81%CE%B9%CE%BF/workshops");
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        if (mTopListener != null) {
-            mTopListener.updateTitle(getString(R.string.workshops_title));
-        }
+        mWorkshops = new ArrayList<>();
     }
 
     @Override
@@ -107,23 +58,63 @@ public class WorkshopsFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_workshops, container, false);
+
+        mRecyclerView = root.findViewById(R.id.workshops_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mWorkshopsRecyclerAdapter = new WorkshopsRecyclerAdapter(mWorkshops);
+        mRecyclerView.setAdapter(mWorkshopsRecyclerAdapter);
+
+        // Each time view is created fetch the latest copy of workshops.
+        new WorkshopsFetcher().execute(this);
+
+        return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (mTopListener != null) {
+            mTopListener.updateTitle(getString(R.string.workshops_title));
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mTopListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    private void updateWorkshopsList(List<Workshop> workshops) {
+        mWorkshops.clear();
+        mWorkshops.addAll(workshops);
+        mWorkshopsRecyclerAdapter.updateWorkshopsList(mWorkshops);
+    }
+
+
+    private static class WorkshopsFetcher extends AsyncTask<WorkshopsFragment, Void, Object[]> {
+
+        @Override
+        protected Object[] doInBackground(WorkshopsFragment... workshopsFragments) {
+            return new Object[] {
+                    new RemoteServerProxy().getWorkshopsList(
+                            UserManager.getUserManager().getCurrentUser().getToken()),
+                    workshopsFragments[0]
+            };
+        }
+
+        @Override
+        protected void onPostExecute(Object[] args) {
+            RemoteServerProxy.ResponseContainer<List<Workshop>> rc =
+                    (RemoteServerProxy.ResponseContainer<List<Workshop>>) args[0];
+            List<Workshop> workshops = rc.getObject();
+            WorkshopsFragment target = (WorkshopsFragment) args[1];
+            target.updateWorkshopsList(workshops);
+        }
     }
 }

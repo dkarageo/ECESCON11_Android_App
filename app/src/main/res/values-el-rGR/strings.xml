@@ -43,6 +43,14 @@
     <string name="passport_profile_img_desc">Εικόνα Προφίλ</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
 
+    <!-- String related to workshops screen -->
+    <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
+    <string name="workshops_item_image_content_desc">Εικόνα Εργαστηρίου</string>
+    <string name="workshops_item_location_icon_content_desc">Εικονίδιο Τοποθεσίας</string>
+    <string name="workshops_item_location_hint_text">Τοποθεσία</string>
+    <string name="workshops_item_date_icon_content_desc">Εικονίδιο Ημερομηνίας</string>
+    <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
+
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
     <string name="camera_scanner_permission_grant_button_text">Παραχώρηση Πρόσβασης</string>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.sfhmmy.mobile.ImagePost;
 import com.sfhmmy.mobile.users.User;
+import com.sfhmmy.mobile.workshops.Workshop;
 
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -169,6 +170,42 @@ public class RemoteServerProxy {
 
         return rc;
     }
+
+    public ResponseContainer<List<Workshop>> getWorkshopsList(String accessToken) {
+        ResponseContainer<List<Workshop>> rc = new ResponseContainer<>();
+
+        List<Workshop> workshops = new ArrayList<>();
+
+        Workshop work1 = new Workshop();
+        work1.setName("R4A Workshop");
+        work1.setImageUrl("https://r4a.issel.ee.auth.gr/images/middleware.png");
+        work1.setJoinQuestion("Do you love robotics?");
+        work1.setPlace("Inside a NAO");
+        work1.setDateTime(ZonedDateTime.parse(
+                "2019-04-21T14:30:00.000+02:00[Europe/Athens]",
+                DateTimeFormatter.ISO_ZONED_DATE_TIME
+        ));
+
+        Workshop work2 = new Workshop();
+        work2.setName("Mhtsos Workshop");
+        work2.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/IT/Dimitrios_Karageorgiou.jpg");
+        work2.setJoinQuestion("Is there any reason to join that workshop?");
+        work2.setPlace("Στο τσαντίρι του");
+        work2.setDateTime(ZonedDateTime.parse(
+                "2019-04-21T18:00:00.000+02:00[Europe/Athens]",
+                DateTimeFormatter.ISO_ZONED_DATE_TIME
+        ));
+
+        workshops.add(work1);
+        workshops.add(work2);
+
+        rc.setCode(RESPONSE_SUCCESS);
+        rc.setMessage("Success.");
+        rc.setObject(workshops);
+
+        return rc;
+    }
+
 
     public class ResponseContainer<T> {
         private T      mObject;
