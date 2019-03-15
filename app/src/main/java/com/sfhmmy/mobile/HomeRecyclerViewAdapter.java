@@ -34,7 +34,7 @@ public class HomeRecyclerViewAdapter
     private List<ImagePost> mImagePosts;
 
 
-    static class PhotosVH extends RecyclerView.ViewHolder {
+    private class PhotosVH extends RecyclerView.ViewHolder {
 
         ImageView mPhoto;
         TextView mPhotoError;
