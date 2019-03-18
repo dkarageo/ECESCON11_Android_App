@@ -81,6 +81,9 @@ public class WorkshopsFragment extends Fragment {
                 t.replace(R.id.main_fragment_container, detailFrag);
                 t.addToBackStack("workshopDetailFragment");
                 t.commit();
+
+                // No navigation elements should be element on detail page.
+                mTopListener.hideNavigationBar();
             }
         });
         mRecyclerView.setAdapter(mWorkshopsRecyclerAdapter);
@@ -104,6 +107,14 @@ public class WorkshopsFragment extends Fragment {
         if (mTopListener != null) {
             mTopListener.updateTitle(getString(R.string.workshops_title));
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Make sure that nav bar is visible again, once returned from detail fragment.
+        mTopListener.showNavigationBar();
     }
 
     @Override
