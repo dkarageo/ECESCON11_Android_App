@@ -48,6 +48,25 @@
     <string name="workshops_item_date_icon_content_desc">Date Icon</string>
     <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
 
+    <!-- String related to workshops detail screen -->
+    <string name="workshop_detail_description_header_text">What to expect?</string>
+    <string name="workshop_detail_description_hint_text">Description</string>
+    <string name="workshop_detail_join_button_text">Request Join</string>
+    <string name="workshop_detail_enroll_rules_header_text">Prerequisites</string>
+    <string name="workshop_detail_enroll_rules_text">- Answer a workshop specific question.</string>
+    <string name="workshop_detail_enroll_status_hint_text">Enroll Status</string>
+    <string name="workshop_detail_enroll_status_icon_content_desc">Enroll Status Icon</string>
+    <string name="workshop_detail_enroll_status_accepted_text">You have enrolled into this workshop!</string>
+    <string name="workshop_detail_enroll_status_rejected_text">Sorry, your application has been rejected!</string>
+    <string name="workshop_detail_enroll_status_available_text">This workshop is waiting you&#8230; don\'t miss it!</string>
+    <string name="workshop_detail_enroll_status_unavailable_text">Sorry, but this workshop is no longer available!</string>
+    <string name="workshop_detail_enroll_status_pending_text">Your application is being verified&#8230;</string>
+    <string name="workshop_enroll_dialog_question_hint">Workshop specific question</string>
+    <string name="workshop_enroll_dialog_answer_hint">Enter your answer here&#8230;</string>
+    <string name="workshop_enroll_dialog_enroll_button_text">Enroll</string>
+    <string name="workshop_enroll_dialog_cancel_button_text">Cancel</string>
+    <string name="workshop_enroll_dialog_answer_needed">An answer is required.</string>
+
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Profile Picture</string>
     <string name="passport_qrcode_img_desc">QR Code</string>

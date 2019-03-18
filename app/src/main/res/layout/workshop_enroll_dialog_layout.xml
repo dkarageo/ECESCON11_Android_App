@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".workshops.WorkshopEnrollDialogFragment"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/workshop_enroll_dialog_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/workshop_enroll_dialog_question_hint"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
+        android:textColor="@color/colorPrimary"/>
+
+    <EditText
+        android:id="@+id/workshop_enroll_dialog_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:lines="3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/workshop_enroll_dialog_question"
+        android:layout_marginTop="8dp"
+        android:hint="@string/workshop_enroll_dialog_answer_hint" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,6 +51,25 @@
     <string name="workshops_item_date_icon_content_desc">Εικονίδιο Ημερομηνίας</string>
     <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
 
+    <!-- String related to workshops detail screen -->
+    <string name="workshop_detail_description_header_text">Τι θα δείτε;</string>
+    <string name="workshop_detail_description_hint_text">Περιγραφή</string>
+    <string name="workshop_detail_join_button_text">Εγγραφή</string>
+    <string name="workshop_detail_enroll_rules_header_text">Απαιτήσεις εγγραφής</string>
+    <string name="workshop_detail_enroll_rules_text">- Απάντηση ερώτησης σχετικής με το εργαστήριο.</string>
+    <string name="workshop_detail_enroll_status_hint_text">Κατάσταση Εγγραφής</string>
+    <string name="workshop_detail_enroll_status_icon_content_desc">Εικονίδιο Κατάστασης Εγγραφής</string>
+    <string name="workshop_detail_enroll_status_accepted_text">Έχετε επιτυχώς εγγραφεί στο εργαστήριο!</string>
+    <string name="workshop_detail_enroll_status_rejected_text">Λυπούμαστε, αλλά η εγγραφή σας δεν έγινε δεκτή!</string>
+    <string name="workshop_detail_enroll_status_available_text">Το εργαστήριο σας περιμένει. Μην το χάσετε!</string>
+    <string name="workshop_detail_enroll_status_unavailable_text">Λυπούμαστε, αλλά το εργαστήριο δεν είναι πλέον διαθέσιμο!</string>
+    <string name="workshop_detail_enroll_status_pending_text">Η εγγραφή σας βρίσκεται στη διαδικασία έγκρισης&#8230;</string>
+    <string name="workshop_enroll_dialog_question_hint">Ερώτηση Εργαστηρίου</string>
+    <string name="workshop_enroll_dialog_answer_hint">Εισάγετε την απάντησή σας&#8230;</string>
+    <string name="workshop_enroll_dialog_enroll_button_text">Εγγραφή</string>
+    <string name="workshop_enroll_dialog_cancel_button_text">Ακύρωση</string>
+    <string name="workshop_enroll_dialog_answer_needed">Η απάντηση είναι απαραίτητη.</string>
+
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
     <string name="camera_scanner_permission_grant_button_text">Παραχώρηση Πρόσβασης</string>
