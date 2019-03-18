@@ -6,9 +6,9 @@
     android:orientation="vertical"
     tools:context=".workshops.WorkshopsFragment">
 
-    <WebView
-        android:id="@+id/workshops_webview"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workshops_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:padding="8dp" />
 </LinearLayout>

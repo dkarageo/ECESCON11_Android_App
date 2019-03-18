@@ -10,4 +10,14 @@ public interface TopLevelFragmentEventsListener {
      * @param newTitle : The new title to be displayed by ActionBar.
      */
     void updateTitle(String newTitle);
+
+    /**
+     * Hides navigation elements.
+     */
+    void hideNavigationBar();
+
+    /**
+     * Displays navigation elements.
+     */
+    void showNavigationBar();
 }

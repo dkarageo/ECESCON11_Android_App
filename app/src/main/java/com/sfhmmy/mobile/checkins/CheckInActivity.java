@@ -26,6 +26,8 @@ import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
 
+import java.util.List;
+
 
 /**
  * Activity that provides access to QR Check-In capabilities and a user list for manual
@@ -36,6 +38,7 @@ public class CheckInActivity extends AppCompatActivity {
     // Fragments of the PagerAdapter.
     CameraScannerFragment mScannerFragment;
     UsersListFragment     mUsersFragment;
+    ViewPager             mViewPager;
 
 
     @Override
@@ -49,34 +52,52 @@ public class CheckInActivity extends AppCompatActivity {
                 new CameraScannerFragment.OnCodeFoundEventListener() {
             @Override
             public void onCodeFound(String value) {
-                // Firstly, display the dialog with its loading spinner.
-                CheckInStatusDialogFragment statusDialog = new CheckInStatusDialogFragment();
-                statusDialog.show(getSupportFragmentManager(), "statusDialog");
-                // Set a listener that starts camera scanner again when popup status window closes.
-                statusDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        mScannerFragment.startScanner();
-                    }
-                });
-
-                // Then, handle check-in process on a new thread.
-                new CheckInProcess().execute(value, statusDialog);
+                checkIn(value);
             }
         });
 
         // Create and setup a new users list fragment.
         mUsersFragment = new UsersListFragment();
+        mUsersFragment.registerOnCheckInRequestListener(
+                new UsersListFragment.OnCheckInRequestListener() {
+            @Override
+            public void onCheckInRequested(User user) {
+                checkIn(user.getPassportValue());
+            }
+        });
 
         // Setup view pager with scanner and users list fragments.
         QRScannerPagerAdapter pagerAdapter = null;
-        ViewPager viewPager;
         try {
             pagerAdapter = new QRScannerPagerAdapter(getSupportFragmentManager());
         } catch (NullPointerException e) { e.printStackTrace(); }
-        viewPager = findViewById(R.id.qrscanner_viewpager);
-        viewPager.setAdapter(pagerAdapter);
+        mViewPager = findViewById(R.id.qrscanner_viewpager);
+        mViewPager.setAdapter(pagerAdapter);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new UsersListFetcher().execute(mUsersFragment);
+    }
+
+    private void checkIn(String value) {
+        // Firstly, display the dialog with its loading spinner.
+        CheckInStatusDialogFragment statusDialog = new CheckInStatusDialogFragment();
+        statusDialog.show(getSupportFragmentManager(), "statusDialog");
+        // Set a listener that starts camera scanner again when popup status window closes.
+        statusDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                // Camera scanner should restart only when check in is initiated by it.
+                if (mViewPager.getCurrentItem() == 0) mScannerFragment.startScanner();
+            }
+        });
+
+        // Then, handle check-in process on a new thread.
+        new CheckInProcess().execute(value, statusDialog);
+    }
+
 
     public class QRScannerPagerAdapter extends FragmentPagerAdapter {
         QRScannerPagerAdapter(FragmentManager fm) {
@@ -100,6 +121,7 @@ public class CheckInActivity extends AppCompatActivity {
             return 2;
         }
     }
+
 
     /**
      * Async Task for checking in a user via the code received from camera scanner.
@@ -151,6 +173,47 @@ public class CheckInActivity extends AppCompatActivity {
             }
 
             dialog.setCheckInStatusData((User) rc.getObject(), dialogStatus, errorMessage);
+        }
+    }
+
+
+    /**
+     * AsyncTask that fetches the complete user list (includes every registered user).
+     */
+    private static class UsersListFetcher
+            extends AsyncTask<UsersListFragment, Void, Object[]> {
+        @Override
+        protected Object[] doInBackground(UsersListFragment... args) {
+            return new Object[] {
+                    new RemoteServerProxy().getUsersList(
+                            UserManager.getUserManager().getCurrentUser().getToken()),
+                    args[0]
+            };
+        }
+
+        @Override
+        protected void onPostExecute(Object[] args) {
+            RemoteServerProxy.ResponseContainer<List<User>> rc =
+                    (RemoteServerProxy.ResponseContainer<List<User>>) args[0];
+            UsersListFragment ulFrag = (UsersListFragment) args[1];
+
+            // Let any null object (in case of error) to be handled by UsersListFragment.
+            ulFrag.updateUsersList(rc.getObject());
+
+            // In case of an erroneous situation, display appropriate message.
+            switch(rc.getCode()) {
+                case RemoteServerProxy.RESPONSE_SUCCESS:
+                    ulFrag.displayError(null, false);
+                    break;
+                case RemoteServerProxy.RESPONSE_ERROR:
+                    ulFrag.displayError(rc.getMessage(), false);
+                    break;
+                case RemoteServerProxy.RESPONSE_WARNING:
+                    ulFrag.displayError(rc.getMessage(), true);
+                    break;
+                default:
+                    throw new RuntimeException("Unknown code contained in check-in response");
+            }
         }
     }
 }

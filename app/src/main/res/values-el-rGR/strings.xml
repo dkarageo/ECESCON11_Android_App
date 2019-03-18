@@ -32,9 +32,43 @@
     <string name="error_field_required">Το πεδίο είναι υποχρεωτικό</string>
     <string name="error_login_failed">Αποτυχία εισόδου</string>
 
+    <!-- String related to home screen -->
+    <string name="home_photos_list_item_uploader_hint_text">Ανέβηκε από</string>
+    <string name="home_photos_list_item_uploaded_date_hint_text">Ανέβηκε</string>
+    <string name="home_photos_list_item_description_hint_text">Περιγραφή</string>
+    <string name="home_photos_list_item_photo_load_error_text">Αδυναμία φόρτωσης της εικόνας.</string>
+    <string name="home_photos_list_item_photo_content_desc">Photo of the post.</string>
+
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Εικόνα Προφίλ</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
+
+    <!-- String related to workshops screen -->
+    <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
+    <string name="workshops_item_image_content_desc">Εικόνα Εργαστηρίου</string>
+    <string name="workshops_item_location_icon_content_desc">Εικονίδιο Τοποθεσίας</string>
+    <string name="workshops_item_location_hint_text">Τοποθεσία</string>
+    <string name="workshops_item_date_icon_content_desc">Εικονίδιο Ημερομηνίας</string>
+    <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
+
+    <!-- String related to workshops detail screen -->
+    <string name="workshop_detail_description_header_text">Τι θα δείτε;</string>
+    <string name="workshop_detail_description_hint_text">Περιγραφή</string>
+    <string name="workshop_detail_join_button_text">Εγγραφή</string>
+    <string name="workshop_detail_enroll_rules_header_text">Απαιτήσεις εγγραφής</string>
+    <string name="workshop_detail_enroll_rules_text">- Απάντηση ερώτησης σχετικής με το εργαστήριο.</string>
+    <string name="workshop_detail_enroll_status_hint_text">Κατάσταση Εγγραφής</string>
+    <string name="workshop_detail_enroll_status_icon_content_desc">Εικονίδιο Κατάστασης Εγγραφής</string>
+    <string name="workshop_detail_enroll_status_accepted_text">Έχετε επιτυχώς εγγραφεί στο εργαστήριο!</string>
+    <string name="workshop_detail_enroll_status_rejected_text">Λυπούμαστε, αλλά η εγγραφή σας δεν έγινε δεκτή!</string>
+    <string name="workshop_detail_enroll_status_available_text">Το εργαστήριο σας περιμένει. Μην το χάσετε!</string>
+    <string name="workshop_detail_enroll_status_unavailable_text">Λυπούμαστε, αλλά το εργαστήριο δεν είναι πλέον διαθέσιμο!</string>
+    <string name="workshop_detail_enroll_status_pending_text">Η εγγραφή σας βρίσκεται στη διαδικασία έγκρισης&#8230;</string>
+    <string name="workshop_enroll_dialog_question_hint">Ερώτηση Εργαστηρίου</string>
+    <string name="workshop_enroll_dialog_answer_hint">Εισάγετε την απάντησή σας&#8230;</string>
+    <string name="workshop_enroll_dialog_enroll_button_text">Εγγραφή</string>
+    <string name="workshop_enroll_dialog_cancel_button_text">Ακύρωση</string>
+    <string name="workshop_enroll_dialog_answer_needed">Η απάντηση είναι απαραίτητη.</string>
 
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
@@ -46,4 +80,27 @@
     <string name="checkin_status_user_email_label_text">Email:</string>
     <string name="checkin_status_user_org_label_text">Οργανισμός:</string>
     <string name="checkin_status_done_button_text">OK</string>
+
+    <!-- Check in users list related strings -->
+    <string name="checkin_users_search_bar_hint">Εισάγετε όνομα ή email...</string>
+    <string name="checkin_users_list_item_name_surname_hint">Όνομα Επίθετο</string>
+    <string name="checkin_users_list_item_email_hint">Email</string>
+    <string name="checkin_users_list_item_checkin_button_text">Check In</string>
+    <string name="checkin_users_list_item_no_checkin">Δεν έχει πραγματοποιηθεί ακόμη</string>
+    <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
+
+    <!-- Elapsed time related strings -->
+    <string name="utils_elapsed_time_format">%s %s πριν</string>
+    <string name="utils_elapsed_time_secs_single">δευτερόλεπτο</string>
+    <string name="utils_elapsed_time_secs_plural">δευτερόλεπτα</string>
+    <string name="utils_elapsed_time_mins_single">λεπτό</string>
+    <string name="utils_elapsed_time_mins_plural">λεπτά</string>
+    <string name="utils_elapsed_time_hours_single">ώρα</string>
+    <string name="utils_elapsed_time_hours_plural">ώρες</string>
+    <string name="utils_elapsed_time_days_single">ημέρα</string>
+    <string name="utils_elapsed_time_days_plural">ημέρες</string>
+    <string name="utils_elapsed_time_months_single">μήνα</string>
+    <string name="utils_elapsed_time_months_plural">μήνες</string>
+    <string name="utils_elapsed_time_years_single">χρόνο</string>
+    <string name="utils_elapsed_time_years_plural">χρόνια</string>
 </resources>

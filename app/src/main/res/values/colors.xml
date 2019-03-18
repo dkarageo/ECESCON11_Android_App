@@ -18,6 +18,12 @@
     <color name="errorBackgroundColor">#d50000</color>
     <color name="errorTextOnErrorBackgroundColor">#ffffff</color>
 
+    <!-- Status indication colors -->
+    <color name="statusPositiveColor">#4caf50</color>
+    <color name="statusNegativeColor">#f44336</color>
+    <color name="statusNeutralColor">#03a9f4</color>
+    <color name="statusUnknownColor">#ffc107</color>
+
     <color name="colorLightUIBackground">#fbe9e7</color>
     <color name="colorUIOverlay">#ffffff</color>
 

@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity
     // An indicator set to true when profile menu is open (i.e. MainMenuFragment
     // is the current one).
     private boolean isProfileMenuEnabled = false;
+    // Indicates whether navigation bar was visible when profile menu showed up.
+    private boolean wasNavBarVisibleWhenProfileMenuDisplayed = false;
 
     // Listener for clicks on bottom navigation bar items.
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -203,6 +205,20 @@ public class MainActivity extends AppCompatActivity
         setTitle(newTitle);
     }
 
+    @Override
+    public void hideNavigationBar() {
+        navBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNavigationBar() {
+        navBar.setVisibility(View.VISIBLE);
+    }
+
+    private boolean isNavigationBarVisible() {
+        return navBar.getVisibility() == View.VISIBLE;
+    }
+
     /**
      * Displays/Hides the profile menu of the application.
      */
@@ -222,8 +238,9 @@ public class MainActivity extends AppCompatActivity
             t.addToBackStack("profile_menu");
             t.commit();
 
+            wasNavBarVisibleWhenProfileMenuDisplayed = isNavigationBarVisible();
             // Bottom nav bar should be hidden during menu display.
-            navBar.setVisibility(View.GONE);
+            hideNavigationBar();
 
             isProfileMenuEnabled = true;
 
@@ -231,7 +248,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager().popBackStack(
                     "profile_menu", FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-            navBar.setVisibility(View.VISIBLE);
+            if (wasNavBarVisibleWhenProfileMenuDisplayed) showNavigationBar();
 
             isProfileMenuEnabled = false;
         }

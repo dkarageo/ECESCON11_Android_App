@@ -33,6 +33,40 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="permission_rationale">Sign in</string>
 
+    <!-- String related to home screen -->
+    <string name="home_photos_list_item_uploader_hint_text">Uploaded by</string>
+    <string name="home_photos_list_item_uploaded_date_hint_text">Uploaded on</string>
+    <string name="home_photos_list_item_description_hint_text">Dexcription</string>
+    <string name="home_photos_list_item_photo_load_error_text">Could not load image.</string>
+    <string name="home_photos_list_item_photo_content_desc">Φωτογραφία της δημοσίευσης.</string>
+
+    <!-- String related to workshops screen -->
+    <string name="workshops_item_name_hint_text">Workshop Name</string>
+    <string name="workshops_item_image_content_desc">Workshop Image</string>
+    <string name="workshops_item_location_icon_content_desc">Location Icon</string>
+    <string name="workshops_item_location_hint_text">Location</string>
+    <string name="workshops_item_date_icon_content_desc">Date Icon</string>
+    <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
+
+    <!-- String related to workshops detail screen -->
+    <string name="workshop_detail_description_header_text">What to expect?</string>
+    <string name="workshop_detail_description_hint_text">Description</string>
+    <string name="workshop_detail_join_button_text">Request Join</string>
+    <string name="workshop_detail_enroll_rules_header_text">Prerequisites</string>
+    <string name="workshop_detail_enroll_rules_text">- Answer a workshop specific question.</string>
+    <string name="workshop_detail_enroll_status_hint_text">Enroll Status</string>
+    <string name="workshop_detail_enroll_status_icon_content_desc">Enroll Status Icon</string>
+    <string name="workshop_detail_enroll_status_accepted_text">You have enrolled into this workshop!</string>
+    <string name="workshop_detail_enroll_status_rejected_text">Sorry, your application has been rejected!</string>
+    <string name="workshop_detail_enroll_status_available_text">This workshop is waiting you&#8230; don\'t miss it!</string>
+    <string name="workshop_detail_enroll_status_unavailable_text">Sorry, but this workshop is no longer available!</string>
+    <string name="workshop_detail_enroll_status_pending_text">Your application is being verified&#8230;</string>
+    <string name="workshop_enroll_dialog_question_hint">Workshop specific question</string>
+    <string name="workshop_enroll_dialog_answer_hint">Enter your answer here&#8230;</string>
+    <string name="workshop_enroll_dialog_enroll_button_text">Enroll</string>
+    <string name="workshop_enroll_dialog_cancel_button_text">Cancel</string>
+    <string name="workshop_enroll_dialog_answer_needed">An answer is required.</string>
+
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Profile Picture</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
@@ -47,6 +81,29 @@
     <string name="checkin_status_user_email_label_text">Email:</string>
     <string name="checkin_status_user_org_label_text">Organization:</string>
     <string name="checkin_status_done_button_text">OK</string>
+
+    <!-- Check in users list related strings -->
+    <string name="checkin_users_search_bar_hint">Enter user\'s name or email...</string>
+    <string name="checkin_users_list_item_name_surname_hint">Name Surname</string>
+    <string name="checkin_users_list_item_email_hint">Email</string>
+    <string name="checkin_users_list_item_checkin_button_text">Check In</string>
+    <string name="checkin_users_list_item_no_checkin">No check-in yet</string>
+    <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
+
+    <!-- Elapsed time related strings -->
+    <string name="utils_elapsed_time_format">%s %s ago</string>
+    <string name="utils_elapsed_time_secs_single">second</string>
+    <string name="utils_elapsed_time_secs_plural">seconds</string>
+    <string name="utils_elapsed_time_mins_single">minute</string>
+    <string name="utils_elapsed_time_mins_plural">minutes</string>
+    <string name="utils_elapsed_time_hours_single">hour</string>
+    <string name="utils_elapsed_time_hours_plural">hours</string>
+    <string name="utils_elapsed_time_days_single">day</string>
+    <string name="utils_elapsed_time_days_plural">days</string>
+    <string name="utils_elapsed_time_months_single">month</string>
+    <string name="utils_elapsed_time_months_plural">months</string>
+    <string name="utils_elapsed_time_years_single">year</string>
+    <string name="utils_elapsed_time_years_plural">years</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

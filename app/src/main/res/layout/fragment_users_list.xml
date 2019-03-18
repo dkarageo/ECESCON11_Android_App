@@ -1,14 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".checkins.UsersListFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".checkins.UsersListFragment"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/checkin_users_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="@string/checkin_users_search_bar_hint"/>
+
+    <!-- TODO: Convert warning area to a reusable fragment or widget. -->
+    <FrameLayout
+        android:id="@+id/checkin_users_list_warning_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/errorBackgroundColor"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/checkin_users_list_warning_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/errorTextOnErrorBackgroundColor"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/labels_text_size" />
+    </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/checkin_users_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Here a list of all users should be displayed." />
-
-</FrameLayout>
+        android:scrollbars="vertical"/>
+</LinearLayout>
