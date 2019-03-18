@@ -17,6 +17,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,11 +36,13 @@ import java.util.List;
 
 public class WorkshopsFragment extends Fragment {
 
+    private static final String WORKSHOPS_LIST_KEY = "workshops_list";
+
     private TopLevelFragmentEventsListener mTopListener;
 
     private RecyclerView             mRecyclerView;
     private WorkshopsRecyclerAdapter mWorkshopsRecyclerAdapter;
-    private List<Workshop>           mWorkshops;
+    private ArrayList<Workshop>      mWorkshops;
 
 
     public WorkshopsFragment() {
@@ -67,10 +70,29 @@ public class WorkshopsFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mWorkshopsRecyclerAdapter = new WorkshopsRecyclerAdapter(mWorkshops);
+        mWorkshopsRecyclerAdapter.setWorkshopDetailRequestListener(
+                new WorkshopsRecyclerAdapter.WorkshopDetailRequestListener() {
+            @Override
+            public void onWorkshopDetailRequest(Workshop workshop) {
+                WorkshopDetailFragment detailFrag = WorkshopDetailFragment.newInstance(workshop);
+                detailFrag.setWorkshopEnrollListener(new LocalWorkshopEnrollListener(detailFrag));
+
+                FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
+                t.replace(R.id.main_fragment_container, detailFrag);
+                t.addToBackStack("workshopDetailFragment");
+                t.commit();
+            }
+        });
         mRecyclerView.setAdapter(mWorkshopsRecyclerAdapter);
 
-        // Each time view is created fetch the latest copy of workshops.
-        new WorkshopsFetcher().execute(this);
+        if (savedInstanceState == null) {
+            // The first time fragment is created, fetch the latest copy of workshops.
+            new WorkshopsFetcher().execute(this);
+        } else {
+            ArrayList<Workshop> restored
+                    = savedInstanceState.getParcelableArrayList(WORKSHOPS_LIST_KEY);
+            updateWorkshopsList(restored);
+        }
 
         return root;
     }
@@ -90,12 +112,28 @@ public class WorkshopsFragment extends Fragment {
         mTopListener = null;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(WORKSHOPS_LIST_KEY, mWorkshops);
+    }
+
     private void updateWorkshopsList(List<Workshop> workshops) {
         mWorkshops.clear();
         mWorkshops.addAll(workshops);
         mWorkshopsRecyclerAdapter.updateWorkshopsList(mWorkshops);
     }
 
+    private void updateWorkshop(Workshop updated) {
+        for (int i = 0; i < mWorkshops.size(); ++i) {
+            Workshop w = mWorkshops.get(i);
+            if (w.getId() == updated.getId()) {
+                mWorkshops.set(i, updated);
+                break;
+            }
+        }
+        mWorkshopsRecyclerAdapter.updateWorkshopsList(mWorkshops);
+    }
 
     private static class WorkshopsFetcher extends AsyncTask<WorkshopsFragment, Void, Object[]> {
 
@@ -115,6 +153,56 @@ public class WorkshopsFragment extends Fragment {
             List<Workshop> workshops = rc.getObject();
             WorkshopsFragment target = (WorkshopsFragment) args[1];
             target.updateWorkshopsList(workshops);
+        }
+    }
+
+
+    private static class WorkshopEnrollTask extends AsyncTask<Object, Void, Object[]> {
+
+        @Override
+        protected Object[] doInBackground(Object... args) {
+            Workshop workshop             = (Workshop) args[0];
+            String answer                 = (String) args[1];
+            WorkshopDetailFragment detail = (WorkshopDetailFragment) args[2];
+            WorkshopsFragment listFrag    = (WorkshopsFragment) args[3];
+
+            RemoteServerProxy.ResponseContainer<Workshop> rc = new RemoteServerProxy()
+                    .enrollToWorkshop(
+                        UserManager.getUserManager().getCurrentUser().getToken(),
+                        workshop, answer
+                    );
+
+            return new Object[] { rc, detail, listFrag };
+        }
+
+        @Override
+        protected void onPostExecute(Object[] args) {
+            super.onPostExecute(args);
+
+            RemoteServerProxy.ResponseContainer<Workshop> rc
+                    = (RemoteServerProxy.ResponseContainer<Workshop>) args[0];
+            Workshop updatedWorkshop      = rc.getObject();
+            WorkshopDetailFragment detail = (WorkshopDetailFragment) args[1];
+            WorkshopsFragment listFrag    = (WorkshopsFragment) args[2];
+
+            detail.updateWorkshop(updatedWorkshop);
+            listFrag.updateWorkshop(updatedWorkshop);
+        }
+    }
+
+
+    private class LocalWorkshopEnrollListener
+            implements WorkshopDetailFragment.WorkshopEnrollListener {
+
+        private WorkshopDetailFragment mTarget;
+
+        LocalWorkshopEnrollListener(WorkshopDetailFragment target) {
+            mTarget = target;
+        }
+
+        @Override
+        public void onWorkshopEnrollRequest(Workshop workshop, String answer) {
+            new WorkshopEnrollTask().execute(workshop, answer, mTarget, WorkshopsFragment.this);
         }
     }
 }

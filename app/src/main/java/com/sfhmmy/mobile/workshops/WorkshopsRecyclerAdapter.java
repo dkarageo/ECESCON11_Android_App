@@ -25,6 +25,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -33,6 +34,8 @@ public class WorkshopsRecyclerAdapter
 
     private List<Workshop> mWorkshops;
 
+    private WorkshopDetailRequestListener mDetailRequestListener;
+
 
     class WorkshopVH extends RecyclerView.ViewHolder {
 
@@ -40,13 +43,15 @@ public class WorkshopsRecyclerAdapter
         ImageView mImage;
         TextView  mLocation;
         TextView  mDateTime;
+        CardView  mContainerCard;
 
         WorkshopVH(View v) {
             super(v);
-            mName     = v.findViewById(R.id.workshops_item_name);
-            mImage    = v.findViewById(R.id.workshops_item_image);
-            mLocation = v.findViewById(R.id.workshops_item_location);
-            mDateTime = v.findViewById(R.id.workshops_item_date);
+            mName          = v.findViewById(R.id.workshops_item_name);
+            mImage         = v.findViewById(R.id.workshops_item_image);
+            mLocation      = v.findViewById(R.id.workshops_item_location);
+            mDateTime      = v.findViewById(R.id.workshops_item_date);
+            mContainerCard = v.findViewById(R.id.workshops_item_container);
         }
     }
 
@@ -74,6 +79,8 @@ public class WorkshopsRecyclerAdapter
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm  dd-MM-yyyy");
         holder.mDateTime.setText(curWorkshop.getDateTime().format(formatter));
 
+        holder.mContainerCard.setOnClickListener(new WorkshopCardClickListener(curWorkshop));
+
         Glide.with(holder.mImage.getContext())
                 .load(curWorkshop.getImageUrl())
                 .fitCenter()
@@ -85,8 +92,38 @@ public class WorkshopsRecyclerAdapter
         return mWorkshops.size();
     }
 
+    public void setWorkshopDetailRequestListener(WorkshopDetailRequestListener l) {
+        mDetailRequestListener = l;
+    }
+
+    public void notifyOnDetailRequest(Workshop workshop) {
+        if (mDetailRequestListener != null) {
+            mDetailRequestListener.onWorkshopDetailRequest(workshop);
+        }
+    }
+
     void updateWorkshopsList(List<Workshop> workshops) {
         mWorkshops = workshops;
         notifyDataSetChanged();
+    }
+
+
+    public interface WorkshopDetailRequestListener {
+        void onWorkshopDetailRequest(Workshop workshop);
+    }
+
+
+    private class WorkshopCardClickListener implements View.OnClickListener {
+
+        Workshop mTarget;
+
+        WorkshopCardClickListener(Workshop workshop) {
+            mTarget = workshop;
+        }
+
+        @Override
+        public void onClick(View view) {
+            notifyOnDetailRequest(mTarget);
+        }
     }
 }

@@ -177,6 +177,7 @@ public class RemoteServerProxy {
         List<Workshop> workshops = new ArrayList<>();
 
         Workshop work1 = new Workshop();
+        work1.setId(0);
         work1.setName("R4A Workshop");
         work1.setImageUrl("https://r4a.issel.ee.auth.gr/images/middleware.png");
         work1.setJoinQuestion("Do you love robotics?");
@@ -185,8 +186,10 @@ public class RemoteServerProxy {
                 "2019-04-21T14:30:00.000+02:00[Europe/Athens]",
                 DateTimeFormatter.ISO_ZONED_DATE_TIME
         ));
+        work1.setDescription("Learn everything about robots!");
 
         Workshop work2 = new Workshop();
+        work2.setId(1);
         work2.setName("Mhtsos Workshop");
         work2.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/IT/Dimitrios_Karageorgiou.jpg");
         work2.setJoinQuestion("Is there any reason to join that workshop?");
@@ -195,6 +198,7 @@ public class RemoteServerProxy {
                 "2019-04-21T18:00:00.000+02:00[Europe/Athens]",
                 DateTimeFormatter.ISO_ZONED_DATE_TIME
         ));
+        work2.setDescription("Ένα εργαστήριο γεμάτο εκπλήξεις! ;)");
 
         workshops.add(work1);
         workshops.add(work2);
@@ -206,6 +210,19 @@ public class RemoteServerProxy {
         return rc;
     }
 
+    public ResponseContainer<Workshop> enrollToWorkshop(String accessToken, Workshop workshop,
+                                                        String answer) {
+
+        ResponseContainer<Workshop> rc = new ResponseContainer<>();
+
+        workshop.setEnrollStatus(Workshop.EnrollStatus.PENDING);
+
+        rc.setObject(workshop);
+        rc.setMessage("Success.");
+        rc.setCode(RESPONSE_SUCCESS);
+
+        return rc;
+    }
 
     public class ResponseContainer<T> {
         private T      mObject;
