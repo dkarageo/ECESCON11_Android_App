@@ -1,3 +1,14 @@
+/*
+ * MainActivity.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
+
 package com.sfhmmy.mobile;
 
 import android.content.Intent;
@@ -200,6 +211,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    // ---- TopLevelFragmentEventsListener methods ----
     @Override
     public void updateTitle(String newTitle) {
         setTitle(newTitle);
@@ -252,5 +264,9 @@ public class MainActivity extends AppCompatActivity
 
             isProfileMenuEnabled = false;
         }
+    }
+
+    private boolean isNavigationBarVisible() {
+        return navBar.getVisibility() == View.VISIBLE;
     }
 }
