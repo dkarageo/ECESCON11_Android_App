@@ -32,6 +32,8 @@
     <string name="error_login_failed">Failed to login</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="permission_rationale">Sign in</string>
+    <string name="login_dialog_login_button_text">Login</string>
+    <string name="login_dialog_cancel_button_text">Cancel</string>
 
     <!-- String related to home screen -->
     <string name="home_photos_list_item_uploader_hint_text">Uploaded by</string>

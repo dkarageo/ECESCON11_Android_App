@@ -31,6 +31,8 @@
     <string name="error_incorrect_password">Το password είναι λανθασμένο</string>
     <string name="error_field_required">Το πεδίο είναι υποχρεωτικό</string>
     <string name="error_login_failed">Αποτυχία εισόδου</string>
+    <string name="login_dialog_login_button_text">Είσοδος</string>
+    <string name="login_dialog_cancel_button_text">Ακύρωση</string>
 
     <!-- String related to home screen -->
     <string name="home_photos_list_item_uploader_hint_text">Ανέβηκε από</string>
