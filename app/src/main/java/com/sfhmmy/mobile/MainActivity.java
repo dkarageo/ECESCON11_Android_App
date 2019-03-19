@@ -27,7 +27,10 @@ import android.view.View;
 import com.sfhmmy.mobile.battles.BattlesFragment;
 import com.sfhmmy.mobile.promo.InfoFragment;
 import com.sfhmmy.mobile.checkins.CheckInActivity;
+import com.sfhmmy.mobile.startups.StartupManager;
+import com.sfhmmy.mobile.users.LoginDialogFragment;
 import com.sfhmmy.mobile.users.PassportFragment;
+import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
 import com.sfhmmy.mobile.workshops.WorkshopsFragment;
 
@@ -36,7 +39,8 @@ import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity
-        implements TopLevelFragmentEventsListener {
+        implements TopLevelFragmentEventsListener,
+                   UserManager.UserAuthenticationListener {
 
     BottomNavigationView navBar;
 
@@ -140,6 +144,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        UserManager.getUserManager().registerUserAuthenticationListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UserManager.getUserManager().unregisterUserAuthenticationListener(this);
+    }
+
+    @Override
     public void onBackPressed() {
 
         // When profile menu is enabled, the back button should hide the menu and not switch
@@ -227,9 +244,15 @@ public class MainActivity extends AppCompatActivity
         navBar.setVisibility(View.VISIBLE);
     }
 
-    private boolean isNavigationBarVisible() {
-        return navBar.getVisibility() == View.VISIBLE;
-    }
+    // ---- UserManager.UserAuthenticationListener methods ----
+    @Override
+    public void onSessionCreated(User user) { updateUserSpecificContent(user); }
+
+    @Override
+    public void onSessionDestroyed() { updateUserSpecificContent(null); }
+
+    @Override
+    public void onSessionRestorationFailure(String error) { updateUserSpecificContent(null); }
 
     /**
      * Displays/Hides the profile menu of the application.
@@ -268,5 +291,17 @@ public class MainActivity extends AppCompatActivity
 
     private boolean isNavigationBarVisible() {
         return navBar.getVisibility() == View.VISIBLE;
+    }
+
+    private void updateUserSpecificContent(User user) {
+        // Notify all child User Aware Fragments about the user change.
+        for (Fragment f : activeFragments.values()) {
+            if (f instanceof UserAwareFragment) {
+                ((UserAwareFragment) f).notifyOnUserChange(user);
+            }
+        }
+
+        // Refresh the options menu, to properly display or hide user specific options.
+        invalidateOptionsMenu();
     }
 }
