@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,12 +24,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
+import com.sfhmmy.mobile.users.User;
+import com.sfhmmy.mobile.users.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends UserAwareFragment {
 
     private TopLevelFragmentEventsListener mTopListener;
 
@@ -67,8 +68,15 @@ public class HomeFragment extends Fragment {
             throw new RuntimeException("Unable to fetch home screen recycler view.");
         }
         // Use a linear layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new HomeRecyclerViewAdapter(mImagePosts);
+        mAdapter.setLoginRequestListener(new HomeRecyclerViewAdapter.LoginRequestListener() {
+            @Override
+            public void onLoginRequest() {
+                displayLoginDialog();
+            }
+        });
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
 
         // Ask to fetch latests posts.
@@ -92,6 +100,14 @@ public class HomeFragment extends Fragment {
         mTopListener = null;
     }
 
+    @Override
+    protected void onCreateUserSpecificContent(User user) {
+        super.onCreateUserSpecificContent(user);
+
+        if (user == null) mAdapter.displayUnloggedUserItem(true);
+        else mAdapter.displayUnloggedUserItem(false);
+    }
+
     private void updateImagePosts(List<ImagePost> imagePosts) {
         mImagePosts.clear();
         mImagePosts.addAll(imagePosts);
@@ -103,8 +119,9 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected Object[] doInBackground(HomeFragment... homeFragments) {
+            User user = UserManager.getUserManager().getCurrentUser();
             RemoteServerProxy.ResponseContainer rc = new RemoteServerProxy().getPhotoWallPosts(
-                    com.sfhmmy.mobile.users.UserManager.getUserManager().getCurrentUser().getToken()
+                    user != null ? user.getToken() : null
             );
             return new Object[] { rc, homeFragments[0] };
         }

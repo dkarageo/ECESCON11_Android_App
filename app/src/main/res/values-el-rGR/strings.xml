@@ -40,6 +40,9 @@
     <string name="home_photos_list_item_description_hint_text">Περιγραφή</string>
     <string name="home_photos_list_item_photo_load_error_text">Αδυναμία φόρτωσης της εικόνας.</string>
     <string name="home_photos_list_item_photo_content_desc">Photo of the post.</string>
+    <string name="home_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένονυ να αποκτήσετε πρόσβαση σε όλο το περιεχόμενο του συνεδρίου, παρακαλούμε συνδεθείτε!</string>
+    <string name="home_unlogged_user_notification_login_button_text">Είσοδος</string>
+    <string name="home_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>
 
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Εικόνα Προφίλ</string>

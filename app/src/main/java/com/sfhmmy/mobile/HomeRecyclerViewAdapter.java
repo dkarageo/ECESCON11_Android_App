@@ -14,6 +14,7 @@ package com.sfhmmy.mobile;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,8 @@ import com.bumptech.glide.Glide;
 import com.sfhmmy.mobile.utils.DateTimeUtils;
 
 import org.threeten.bp.ZonedDateTime;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -33,6 +36,10 @@ public class HomeRecyclerViewAdapter
     // List of image posts to be displayed.
     private List<ImagePost> mImagePosts;
 
+    private boolean mDisplayUnloggedUserItem;
+
+    private LoginRequestListener mLoginRequestListener;
+
 
     private class PhotosVH extends RecyclerView.ViewHolder {
 
@@ -42,7 +49,7 @@ public class HomeRecyclerViewAdapter
         TextView mUploadDate;
         TextView mDescription;
 
-        public PhotosVH(View v) {
+        PhotosVH(View v) {
             super(v);
             mPhoto = v.findViewById(R.id.home_photos_list_item_photo);
             mPhotoError = v.findViewById(R.id.home_photos_list_item_photo_load_error);
@@ -52,21 +59,41 @@ public class HomeRecyclerViewAdapter
         }
     }
 
+    private class UnloggedUserVH extends RecyclerView.ViewHolder {
 
-    public HomeRecyclerViewAdapter(List<ImagePost> imagePosts) {
-        mImagePosts = imagePosts;
+        Button mLoginButton;
+
+        UnloggedUserVH(View v) {
+            super(v);
+            mLoginButton = v.findViewById(R.id.home_unlogged_user_notification_login_button);
+        }
     }
 
-    @Override
+
+    HomeRecyclerViewAdapter(List<ImagePost> imagePosts) {
+
+        mImagePosts = new ArrayList<>();
+        mImagePosts.addAll(imagePosts);
+    }
+
+    @Override @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         RecyclerView.ViewHolder vh;
+        View v;
 
         switch(viewType) {
             case 0:
-                View v = LayoutInflater.from(viewGroup.getContext()).inflate(
+                v = LayoutInflater.from(viewGroup.getContext()).inflate(
                         R.layout.home_photo_item_layout, viewGroup, false
                 );
                 vh = new PhotosVH(v);
+                break;
+
+            case 1:
+                v = LayoutInflater.from(viewGroup.getContext()).inflate(
+                        R.layout.home_unlogged_user_notification_item_layout, viewGroup, false
+                );
+                vh = new UnloggedUserVH(v);
                 break;
 
             default:
@@ -83,6 +110,10 @@ public class HomeRecyclerViewAdapter
                 bindPhotosVH((PhotosVH) holder, position);
                 break;
 
+            case 1:
+                bindUnloggedUserVH((UnloggedUserVH) holder, position);
+                break;
+
             default:
                 throw new RuntimeException("Invalid view type.");
         }
@@ -93,9 +124,35 @@ public class HomeRecyclerViewAdapter
         return mImagePosts.size();
     }
 
-    public void updateImagePosts(List<ImagePost> imagePosts) {
-        mImagePosts = imagePosts;
+    void updateImagePosts(List<ImagePost> imagePosts) {
+        mImagePosts.clear();
+        mImagePosts.addAll(imagePosts);
+        if (mDisplayUnloggedUserItem) mImagePosts.add(0, new ImagePost());
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mDisplayUnloggedUserItem && position == 0) return 1;
+        else return 0;
+    }
+
+    void displayUnloggedUserItem(boolean display) {
+        // As long as notification should be visible, keep a null item to image posts list.
+        if (display && !mDisplayUnloggedUserItem) mImagePosts.add(0, new ImagePost());
+        else if (!display && mDisplayUnloggedUserItem) mImagePosts.remove(0);
+
+        mDisplayUnloggedUserItem = display;
+
+        notifyDataSetChanged();
+    }
+
+    public void setLoginRequestListener(LoginRequestListener l) {
+        mLoginRequestListener = l;
+    }
+
+    private void notifyOnLoginRequest() {
+        mLoginRequestListener.onLoginRequest();
     }
 
     private void bindPhotosVH(PhotosVH holder, int position) {
@@ -111,5 +168,19 @@ public class HomeRecyclerViewAdapter
                 .load(curPost.getImageUrl())
                 .fitCenter()
                 .into(holder.mPhoto);
+    }
+
+    private void bindUnloggedUserVH(UnloggedUserVH holder, int position) {
+        holder.mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notifyOnLoginRequest();
+            }
+        });
+    }
+
+
+    public interface LoginRequestListener {
+        void onLoginRequest();
     }
 }
