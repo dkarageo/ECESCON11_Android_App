@@ -1,7 +1,6 @@
 package com.sfhmmy.mobile.users;
 
 import com.sfhmmy.mobile.App;
-import com.sfhmmy.mobile.MainActivity;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
 
@@ -125,8 +124,9 @@ public class UserManager {
      *
      */
     public interface UserAuthenticationListener {
-        void onSessionCreated();
+        void onSessionCreated(User user);
         void onSessionRestorationFailure(String error);
+        void onSessionDestroyed();
     }
 
     /**
@@ -173,9 +173,9 @@ public class UserManager {
         return u;
     }
 
-    private void notifyOnSessionCreated() {
+    private void notifyOnSessionCreated(User user) {
         for (UserAuthenticationListener listener : authenticationListeners) {
-            listener.onSessionCreated();
+            listener.onSessionCreated(user);
         }
     }
 
@@ -214,7 +214,7 @@ public class UserManager {
             // When background worker returns no users, notify authentication listeners
             // about the error.
             // TODO: Implement cause specific errors.
-            if (u != null) notifyOnSessionCreated();
+            if (u != null) notifyOnSessionCreated(getCurrentUser());
             else notifyOnSessionRestorationFailure();
         }
     }
@@ -241,7 +241,7 @@ public class UserManager {
             // When background worker returns no users, notify authentication listeners
             // about the error.
             // TODO: Implement cause specific errors.
-            if (u != null) notifyOnSessionCreated();
+            if (u != null) notifyOnSessionCreated(getCurrentUser());
             else notifyOnSessionRestorationFailure();
         }
     }
