@@ -58,7 +58,7 @@ public class LoginActivity
 
     // ---- UserManager.UserAuthenticationListener methods ----
     @Override
-    public void onSessionCreated() {
+    public void onSessionCreated(User user) {
         // When valid user session is created, login can terminate and continue to main activity.
         startActivity(new Intent(this, MainActivity.class));
         finish();
@@ -73,6 +73,9 @@ public class LoginActivity
 
         allowCredentialsEditing(true);
     }
+
+    @Override
+    public void onSessionDestroyed() {}
 
     // ---- Activity's lifecycle methods ----
     @Override
