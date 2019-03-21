@@ -8,8 +8,10 @@
     android:layout_height="wrap_content"
     card_view:card_elevation="4dp"
     card_view:cardCornerRadius="4dp"
-    android:layout_marginBottom="8dp"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

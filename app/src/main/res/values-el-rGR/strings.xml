@@ -55,6 +55,9 @@
     <string name="workshops_item_location_hint_text">Τοποθεσία</string>
     <string name="workshops_item_date_icon_content_desc">Εικονίδιο Ημερομηνίας</string>
     <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
+    <string name="workshops_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένονυ να εγγραφείτε στα εργαστήρια, παρακαλούμε συνδεθείτε!</string>
+    <string name="workshops_unlogged_user_notification_login_button_text">Είσοδος</string>
+    <string name="workshops_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>
 
     <!-- String related to workshops detail screen -->
     <string name="workshop_detail_description_header_text">Τι θα δείτε;</string>
