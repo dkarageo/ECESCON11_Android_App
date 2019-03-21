@@ -200,6 +200,14 @@ public class RemoteServerProxy {
         ));
         work2.setDescription("Ένα εργαστήριο γεμάτο εκπλήξεις! ;)");
 
+        if (accessToken != null) {
+            work1.setEnrollStatus(Workshop.EnrollStatus.AVAILABLE);
+            work2.setEnrollStatus(Workshop.EnrollStatus.AVAILABLE);
+        } else {
+            work1.setEnrollStatus(Workshop.EnrollStatus.UNAVAILABLE);
+            work2.setEnrollStatus(Workshop.EnrollStatus.UNAVAILABLE);
+        }
+
         workshops.add(work1);
         workshops.add(work2);
 
