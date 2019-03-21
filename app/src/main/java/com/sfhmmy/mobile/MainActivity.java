@@ -148,6 +148,13 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         UserManager.getUserManager().registerUserAuthenticationListener(this);
+
+        // On first run of the application, open login dialog.
+        boolean isFirstRun = StartupManager.getStartupManager().isFirstRun();
+        if (isFirstRun && UserManager.getUserManager() == null)  {
+            LoginDialogFragment loginDialog = LoginDialogFragment.newInstance();
+            loginDialog.show(getSupportFragmentManager(), "loginDialog");
+        }
     }
 
     @Override
