@@ -157,35 +157,42 @@ public class WorkshopDetailFragment extends Fragment {
         int textRes;
         int colorRes;
 
+        boolean displayEnrollButton;
+
         switch (status) {
             case AVAILABLE:
                 iconRes  = R.drawable.question_mark;
                 textRes  = R.string.workshop_detail_enroll_status_available_text;
                 colorRes = R.color.statusNeutralColor;
+                displayEnrollButton = true;
                 break;
 
             case UNAVAILABLE:
                 iconRes  = R.drawable.cross_mark;
                 textRes  = R.string.workshop_detail_enroll_status_unavailable_text;
                 colorRes = R.color.statusNegativeColor;
+                displayEnrollButton = false;
                 break;
 
             case ACCEPTED:
                 iconRes  = R.drawable.check_mark;
                 textRes  = R.string.workshop_detail_enroll_status_accepted_text;
                 colorRes = R.color.statusPositiveColor;
+                displayEnrollButton = false;
                 break;
 
             case REJECTED:
                 iconRes  = R.drawable.cross_mark;
                 textRes  = R.string.workshop_detail_enroll_status_rejected_text;
                 colorRes = R.color.statusNegativeColor;
+                displayEnrollButton = false;
                 break;
 
             case PENDING:
                 iconRes  = R.drawable.question_mark;
                 textRes  = R.string.workshop_detail_enroll_status_pending_text;
                 colorRes = R.color.statusUnknownColor;
+                displayEnrollButton = false;
                 break;
 
             default:
@@ -200,6 +207,9 @@ public class WorkshopDetailFragment extends Fragment {
         // Set colored text.
         mEnrollStatus.setText(getText(textRes));
         mEnrollStatus.setTextColor(getResources().getColor(colorRes));
+
+        if (displayEnrollButton) mEnrollButton.setVisibility(View.VISIBLE);
+        else mEnrollButton.setVisibility(View.GONE);
     }
 
 
