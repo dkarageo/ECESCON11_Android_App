@@ -23,6 +23,9 @@ import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.users.User;
 
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -91,12 +94,11 @@ public class UsersListRecyclerAdapter
         holder.mNameSurname.setText(String.format("%s %s", curUser.getName(), curUser.getSurname()));
         holder.mEmail.setText(curUser.getEmail());
 
-        Date lastCheckInDate = curUser.getLastCheckInDate();
+        ZonedDateTime lastCheckInDate = curUser.getLastCheckInDate();
         holder.mLastCheckIn.setText(
                 lastCheckInDate == null ?
                         App.getAppResources().getString(R.string.checkin_users_list_item_no_checkin) :
-                        new SimpleDateFormat("hh:mm dd-MM-yyyy")
-                                .format(curUser.getLastCheckInDate())
+                        lastCheckInDate.format(DateTimeFormatter.ofPattern("HH:mm  dd-MM-yyyy"))
         );
 
         holder.mItem.setOnClickListener(new View.OnClickListener() {

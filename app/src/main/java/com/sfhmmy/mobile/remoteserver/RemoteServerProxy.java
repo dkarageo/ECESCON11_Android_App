@@ -82,7 +82,7 @@ public class RemoteServerProxy {
 
             Calendar cal = GregorianCalendar.getInstance();
             cal.set(2019, 2, 8);
-            u.setLastCheckInDate(cal.getTime());
+            u.setLastCheckInDate(ZonedDateTime.now());
         }
 
         return u;

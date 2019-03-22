@@ -2,6 +2,8 @@ package com.sfhmmy.mobile.users;
 
 import android.graphics.Bitmap;
 
+import org.threeten.bp.ZonedDateTime;
+
 import java.util.Date;
 
 public class User {
@@ -18,7 +20,7 @@ public class User {
     private Role   mRole;
     private Bitmap mProfilePicture;
     private String mPassportValue;
-    private Date   mLastCheckInDate;
+    private ZonedDateTime mLastCheckInDate;
 
     public User() {}
 
@@ -37,7 +39,7 @@ public class User {
     public Bitmap getProfilePicture() { return mProfilePicture; }
     public String getOrganization() { return mOrganization; }
     public String getPassportValue() { return mPassportValue; }
-    public Date getLastCheckInDate() { return mLastCheckInDate; }
+    public ZonedDateTime getLastCheckInDate() { return mLastCheckInDate; }
 
 
     public void setUid(long uid) { mUid = uid; }
@@ -49,7 +51,7 @@ public class User {
     public void setProfilePicture(Bitmap profilePicture) { mProfilePicture = profilePicture; }
     public void setOrganization(String organization) { mOrganization = organization; }
     public void setPassportValue(String passportValue) { mPassportValue = passportValue; }
-    public void setLastCheckInDate(Date lastCheckInDate) { mLastCheckInDate = lastCheckInDate; }
+    public void setLastCheckInDate(ZonedDateTime lastCheckInDate) { mLastCheckInDate = lastCheckInDate; }
 
     public boolean hasRoleOf(Role role) {
         if (mRole == role) return true;
