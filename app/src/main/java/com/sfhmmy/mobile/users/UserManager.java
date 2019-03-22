@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +23,21 @@ import java.util.List;
 public class UserManager {
 
     // Name of the SharedPreferences file used for storing user data.
-    private static String USER_PREFERENCES_FILE_NAME = "com.sfhmmy.mobile.users";
-    private static String USER_PREFERENCES_TOKEN_ID = "com.sfhmmy.mobile.users.token";
-    private static String USER_PREFERENCES_NAME_ID = "com.sfhmmy.mobile.users.name";
-    private static String USER_PREFERENCES_EMAIL_ID = "com.sfhmmy.mobile.users.email";
-    private static String USER_PREFERENCES_UID_ID = "com.sfhmmy.mobile.users.id";
-    private static String USER_PREFERENCES_ROLE_ID = "com.sfhmmy.mobile.users.role";
+    private static final String USER_PREFERENCES_FILE_NAME = "com.sfhmmy.mobile.users";
+    private static final String USER_PREFERENCES_TOKEN_KEY = "com.sfhmmy.mobile.users.token";
+    private static final String USER_PREFERENCES_NAME_KEY = "com.sfhmmy.mobile.users.name";
+    private static final String USER_PREFERENCES_SURNAME_KEY = "com.sfhmmy.mobile.users.surname";
+    private static final String USER_PREFERENCES_EMAIL_KEY = "com.sfhmmy.mobile.users.email";
+    private static final String USER_PREFERENCES_UID_KEY = "com.sfhmmy.mobile.users.id";
+    private static final String USER_PREFERENCES_ROLE_KEY = "com.sfhmmy.mobile.users.role";
+    private static final String USER_PREFERENCES_PROFILE_PIC_URL_KEY
+            = "com.sfhmmy.mobile.users.profile_pic";
+    private static final String USER_PREFERENCES_ORGANIZATION_KEY
+            = "com.sfhmmy.mobile.users.organization";
+    private static final String USER_PREFERENCES_PASSPORT_VALUE_KEY
+            = "com.sfhmmy.mobile.users.passport_value";
+    private static final String USER_PREFERENCES_LAST_CHECKIN_DATE_KEY
+            = "com.sfhmmy.mobile.users.last_checkin_date";
 
     // Singleton reference of UserManager.
     private static UserManager mUserManager = null;
@@ -81,10 +93,12 @@ public class UserManager {
     }
 
     /**
-     * Destroys any currently saved user session.
+     * Destroys any currently saved user session and notifies all registered
+     * UserAuthenticationListener objects via a call to onSessionDestroyed() method.
      */
     public void logout() {
-        // TODO: logout implement
+        saveUserObject(null);
+        notifyOnSessionDestroyed();
     }
 
     /**
@@ -96,33 +110,18 @@ public class UserManager {
         return false;
     }
 
-    /**
-     *
-     * @param l
-     * @return
-     */
-    public boolean registerUserAuthenticationListener(UserAuthenticationListener l) {
-        return authenticationListeners.add(l);
+    public void registerUserAuthenticationListener(UserAuthenticationListener l) {
+        authenticationListeners.add(l);
     }
 
-    /**
-     *
-     * @param l
-     * @return
-     */
-    public boolean unregisterUserAuthenticationListener(UserAuthenticationListener l) {
-        return authenticationListeners.remove(l);
+    public void unregisterUserAuthenticationListener(UserAuthenticationListener l) {
+        authenticationListeners.remove(l);
     }
 
     public boolean isCurrentUserSecretary() {
-        if (mCurrentUser != null && mCurrentUser.getRole().equals(User.USER_ROLE_SECRETARY)) {
-            return true;
-        } else return false;
+        return mCurrentUser != null && mCurrentUser.hasRoleOf(User.Role.SECRETARY);
     }
 
-    /**
-     *
-     */
     public interface UserAuthenticationListener {
         void onSessionCreated(User user);
         void onSessionRestorationFailure(String error);
@@ -132,19 +131,40 @@ public class UserManager {
     /**
      * Saves given User object to a SharedPreferences file.
      *
-     * Currently saved user (if any) is replaced by given one.
+     * Currently saved user (if any) is replaced by given one. If given user is null, then any
+     * previously saved user is removed from the storage.
      */
     private void saveUserObject(User u) {
-        if (u == null) throw new NullPointerException();
-
         SharedPreferences.Editor spe = App.getAppContext().getSharedPreferences(
                 USER_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE).edit();
 
-        if (u.getName() != null) spe.putString(USER_PREFERENCES_NAME_ID, u.getName());
-        if (u.getEmail() != null) spe.putString(USER_PREFERENCES_EMAIL_ID, u.getEmail());
-        if (u.getToken() != null) spe.putString(USER_PREFERENCES_TOKEN_ID, u.getToken());
-        if (u.getRole() != null) spe.putString(USER_PREFERENCES_ROLE_ID, u.getRole());
-        if (u.getUid() > 0) spe.putLong(USER_PREFERENCES_UID_ID, u.getUid());
+        if (u != null) {
+            spe.putLong(USER_PREFERENCES_UID_KEY, u.getUid());
+            spe.putString(USER_PREFERENCES_EMAIL_KEY, u.getEmail());
+            spe.putString(USER_PREFERENCES_NAME_KEY, u.getName());
+            spe.putString(USER_PREFERENCES_SURNAME_KEY, u.getSurname());
+            spe.putString(USER_PREFERENCES_TOKEN_KEY, u.getToken());
+            spe.putString(USER_PREFERENCES_ROLE_KEY, u.getRole().name());
+            spe.putString(USER_PREFERENCES_PROFILE_PIC_URL_KEY, u.getProfilePictureURL());
+            spe.putString(USER_PREFERENCES_ORGANIZATION_KEY, u.getOrganization());
+            spe.putString(USER_PREFERENCES_PASSPORT_VALUE_KEY, u.getPassportValue());
+            spe.putString(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY,
+                    u.getLastCheckInDate() != null ?
+                            u.getLastCheckInDate().format(DateTimeFormatter.ISO_ZONED_DATE_TIME) :
+                            null
+                    );
+        } else {
+            spe.remove(USER_PREFERENCES_UID_KEY);
+            spe.remove(USER_PREFERENCES_EMAIL_KEY);
+            spe.remove(USER_PREFERENCES_NAME_KEY);
+            spe.remove(USER_PREFERENCES_SURNAME_KEY);
+            spe.remove(USER_PREFERENCES_TOKEN_KEY);
+            spe.remove(USER_PREFERENCES_ROLE_KEY);
+            spe.remove(USER_PREFERENCES_PROFILE_PIC_URL_KEY);
+            spe.remove(USER_PREFERENCES_ORGANIZATION_KEY);
+            spe.remove(USER_PREFERENCES_PASSPORT_VALUE_KEY);
+            spe.remove(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY);
+        }
 
         spe.apply();
     }
@@ -161,13 +181,33 @@ public class UserManager {
 
         User u = null;
 
-        if (sp.contains(USER_PREFERENCES_UID_ID)) {
+        if (sp.contains(USER_PREFERENCES_UID_KEY)) {
             u = new User();
-            u.setUid(sp.getLong(USER_PREFERENCES_UID_ID, -1));
-            u.setToken(sp.getString(USER_PREFERENCES_TOKEN_ID, ""));
-            u.setName(sp.getString(USER_PREFERENCES_NAME_ID, ""));
-            u.setEmail(sp.getString(USER_PREFERENCES_EMAIL_ID, ""));
-            u.setRole(sp.getString(USER_PREFERENCES_ROLE_ID, ""));
+            u.setUid(sp.getLong(USER_PREFERENCES_UID_KEY, -1));
+            u.setEmail(sp.getString(USER_PREFERENCES_EMAIL_KEY, null));
+            u.setName(sp.getString(USER_PREFERENCES_NAME_KEY, null));
+            u.setSurname(sp.getString(USER_PREFERENCES_SURNAME_KEY, null));
+            u.setToken(sp.getString(USER_PREFERENCES_TOKEN_KEY, null));
+
+            String roleString = sp.getString(USER_PREFERENCES_ROLE_KEY, null);
+            try {
+                u.setRole(roleString != null ? User.Role.valueOf(roleString) : null);
+            } catch (IllegalArgumentException ex) {
+                // In case for a reason preferences file got corrupted, don't allow the app to
+                // crash by just not setting role attribute.
+                u.setRole(null);
+            }
+
+            u.setProfilePictureURL(sp.getString(USER_PREFERENCES_PROFILE_PIC_URL_KEY, null));
+            u.setOrganization(sp.getString(USER_PREFERENCES_ORGANIZATION_KEY, null));
+
+            String dateString = sp.getString(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY, null);
+            if (dateString != null) {
+                ZonedDateTime dateTime = ZonedDateTime.parse(
+                        dateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
+                );
+                u.setLastCheckInDate(dateTime);
+            }
         }
 
         return u;
@@ -183,6 +223,12 @@ public class UserManager {
         for (UserAuthenticationListener listener : authenticationListeners) {
             listener.onSessionRestorationFailure(
                     App.getAppResources().getString(R.string.error_login_failed));
+        }
+    }
+
+    private void notifyOnSessionDestroyed() {
+        for (UserAuthenticationListener listener : authenticationListeners) {
+            listener.onSessionDestroyed();
         }
     }
 
