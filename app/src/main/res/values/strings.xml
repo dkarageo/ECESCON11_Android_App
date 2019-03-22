@@ -78,6 +78,13 @@
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Profile Picture</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
+    <string name="passport_conference_name">11th Electrical and Computers Engineering Students Conference</string>
+    <string name="passport_conference_logo_content_desc">Conference Logo</string>
+    <string name="passport_conference_location_and_date">19&#8211;21 April 2019, Thessaloniki, Greece</string>
+    <string name="passport_user_role_administrator_text">Administrator</string>
+    <string name="passport_user_role_secretary_text">Secretary</string>
+    <string name="passport_unlogged_user_notification_text">By logging in you have the ability to check-in simply by your smartphone. Don\'t miss it!</string>
+    <string name="passport_unlogged_user_notification_login_button_text">Give me simple check-ins</string>
 
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Access to camera is required in order to use QR Code Scanner.</string>

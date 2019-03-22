@@ -47,6 +47,14 @@
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Εικόνα Προφίλ</string>
     <string name="passport_qrcode_img_desc">QR Code</string>
+    <string name="passport_conference_name">11ο Συνέδριο Φοιτητών Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών</string>
+    <string name="passport_conference_logo_content_desc">Εικονίδιο Συνεδρίου</string>
+    <string name="passport_conference_location_and_date">19&#8211;21 Απριλίου 2019, Θεσσαλονίκη, Ελλάδα</string>
+    <string name="passport_user_role_administrator_text">Διαχειριστής</string>
+    <string name="passport_user_role_secretary_text">Γραμματέας</string>
+    <string name="passport_unlogged_user_notification_text">Η είσοδος στην εφαρμογή σας δίνει τη δυνατότητα για εύκολο και απλό check-in από το κινητό σας!</string>
+    <string name="passport_unlogged_user_notification_login_button_text">Θελω ευκολο check-in</string>
+
 
     <!-- String related to workshops screen -->
     <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
