@@ -68,7 +68,7 @@ public class RemoteServerProxy {
             u = new User(5, "secretary@gmail.com", "Fat");
             u.setSurname("Elephant");
             u.setToken(accessToken);
-            u.setRole(User.USER_ROLE_SECRETARY);
+            u.setRole(User.Role.SECRETARY);
             u.setOrganization("ECESCON11 Organizing Committee");
             u.setPassportValue("ecescon11://secretary");
 
@@ -76,7 +76,7 @@ public class RemoteServerProxy {
             u = new User(1001, "user@gmail.com", "Kostas");
             u.setSurname("Dimitriou");
             u.setToken(accessToken);
-            u.setRole(User.USER_ROLE_VISITOR);
+            u.setRole(User.Role.VISITOR);
             u.setOrganization("Aristotle University Of Thessaloniki");
             u.setPassportValue("ecescon11://user");
 
