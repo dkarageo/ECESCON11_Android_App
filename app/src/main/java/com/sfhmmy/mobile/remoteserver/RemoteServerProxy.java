@@ -71,6 +71,7 @@ public class RemoteServerProxy {
             u.setRole(User.Role.SECRETARY);
             u.setOrganization("ECESCON11 Organizing Committee");
             u.setPassportValue("ecescon11://secretary");
+            u.setProfilePictureURL("https://sfhmmy.gr/img/pages/conference/organizing_committee/IT/Dimitrios_Karageorgiou.jpg");
 
         } else if (accessToken.equals("user123token")) {
             u = new User(1001, "user@gmail.com", "Kostas");

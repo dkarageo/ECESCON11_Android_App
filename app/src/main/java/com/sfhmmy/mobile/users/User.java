@@ -9,7 +9,6 @@ import java.util.Date;
 public class User {
 
     public enum Role { VISITOR, SECRETARY, ADMINISTRATOR }
-    public static String USER_ROLE_SECRETARY = "secretary";
 
     private long   mUid;
     private String mEmail;
@@ -18,7 +17,7 @@ public class User {
     private String mOrganization;
     private String mToken;
     private Role   mRole;
-    private Bitmap mProfilePicture;
+    private String mProfilePictureURL;
     private String mPassportValue;
     private ZonedDateTime mLastCheckInDate;
 
@@ -36,11 +35,10 @@ public class User {
     public String getSurname() { return mSurname; }
     public String getToken() { return mToken; }
     public Role getRole() { return mRole; }
-    public Bitmap getProfilePicture() { return mProfilePicture; }
+    public String getProfilePictureURL() { return mProfilePictureURL; }
     public String getOrganization() { return mOrganization; }
     public String getPassportValue() { return mPassportValue; }
     public ZonedDateTime getLastCheckInDate() { return mLastCheckInDate; }
-
 
     public void setUid(long uid) { mUid = uid; }
     public void setEmail(String email) { mEmail = email; }
@@ -48,7 +46,7 @@ public class User {
     public void setSurname(String surname) { mSurname = surname; }
     public void setToken(String token) { mToken = token; }
     public void setRole(Role role) { mRole = role; }
-    public void setProfilePicture(Bitmap profilePicture) { mProfilePicture = profilePicture; }
+    public void setProfilePictureURL(String profilePictureURL) { mProfilePictureURL = profilePictureURL; }
     public void setOrganization(String organization) { mOrganization = organization; }
     public void setPassportValue(String passportValue) { mPassportValue = passportValue; }
     public void setLastCheckInDate(ZonedDateTime lastCheckInDate) { mLastCheckInDate = lastCheckInDate; }
