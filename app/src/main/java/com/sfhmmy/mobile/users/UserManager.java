@@ -97,6 +97,7 @@ public class UserManager {
      * UserAuthenticationListener objects via a call to onSessionDestroyed() method.
      */
     public void logout() {
+        mCurrentUser = null;
         saveUserObject(null);
         notifyOnSessionDestroyed();
     }
