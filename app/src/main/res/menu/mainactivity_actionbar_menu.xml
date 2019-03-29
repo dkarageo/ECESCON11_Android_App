@@ -9,9 +9,11 @@
         android:visible="false"
         app:showAsAction="ifRoom" />
 
+    <!--
     <item
         android:id="@+id/mainactivity_actionbar_menu_profile"
         android:title="@string/mainactivity_actionbar_menu_profile_title"
         android:icon="@drawable/generic_user_icon"
         app:showAsAction="ifRoom"/>
+    -->
 </menu>
