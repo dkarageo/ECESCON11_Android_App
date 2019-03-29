@@ -16,6 +16,7 @@
     <string name="battles_title">Photoshop Battles</string>
     <string name="info_title">Το συνέδριό μας</string>
     <string name="profile_menu_tile">Λογαριασμός</string>
+    <string name="about_action_bar_title">Σχετικά</string>
 
     <!-- Main Action Bar Titles -->
     <string name="mainactivity_actionbar_menu_profile_title">Προφίλ</string>
