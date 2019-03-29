@@ -16,6 +16,7 @@
     <string name="info_title">The Conference</string>
     <string name="profile_menu_tile">Account</string>
     <string name="about_action_bar_title">About</string>
+    <string name="user_profile_action_bar_title">My Profile</string>
 
     <!-- Main Action Bar Titles -->
     <string name="mainactivity_actionbar_menu_profile_title">Profile</string>
