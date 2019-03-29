@@ -1,5 +1,7 @@
 package com.sfhmmy.mobile;
 
+import androidx.fragment.app.Fragment;
+
 /**
  * Interface to be implemented by activities whose main content is the contents of a fragment.
  */
@@ -20,4 +22,14 @@ public interface TopLevelFragmentEventsListener {
      * Displays navigation elements.
      */
     void showNavigationBar();
+
+    /**
+     * Displays given fragment.
+     *
+     * All required operations for navigating away from that fragment are handled.
+     *
+     * @param target Fragment to be displayed.
+     * @param tag Tag for given fragment.
+     */
+    void navigateTo(Fragment target, String tag);
 }

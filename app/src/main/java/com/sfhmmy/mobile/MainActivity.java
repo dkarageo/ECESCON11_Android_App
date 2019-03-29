@@ -251,6 +251,14 @@ public class MainActivity extends AppCompatActivity
         navBar.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void navigateTo(Fragment target, String tag) {
+        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.main_fragment_container, target, tag);
+        t.addToBackStack(tag);
+        t.commit();
+    }
+
     // ---- UserManager.UserAuthenticationListener methods ----
     @Override
     public void onSessionCreated(User user) { updateUserSpecificContent(user); }
