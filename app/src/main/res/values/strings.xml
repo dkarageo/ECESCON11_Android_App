@@ -107,6 +107,11 @@
     <string name="checkin_users_list_item_no_checkin">No check-in yet</string>
     <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
 
+    <!-- User related strings -->
+    <string name="user_role_visitor_text">Visitor</string>
+    <string name="user_role_secretary_text">Secretary</string>
+    <string name="user_role_administrator_text">Administrator</string>
+
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s ago</string>
     <string name="utils_elapsed_time_secs_single">second</string>

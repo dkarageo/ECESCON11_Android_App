@@ -2,6 +2,9 @@ package com.sfhmmy.mobile.users;
 
 import android.graphics.Bitmap;
 
+import com.sfhmmy.mobile.App;
+import com.sfhmmy.mobile.R;
+
 import org.threeten.bp.ZonedDateTime;
 
 import java.util.Date;
@@ -55,5 +58,27 @@ public class User {
         if (mRole == role) return true;
         else if (role == Role.SECRETARY && mRole == Role.ADMINISTRATOR) return true;
         else return false;
+    }
+
+    public String getRoleText() {
+        String text = null;
+
+        if (mRole != null) {
+            switch (mRole) {
+                case VISITOR:
+                    text = App.getAppResources().getString(R.string.user_role_visitor_text);
+                    break;
+
+                case SECRETARY:
+                    text = App.getAppResources().getString(R.string.user_role_secretary_text);
+                    break;
+
+                case ADMINISTRATOR:
+                    text = App.getAppResources().getString(R.string.user_role_administrator_text);
+                    break;
+            }
+        }
+
+        return text;
     }
 }

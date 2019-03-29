@@ -121,4 +121,9 @@
     <string name="utils_elapsed_time_months_plural">μήνες</string>
     <string name="utils_elapsed_time_years_single">χρόνο</string>
     <string name="utils_elapsed_time_years_plural">χρόνια</string>
+
+    <!-- User related strings -->
+    <string name="user_role_visitor_text">Σύνεδρος</string>
+    <string name="user_role_secretary_text">Γραμματέας</string>
+    <string name="user_role_administrator_text">Διαχειριστής</string>
 </resources>
