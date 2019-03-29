@@ -88,6 +88,18 @@
     <string name="passport_unlogged_user_notification_text">By logging in you have the ability to check-in simply by your smartphone. Don\'t miss it!</string>
     <string name="passport_unlogged_user_notification_login_button_text">Give me simple check-ins</string>
 
+    <!-- Main Menu related strings -->
+    <string name="main_menu_header_bg_content_desc">Blurry Profile Image As Background</string>
+    <string name="main_menu_header_user_name_hint">Name Surname</string>
+    <string name="main_menu_header_user_role_hint">Role</string>
+    <string name="main_menu_item_icon_content_desc">Menu Item Icon</string>
+    <string name="main_menu_item_view_profile_text">My Profile</string>
+    <string name="main_menu_item_conference_info_text">Conference Info</string>
+    <string name="main_menu_item_change_account_text">Change Account</string>
+    <string name="main_menu_item_about_text">About</string>
+    <string name="main_menu_item_sign_in">Sign In</string>
+    <string name="main_menu_header_generic_user_name">Another great engineer&#8230;</string>
+
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Access to camera is required in order to use QR Code Scanner.</string>
     <string name="camera_scanner_permission_grant_button_text">Grant Permission</string>

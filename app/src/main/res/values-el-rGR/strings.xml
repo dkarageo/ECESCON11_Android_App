@@ -57,6 +57,17 @@
     <string name="passport_unlogged_user_notification_text">Η είσοδος στην εφαρμογή σας δίνει τη δυνατότητα για εύκολο και απλό check-in από το κινητό σας!</string>
     <string name="passport_unlogged_user_notification_login_button_text">Θελω ευκολο check-in</string>
 
+    <!-- Main Menu related strings -->
+    <string name="main_menu_header_bg_content_desc">Θολωμένη εικόνα προφίλ στο παρασκήνιο</string>
+    <string name="main_menu_header_user_name_hint">Όνομα Επώνυμο</string>
+    <string name="main_menu_header_user_role_hint">Ιδιότητα</string>
+    <string name="main_menu_item_icon_content_desc">Εικονίδιο Αντικειμένου Μενού</string>
+    <string name="main_menu_item_view_profile_text">Το προφίλ μου</string>
+    <string name="main_menu_item_conference_info_text">Το συνέδριο</string>
+    <string name="main_menu_item_change_account_text">Αλλαγή λογαριασμού</string>
+    <string name="main_menu_item_about_text">Πληροφορίες εφαρμογής</string>
+    <string name="main_menu_item_sign_in">Είσοδος</string>
+    <string name="main_menu_header_generic_user_name">Ένας σπουδαίος μηχανικός&#8230;</string>
 
     <!-- String related to workshops screen -->
     <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
