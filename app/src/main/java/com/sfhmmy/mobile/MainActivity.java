@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -23,6 +25,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.sfhmmy.mobile.battles.BattlesFragment;
 import com.sfhmmy.mobile.checkins.CheckInActivity;
@@ -31,6 +37,7 @@ import com.sfhmmy.mobile.users.LoginDialogFragment;
 import com.sfhmmy.mobile.users.PassportFragment;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
+import com.sfhmmy.mobile.utils.DrawableUtils;
 import com.sfhmmy.mobile.workshops.WorkshopsFragment;
 
 import java.util.HashMap;
@@ -41,7 +48,10 @@ public class MainActivity extends AppCompatActivity
         implements TopLevelFragmentEventsListener,
                    UserManager.UserAuthenticationListener {
 
-    BottomNavigationView navBar;
+    private BottomNavigationView mNavBar;
+    private FrameLayout          mFragmentContainer;
+    private View                 mStartupLoadingBg;
+    private ImageView            mStartupLoadingIcon;
 
     // A map for all active fragments navigable from bottom navigation bar.
     private Map<String, Fragment> activeFragments = new HashMap<>();
@@ -53,6 +63,9 @@ public class MainActivity extends AppCompatActivity
 //    private boolean isProfileMenuEnabled = false;
 //    // Indicates whether navigation bar was visible when profile menu showed up.
 //    private boolean wasNavBarVisibleWhenProfileMenuDisplayed = false;
+
+    private StartupManager.StartupProcessListener mStartupListener;
+    private boolean mStartupCompleted;
 
     // Listener for clicks on bottom navigation bar items.
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -114,7 +127,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-                t.replace(R.id.main_fragment_container, selection);
+                t.replace(R.id.main_activity_fragment_container, selection);
                 t.addToBackStack(Integer.toString(item.getItemId()));
                 t.commit();
             }
@@ -122,6 +135,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,13 +147,19 @@ public class MainActivity extends AppCompatActivity
             Fragment homeFrag = new HomeFragment();
             activeFragments.put("home", homeFrag);
             FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-            t.add(R.id.main_fragment_container, homeFrag);
+            t.add(R.id.main_activity_fragment_container, homeFrag);
             t.commit();
         }
 
-        navBar = findViewById(R.id.navigation);
-        if (navBar == null) throw new RuntimeException("Failed to acquire bottom navigation bar");
-        navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        mNavBar             = findViewById(R.id.main_activity_navigation);
+        mFragmentContainer  = findViewById(R.id.main_activity_fragment_container);
+        mStartupLoadingBg   = findViewById(R.id.main_activity_startup_loading_bg);
+        mStartupLoadingIcon = findViewById(R.id.main_activity_startup_loading_icon);
+
+        mNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // Initialization of application starts here.
+        executeStartupProcess();
     }
 
     @Override
@@ -160,6 +180,11 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         UserManager.getUserManager().unregisterUserAuthenticationListener(this);
+
+        // Just a best effort cleanup of the listener.
+        if (mStartupCompleted) {
+            StartupManager.getStartupManager().unregisterStartupProcessListener(mStartupListener);
+        }
     }
 
     @Override
@@ -190,7 +215,7 @@ public class MainActivity extends AppCompatActivity
                 menuItemId = R.id.bot_nav_home;
             }
 
-            navBar.setSelectedItemId(menuItemId);
+            mNavBar.setSelectedItemId(menuItemId);
 
             fm.popBackStack();
         } else {
@@ -242,18 +267,18 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void hideNavigationBar() {
-        navBar.setVisibility(View.GONE);
+        mNavBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showNavigationBar() {
-        navBar.setVisibility(View.VISIBLE);
+        mNavBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void navigateTo(Fragment target, String tag) {
         FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.main_fragment_container, target, tag);
+        t.replace(R.id.main_activity_fragment_container, target, tag);
         t.addToBackStack(tag);
         t.commit();
     }
@@ -304,7 +329,7 @@ public class MainActivity extends AppCompatActivity
 //    }
 
 //    private boolean isNavigationBarVisible() {
-//        return navBar.getVisibility() == View.VISIBLE;
+//        return mNavBar.getVisibility() == View.VISIBLE;
 //    }
 
     private void updateUserSpecificContent(User user) {
@@ -317,5 +342,57 @@ public class MainActivity extends AppCompatActivity
 
         // Refresh the options menu, to properly display or hide user specific options.
         invalidateOptionsMenu();
+    }
+
+    private void executeStartupProcess() {
+
+        mStartupCompleted = false;
+
+        setVisibilityOfStartupLoadingScreen(true);
+
+        mStartupListener = new StartupManager.StartupProcessListener() {
+            @Override
+            public void onStartupCompleted() {
+                setVisibilityOfStartupLoadingScreen(false);
+                mStartupCompleted = true;
+            }
+        };
+
+        StartupManager manager = StartupManager.getStartupManager();
+        manager.registerStartupProcessListener(mStartupListener);
+        manager.startup();
+    }
+
+    private void setVisibilityOfStartupLoadingScreen(boolean show) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            if (!show) actionBar.show();
+            else actionBar.hide();
+        }
+
+        if (show) {
+            mStartupLoadingIcon.setVisibility(View.VISIBLE);
+            mStartupLoadingBg.setVisibility(View.VISIBLE);
+            mNavBar.setVisibility(View.GONE);
+            mFragmentContainer.setVisibility(View.GONE);
+
+            mStartupLoadingIcon.setImageDrawable(
+                    DrawableUtils.applyTintToDrawable(
+                            getResources().getDrawable(R.drawable.ecescon11_logo),
+                            R.color.white)
+            );
+
+            Animation pulseAnim = AnimationUtils.loadAnimation(
+                    this, R.anim.main_activity_startup_icon_pulse
+            );
+            mStartupLoadingIcon.startAnimation(pulseAnim);
+        } else {
+            mStartupLoadingIcon.clearAnimation();
+
+            mStartupLoadingIcon.setVisibility(View.GONE);
+            mStartupLoadingBg.setVisibility(View.GONE);
+            mNavBar.setVisibility(View.VISIBLE);
+            mFragmentContainer.setVisibility(View.VISIBLE);
+        }
     }
 }
