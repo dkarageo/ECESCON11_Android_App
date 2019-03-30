@@ -49,10 +49,10 @@ public class RemoteServerProxy {
 
     public boolean isOAuth2TokenValid(String token) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {}
 
-        return false;
+        return true;
     }
 
     public User getUserProfile(String accessToken) {
