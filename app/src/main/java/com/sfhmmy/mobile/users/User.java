@@ -1,15 +1,27 @@
 package com.sfhmmy.mobile.users;
 
-import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
 
 import org.threeten.bp.ZonedDateTime;
 
-import java.util.Date;
 
-public class User {
+public class User implements Parcelable {
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 
     public enum Role { VISITOR, SECRETARY, ADMINISTRATOR }
 
@@ -42,6 +54,25 @@ public class User {
         setUid(uid);
         setEmail(email);
         setName(name);
+    }
+
+    public User(Parcel source) {
+        mUid               = source.readLong();
+        mEmail             = source.readString();
+        mName              = source.readString();
+        mSurname           = source.readString();
+        mEducationLevel    = source.readString();
+        mOrganization      = source.readString();
+        mDepartment        = source.readString();
+        mDepartmentSpecialization = source.readString();
+        mYearsOfExperience = source.readInt();
+        mToken             = source.readString();
+        mRole              = (Role) source.readSerializable();
+        mProfilePictureURL = source.readString();
+        mPassportValue     = source.readString();
+        mLastCheckInDate   = (ZonedDateTime) source.readSerializable();
+        mGender            = (Gender) source.readSerializable();
+        mPreferedLanguage  = source.readString();
     }
 
     public long getUid() { return mUid; }
@@ -132,5 +163,28 @@ public class User {
         }
 
         return text;
+    }
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mUid);
+        dest.writeString(mEmail);
+        dest.writeString(mName);
+        dest.writeString(mSurname);
+        dest.writeString(mEducationLevel);
+        dest.writeString(mOrganization);
+        dest.writeString(mDepartment);
+        dest.writeString(mDepartmentSpecialization);
+        dest.writeInt(mYearsOfExperience);
+        dest.writeString(mToken);
+        dest.writeSerializable(mRole);
+        dest.writeString(mProfilePictureURL);
+        dest.writeString(mPassportValue);
+        dest.writeSerializable(mLastCheckInDate);
+        dest.writeSerializable(mGender);
+        dest.writeString(mPreferedLanguage);
     }
 }
