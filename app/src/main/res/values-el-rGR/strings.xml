@@ -23,6 +23,9 @@
     <string name="mainactivity_actionbar_menu_profile_title">Προφίλ</string>
     <string name="mainactivity_actionbar_scanner_title">Σαρωτής QR</string>
 
+    <!-- Startup loading screen strings -->
+    <string name="main_activity_startup_loading_icon_content_desc">Εικονίδιο ΣΦΗΜΜΥ 11</string>
+
     <!-- Strings related to login -->
     <string name="loginForm_logoDescription">ECESCON 11 Logo</string>
     <string name="prompt_email">Email</string>
