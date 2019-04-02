@@ -145,6 +145,12 @@
     <string name="utils_elapsed_time_years_single">year</string>
     <string name="utils_elapsed_time_years_plural">years</string>
 
+    <!-- Ordinal conversion utility strings -->
+    <string name="utils_ordinal_suffix_first">st</string>
+    <string name="utils_ordinal_suffix_second">nd</string>
+    <string name="utils_ordinal_suffix_third">rd</string>
+    <string name="utils_ordinal_suffix_generic">th</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
