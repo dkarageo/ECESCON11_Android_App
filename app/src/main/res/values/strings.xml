@@ -126,6 +126,9 @@
     <string name="user_role_visitor_text">Visitor</string>
     <string name="user_role_secretary_text">Secretary</string>
     <string name="user_role_administrator_text">Administrator</string>
+    <string name="user_gender_male_text">Male</string>
+    <string name="user_gender_female_text">Female</string>
+    <string name="user_gender_other_text">Other</string>
 
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s ago</string>

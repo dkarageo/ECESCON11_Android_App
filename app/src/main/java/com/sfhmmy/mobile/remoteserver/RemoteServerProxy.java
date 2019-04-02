@@ -72,6 +72,12 @@ public class RemoteServerProxy {
             u.setOrganization("ECESCON11 Organizing Committee");
             u.setPassportValue("ecescon11://secretary");
             u.setProfilePictureURL("https://sfhmmy.gr/img/pages/conference/organizing_committee/IT/Dimitrios_Karageorgiou.jpg");
+            u.setEducationLevel("Προπτυχιακός Φοιτητής");
+            u.setDepartment("Πολυτεχνική Σχολή");
+            u.setGender(User.Gender.MALE);
+            u.setDepartmentSpecialization("Τμήμα Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών");
+            u.setPreferedLanguage("Ελληνικά");
+            u.setYearsOfExperience(5);
 
         } else if (accessToken.equals("user123token")) {
             u = new User(1001, "user@gmail.com", "Kostas");
@@ -80,6 +86,12 @@ public class RemoteServerProxy {
             u.setRole(User.Role.VISITOR);
             u.setOrganization("Aristotle University Of Thessaloniki");
             u.setPassportValue("ecescon11://user");
+            u.setEducationLevel("Προπτυχιακός Φοιτητής");
+            u.setDepartment("Πολυτεχνική Σχολή");
+            u.setGender(User.Gender.FEMALE);
+            u.setDepartmentSpecialization("Τμήμα Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών");
+            u.setPreferedLanguage("Ελληνικά");
+            u.setYearsOfExperience(2);
 
             Calendar cal = GregorianCalendar.getInstance();
             cal.set(2019, 2, 8);
