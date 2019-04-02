@@ -128,6 +128,20 @@
     <string name="user_gender_male_text">Άνδρας</string>
     <string name="user_gender_female_text">Γυναίκα</string>
     <string name="user_gender_other_text">Άλλο</string>
+
+    <!-- User profile strings -->
+    <string name="user_profile_field_absence_text">-</string>
+    <string name="user_profile_gender_field_title">Φύλο</string>
+    <string name="user_profile_certificate_language_field_title">Γλώσσα Έκδοσης Πιστοποιητικού</string>
+    <string name="user_profile_education_level_field_title">Βαθμίδα Εκπαίδευσης</string>
+    <string name="user_profile_organization_field_title">Εκπαιδευτικό Ίδρυμα</string>
+    <string name="user_profile_department_field_title">Σχολή</string>
+    <string name="user_profile_department_specialization_field_title">Τμήμα</string>
+    <string name="user_profile_years_of_experience_field_title">Έτος Φοίτησης</string>
+
+    <!-- Generic strings -->
+    <string name="generic_edit_icon_content_description">Εικονίδιο Επεξεργασίας</string>
+
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s πριν</string>
     <string name="utils_elapsed_time_secs_single">δευτερόλεπτο</string>

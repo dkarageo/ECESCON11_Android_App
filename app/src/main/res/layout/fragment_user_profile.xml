@@ -1,14 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:fillViewport="true"
     tools:context=".users.UserProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="This is user profile framgnet." />
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-</FrameLayout>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_profile_user_photo"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/user_profile_user_name"
+            app:layout_constraintBottom_toBottomOf="@id/user_profile_email"
+            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_width="2dp" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/user_profile_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:met_textColor="@drawable/user_profile_edit_text_color"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_underlineColor="@color/colorPrimary"
+            app:met_hideUnderline="true"
+            app:met_floatingLabelPadding="0dp"
+            app:met_floatingLabelTextSize="0dp"
+            app:met_bottomTextSize="0sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/user_profile_user_photo"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/user_profile_user_surname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:met_textColor="@drawable/user_profile_edit_text_color"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_underlineColor="@color/colorPrimary"
+            app:met_hideUnderline="true"
+            app:met_floatingLabelPadding="0dp"
+            app:met_floatingLabelTextSize="0dp"
+            app:met_bottomTextSize="0sp"
+            app:layout_constraintTop_toBottomOf="@id/user_profile_user_name"
+            app:layout_constraintStart_toEndOf="@id/user_profile_user_photo"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:id="@+id/user_profile_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/user_profile_user_surname"
+            app:layout_constraintBottom_toTopOf="@id/user_profile_header_body_separator"
+            app:layout_constraintStart_toEndOf="@id/user_profile_user_photo"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <ImageButton
+            android:id="@+id/user_profile_edit_fullname_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/generic_edit_icon_content_description"
+            app:layout_constraintBottom_toBottomOf="@id/user_profile_user_surname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/user_profile_user_surname"
+            app:layout_constraintTop_toTopOf="@id/user_profile_user_name" />
+
+        <View
+            android:id="@+id/user_profile_header_body_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            app:layout_constraintTop_toBottomOf="@id/user_profile_email"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/list_view_basic_divider" />
+
+        <com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView
+            android:id="@+id/user_profile_user_detail_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/user_profile_header_body_separator"
+            android:divider="@drawable/list_view_basic_divider"
+            android:dividerHeight="1px" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

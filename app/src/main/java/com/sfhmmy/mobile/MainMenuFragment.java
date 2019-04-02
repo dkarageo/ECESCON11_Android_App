@@ -245,7 +245,11 @@ public class MainMenuFragment extends UserAwareFragment {
         @Override
         public void onClick(View v) {
             if (mTopListener != null) {
-                mTopListener.navigateTo(new UserProfileFragment(),"profile_frag");
+                mTopListener.navigateTo(
+                        UserProfileFragment.newInstance(
+                                UserManager.getUserManager().getCurrentUser()),
+                        "profile_frag"
+                );
             }
         }
     }

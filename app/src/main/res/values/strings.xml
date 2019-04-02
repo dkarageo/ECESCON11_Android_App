@@ -130,6 +130,19 @@
     <string name="user_gender_female_text">Female</string>
     <string name="user_gender_other_text">Other</string>
 
+    <!-- User profile strings -->
+    <string name="user_profile_field_absence_text">-</string>
+    <string name="user_profile_gender_field_title">Gender</string>
+    <string name="user_profile_certificate_language_field_title">Conference Certification Language</string>
+    <string name="user_profile_education_level_field_title">Education Level</string>
+    <string name="user_profile_organization_field_title">Educational Institution</string>
+    <string name="user_profile_department_field_title">School</string>
+    <string name="user_profile_department_specialization_field_title">Department</string>
+    <string name="user_profile_years_of_experience_field_title">Year of Study</string>
+
+    <!-- Generic strings -->
+    <string name="generic_edit_icon_content_description">Edit Icon</string>
+
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s ago</string>
     <string name="utils_elapsed_time_secs_single">second</string>
