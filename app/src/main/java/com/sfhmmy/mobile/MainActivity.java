@@ -158,8 +158,10 @@ public class MainActivity extends AppCompatActivity
 
         mNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // Initialization of application starts here.
-        executeStartupProcess();
+        if (savedInstanceState == null) {
+            // Initialization of application starts here.
+            executeStartupProcess();
+        }
     }
 
     @Override
