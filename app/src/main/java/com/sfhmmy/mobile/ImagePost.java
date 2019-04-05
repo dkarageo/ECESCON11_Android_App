@@ -13,8 +13,10 @@ package com.sfhmmy.mobile;
 
 import org.threeten.bp.ZonedDateTime;
 
+import java.io.Serializable;
 
-public class ImagePost {
+
+public class ImagePost implements Serializable {
 
     private String        mUploader;
     private ZonedDateTime mUploadedDate;
