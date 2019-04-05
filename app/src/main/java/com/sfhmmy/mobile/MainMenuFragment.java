@@ -94,6 +94,8 @@ public class MainMenuFragment extends UserAwareFragment {
             }
         });
 
+        mItemsList.setExpanded(true);
+
         return root;
     }
 
