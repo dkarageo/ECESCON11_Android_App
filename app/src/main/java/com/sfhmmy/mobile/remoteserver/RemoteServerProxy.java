@@ -1,8 +1,16 @@
+/*
+ * RemoteServerProxy.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
+
 package com.sfhmmy.mobile.remoteserver;
 
-import android.os.Bundle;
-
-import com.sfhmmy.mobile.ImagePost;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.workshops.Workshop;
 
@@ -11,7 +19,6 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -147,39 +154,6 @@ public class RemoteServerProxy {
             rc.setMessage("Invalid code.");
             rc.setCode(RESPONSE_ERROR);
         }
-
-        return rc;
-    }
-
-    public ResponseContainer<List<ImagePost>> getPhotoWallPosts(String accessToken) {
-        ResponseContainer<List<ImagePost>> rc = new ResponseContainer<>();
-
-        List<ImagePost> imagePosts = new ArrayList<>();
-
-        ImagePost post1 = new ImagePost();
-        post1.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/Teams/IT.jpg");
-        post1.setDescription("The best IT team ever.");
-        post1.setUploader("Ecescon 11 Organizing Committee");
-        post1.setUploadedDate(ZonedDateTime.parse(
-                "2019-03-14T01:25:38.492+02:00[Europe/Athens]",
-                DateTimeFormatter.ISO_ZONED_DATE_TIME
-        ));
-
-        ImagePost post2 = new ImagePost();
-        post2.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/Teams/IT.jpg");
-        post2.setDescription("Once more, the best IT team ever.");
-        post2.setUploader("Ecescon 11 Organizing Committee");
-        post2.setUploadedDate(ZonedDateTime.parse(
-                "2019-02-10T12:25:38.492+02:00[Europe/Athens]",
-                DateTimeFormatter.ISO_ZONED_DATE_TIME
-        ));
-
-        imagePosts.add(post1);
-        imagePosts.add(post2);
-
-        rc.setCode(RESPONSE_SUCCESS);
-        rc.setMessage("Success.");
-        rc.setObject(imagePosts);
 
         return rc;
     }
