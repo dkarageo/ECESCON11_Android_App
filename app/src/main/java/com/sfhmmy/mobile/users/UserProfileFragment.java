@@ -172,6 +172,12 @@ public class UserProfileFragment extends Fragment {
         mTopListener = null;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(USER_OBJECT_KEY, mAttachedUser);
+    }
+
     private void bindUser(User user) {
         mUserName.setText(user.getName());
         mUserSurname.setText(user.getSurname());
