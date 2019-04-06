@@ -38,6 +38,18 @@ public class UserManager {
             = "com.sfhmmy.mobile.users.passport_value";
     private static final String USER_PREFERENCES_LAST_CHECKIN_DATE_KEY
             = "com.sfhmmy.mobile.users.last_checkin_date";
+    private static final String USER_PREFERENCES_EDUCATION_LEVEL_KEY
+            = "com.sfhmmy.mobile.users.education_level";
+    private static final String USER_PREFERENCES_DEPARTMENT_KEY
+            = "com.sfhmmy.mobile.users.department";
+    private static final String USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY
+            = "com.sfhmmy.mobile.users.department_specialization";
+    private static final String USER_PREFERENCES_YEARS_OF_EXPERIENCE_KEY
+            = "com.sfhmmy.mobile.users.years_of_experience";
+    private static final String USER_PREFERENCES_GENDER_KEY = "com.sfhmmy.mobile.users.gender";
+    private static final String USER_PREFERENCES_PREFERED_LANGUAGE_KEY
+            = "com.sfhmmy.mobile.prefered_language";
+
 
     // Singleton reference of UserManager.
     private static UserManager mUserManager = null;
@@ -97,6 +109,7 @@ public class UserManager {
      * UserAuthenticationListener objects via a call to onSessionDestroyed() method.
      */
     public void logout() {
+        mCurrentUser = null;
         saveUserObject(null);
         notifyOnSessionDestroyed();
     }
@@ -153,6 +166,14 @@ public class UserManager {
                             u.getLastCheckInDate().format(DateTimeFormatter.ISO_ZONED_DATE_TIME) :
                             null
                     );
+            spe.putString(USER_PREFERENCES_EDUCATION_LEVEL_KEY, u.getEducationLevel());
+            spe.putString(USER_PREFERENCES_DEPARTMENT_KEY, u.getDepartment());
+            spe.putString(USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY,
+                          u.getDepartmentSpecialization());
+            spe.putInt(USER_PREFERENCES_YEARS_OF_EXPERIENCE_KEY, u.getYearsOfExperience());
+            spe.putString(USER_PREFERENCES_GENDER_KEY, u.getGender().name());
+            spe.putString(USER_PREFERENCES_PREFERED_LANGUAGE_KEY, u.getPreferedLanguage());
+
         } else {
             spe.remove(USER_PREFERENCES_UID_KEY);
             spe.remove(USER_PREFERENCES_EMAIL_KEY);
@@ -164,6 +185,12 @@ public class UserManager {
             spe.remove(USER_PREFERENCES_ORGANIZATION_KEY);
             spe.remove(USER_PREFERENCES_PASSPORT_VALUE_KEY);
             spe.remove(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY);
+            spe.remove(USER_PREFERENCES_EDUCATION_LEVEL_KEY);
+            spe.remove(USER_PREFERENCES_DEPARTMENT_KEY);
+            spe.remove(USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY);
+            spe.remove(USER_PREFERENCES_YEARS_OF_EXPERIENCE_KEY);
+            spe.remove(USER_PREFERENCES_GENDER_KEY);
+            spe.remove(USER_PREFERENCES_PREFERED_LANGUAGE_KEY);
         }
 
         spe.apply();
@@ -188,6 +215,14 @@ public class UserManager {
             u.setName(sp.getString(USER_PREFERENCES_NAME_KEY, null));
             u.setSurname(sp.getString(USER_PREFERENCES_SURNAME_KEY, null));
             u.setToken(sp.getString(USER_PREFERENCES_TOKEN_KEY, null));
+            u.setProfilePictureURL(sp.getString(USER_PREFERENCES_PROFILE_PIC_URL_KEY, null));
+            u.setOrganization(sp.getString(USER_PREFERENCES_ORGANIZATION_KEY, null));
+            u.setEducationLevel(sp.getString(USER_PREFERENCES_EDUCATION_LEVEL_KEY, null));
+            u.setDepartment(sp.getString(USER_PREFERENCES_DEPARTMENT_KEY, null));
+            u.setDepartmentSpecialization(
+                    sp.getString(USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY, null));
+            u.setYearsOfExperience(sp.getInt(USER_PREFERENCES_YEARS_OF_EXPERIENCE_KEY, -1));
+            u.setPreferedLanguage(sp.getString(USER_PREFERENCES_PREFERED_LANGUAGE_KEY, null));
 
             String roleString = sp.getString(USER_PREFERENCES_ROLE_KEY, null);
             try {
@@ -198,8 +233,14 @@ public class UserManager {
                 u.setRole(null);
             }
 
-            u.setProfilePictureURL(sp.getString(USER_PREFERENCES_PROFILE_PIC_URL_KEY, null));
-            u.setOrganization(sp.getString(USER_PREFERENCES_ORGANIZATION_KEY, null));
+            String genderString = sp.getString(USER_PREFERENCES_GENDER_KEY, null);
+            try {
+                u.setGender(genderString != null ? User.Gender.valueOf(genderString) : null);
+            } catch (IllegalArgumentException ex) {
+                // In case for a reason preferences file got corrupted, don't allow the app to
+                // crash by just not setting role attribute.
+                u.setGender(null);
+            }
 
             String dateString = sp.getString(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY, null);
             if (dateString != null) {

@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -23,15 +25,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.sfhmmy.mobile.battles.BattlesFragment;
-import com.sfhmmy.mobile.promo.InfoFragment;
 import com.sfhmmy.mobile.checkins.CheckInActivity;
 import com.sfhmmy.mobile.startups.StartupManager;
 import com.sfhmmy.mobile.users.LoginDialogFragment;
 import com.sfhmmy.mobile.users.PassportFragment;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
+import com.sfhmmy.mobile.utils.DrawableUtils;
 import com.sfhmmy.mobile.workshops.WorkshopsFragment;
 
 import java.util.LinkedList;
@@ -57,6 +63,9 @@ public class MainActivity extends AppCompatActivity
     // Indicates whether a click to bottom navigation bar was not initiated by the user, but from
     // an attempt to fix currently highlighted item.
     private boolean mIsFixingBottomNavigationSelection = false;
+
+    private StartupManager.StartupProcessListener mStartupListener;
+    private boolean mStartupCompleted;
 
     // Listener for clicks on bottom navigation bar items.
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -149,6 +158,7 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,6 +210,11 @@ public class MainActivity extends AppCompatActivity
     protected void onPause() {
         super.onPause();
         UserManager.getUserManager().unregisterUserAuthenticationListener(this);
+
+        // Just a best effort cleanup of the listener.
+        if (mStartupCompleted) {
+            StartupManager.getStartupManager().unregisterStartupProcessListener(mStartupListener);
+        }
     }
 
     @Override
@@ -253,12 +268,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void hideNavigationBar() {
-        navBar.setVisibility(View.GONE);
+        mNavBar.setVisibility(View.GONE);
     }
 
     @Override
     public void showNavigationBar() {
-        navBar.setVisibility(View.VISIBLE);
+        mNavBar.setVisibility(View.VISIBLE);
     }
 
     @Override

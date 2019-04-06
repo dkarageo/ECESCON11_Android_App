@@ -1,5 +1,7 @@
 package com.sfhmmy.mobile;
 
+import androidx.fragment.app.Fragment;
+
 /**
  * Interface to be implemented by activities whose main content is the contents of a fragment.
  */
