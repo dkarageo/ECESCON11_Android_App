@@ -34,26 +34,29 @@ import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
 import com.sfhmmy.mobile.workshops.WorkshopsFragment;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 
 public class MainActivity extends AppCompatActivity
         implements TopLevelFragmentEventsListener,
                    UserManager.UserAuthenticationListener {
 
-    BottomNavigationView navBar;
+    private static final String HOME_FRAGMENT_TAG = "home";
+    private static final String WORKSHOPS_FRAGMENT_TAG = "workshops";
+    private static final String PASSPORT_FRAGMENT_TAG = "passport";
+    private static final String BATTLES_FRAGMENT_TAG = "battles";
+    private static final String MAIN_MENU_FRAGMENT_TAG = "main_menu";
 
-    // A map for all active fragments navigable from bottom navigation bar.
-    private Map<String, Fragment> activeFragments = new HashMap<>();
-    // An indicator set to true when a fragment change is caused by a press to back button (and
-    // e.g. not from a click to navigation bar buttons).
-    private boolean switchCausedByBackButton = false;
-    // An indicator set to true when profile menu is open (i.e. MainMenuFragment
-    // is the current one).
-    private boolean isProfileMenuEnabled = false;
-    // Indicates whether navigation bar was visible when profile menu showed up.
-    private boolean wasNavBarVisibleWhenProfileMenuDisplayed = false;
+    private BottomNavigationView mNavBar;
+    private FrameLayout          mFragmentContainer;
+    private View                 mStartupLoadingBg;
+    private ImageView            mStartupLoadingIcon;
+
+    // Custom backstack for the current activity.
+    private LinkedList<BackstackItem> mBackStack = new LinkedList<>();
+    // Indicates whether a click to bottom navigation bar was not initiated by the user, but from
+    // an attempt to fix currently highlighted item.
+    private boolean mIsFixingBottomNavigationSelection = false;
 
     // Listener for clicks on bottom navigation bar items.
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -61,63 +64,85 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            if (!switchCausedByBackButton) {
-                Fragment selection;
+            if (!mIsFixingBottomNavigationSelection) {
+                NavigableKey navKey;
 
                 switch (item.getItemId()) {
                     case R.id.bot_nav_home:
-                        if (activeFragments.containsKey("home"))
-                            selection = activeFragments.get("home");
-                        else {
-                            selection = new HomeFragment();
-                            activeFragments.put("home", selection);
-                        }
+                        navKey = new NavigableKey() {
+                            @Override
+                            public String getKey() {
+                                return HOME_FRAGMENT_TAG;
+                            }
+
+                            @Override
+                            public Fragment createFragment() {
+                                return new HomeFragment();
+                            }
+                        };
                         break;
 
                     case R.id.bot_nav_workshops:
-                        if (activeFragments.containsKey("workshops")) {
-                            selection = activeFragments.get("workshops");
-                        } else {
-                            selection = new WorkshopsFragment();
-                            activeFragments.put("workshops", selection);
-                        }
+                        navKey = new NavigableKey() {
+                            @Override
+                            public String getKey() {
+                                return WORKSHOPS_FRAGMENT_TAG;
+                            }
+
+                            @Override
+                            public Fragment createFragment() {
+                                return new WorkshopsFragment();
+                            }
+                        };
                         break;
 
                     case R.id.bot_nav_passport:
-                        if (activeFragments.containsKey("passport")) {
-                            selection = activeFragments.get("passport");
-                        } else {
-                            selection = new PassportFragment();
-                            activeFragments.put("passport", selection);
-                        }
+                        navKey = new NavigableKey() {
+                            @Override
+                            public String getKey() {
+                                return PASSPORT_FRAGMENT_TAG;
+                            }
+
+                            @Override
+                            public Fragment createFragment() {
+                                return new PassportFragment();
+                            }
+                        };
                         break;
 
                     case R.id.bot_nav_battles:
-                        if (activeFragments.containsKey("battles")) {
-                            selection = activeFragments.get("battles");
-                        } else {
-                            selection = new BattlesFragment();
-                            activeFragments.put("battles", selection);
-                        }
+                        navKey = new NavigableKey() {
+                            @Override
+                            public String getKey() {
+                                return BATTLES_FRAGMENT_TAG;
+                            }
+
+                            @Override
+                            public Fragment createFragment() {
+                                return new BattlesFragment();
+                            }
+                        };
                         break;
 
-                    case R.id.bot_nav_info:
-                        if (activeFragments.containsKey("info")) {
-                            selection = activeFragments.get("info");
-                        } else {
-                            selection = new InfoFragment();
-                            activeFragments.put("info", selection);
-                        }
+                    case R.id.bot_nav_main_menu:
+                        navKey = new NavigableKey() {
+                            @Override
+                            public String getKey() {
+                                return MAIN_MENU_FRAGMENT_TAG;
+                            }
+
+                            @Override
+                            public Fragment createFragment() {
+                                return new MainMenuFragment();
+                            }
+                        };
                         break;
 
                     default:
                         return false;
                 }
 
-                FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-                t.replace(R.id.main_fragment_container, selection);
-                t.addToBackStack(Integer.toString(item.getItemId()));
-                t.commit();
+                navigateToNavigableKey(navKey, false);
             }
 
             return true;
@@ -129,18 +154,32 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mNavBar             = findViewById(R.id.main_activity_navigation);
+        mFragmentContainer  = findViewById(R.id.main_activity_fragment_container);
+        mStartupLoadingBg   = findViewById(R.id.main_activity_startup_loading_bg);
+        mStartupLoadingIcon = findViewById(R.id.main_activity_startup_loading_icon);
+
+        mNavBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
         if (savedInstanceState == null) {
             // Initially set activity's fragment to home.
-            Fragment homeFrag = new HomeFragment();
-            activeFragments.put("home", homeFrag);
-            FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-            t.add(R.id.main_fragment_container, homeFrag);
-            t.commit();
-        }
+            navigateToNavigableKey(new NavigableKey() {
+                @Override
+                public String getKey() {
+                    return HOME_FRAGMENT_TAG;
+                }
 
-        navBar = (BottomNavigationView) findViewById(R.id.navigation);
-        if (navBar == null) throw new RuntimeException("Failed to acquire bottom navigation bar");
-        navBar.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+                @Override
+                public Fragment createFragment() {
+                    return new HomeFragment();
+                }
+            }, false);
+
+            // Initialization of application starts here.
+            executeStartupProcess();
+        } else {
+            mBackStack = (LinkedList<BackstackItem>) getLastCustomNonConfigurationInstance();
+        }
     }
 
     @Override
@@ -165,40 +204,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-
-        // When profile menu is enabled, the back button should hide the menu and not switch
-        // between main fragments.
-        if (isProfileMenuEnabled) {
-            displayProfileMenu(false);
-            return;
-        }
-
-        FragmentManager fm = getSupportFragmentManager();
-        switchCausedByBackButton = true;
-
-        int backStackCount;
-        if ((backStackCount = fm.getBackStackEntryCount()) > 0) {
-            // Update active item at bottom navigation bar when pressing back button.
-            int menuItemId;
-
-            // On first transaction, the previous fragment is always the home screen.
-            // All fragment transactions are expected to contain in their 'name' the id of menu
-            // item their containing fragment wants to be active (while the fragment is active).
-            if (backStackCount > 1) {
-                FragmentManager.BackStackEntry t = fm.getBackStackEntryAt(backStackCount - 2);
-                menuItemId = Integer.parseInt(t.getName());
-            } else {
-                menuItemId = R.id.bot_nav_home;
-            }
-
-            navBar.setSelectedItemId(menuItemId);
-
-            fm.popBackStack();
-        } else {
-            super.onBackPressed();
-        }
-
-        switchCausedByBackButton = false;
+        // Delegate to custom navigator only back requests
+        if (mBackStack.size() > 1) goBack();
+        else super.onBackPressed();
     }
 
     @Override
@@ -220,10 +228,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.mainactivity_actionbar_menu_profile:
-                displayProfileMenu(!isProfileMenuEnabled);
-                break;
-
             case R.id.mainactivity_actionbar_scanner:
                 startActivity(new Intent(this, CheckInActivity.class));
                 break;
@@ -233,6 +237,12 @@ public class MainActivity extends AppCompatActivity
         }
 
         return true;
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        super.onRetainCustomNonConfigurationInstance();
+        return mBackStack;
     }
 
     // ---- TopLevelFragmentEventsListener methods ----
@@ -251,6 +261,56 @@ public class MainActivity extends AppCompatActivity
         navBar.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void navigateToNavigableKey(NavigableKey target, boolean skipCurrentOnBack) {
+
+        BackstackItem targetItem = null;
+
+        // If there is a request for skipping current (last) key in backstack, then remove it.
+        if (skipCurrentOnBack) mBackStack.removeLast();
+
+        // Firstly, search backstack for the existence of requested destination.
+        for (BackstackItem item : mBackStack) {
+            if (item.getNavigableKey().getKey().equals(target.getKey())) {
+                targetItem = item;
+
+                // If a matching item found, remove it from its previous position, so to place
+                // it a the end.
+                mBackStack.remove(item);
+                break;
+            }
+        }
+
+        // If destination could not be found in backstack, create one.
+        if (targetItem == null) {
+            targetItem = new BackstackItem(target, target.createFragment());
+        }
+
+        // Always add the item to the end of backstack.
+        mBackStack.add(targetItem);
+
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment targetFrag = manager.findFragmentByTag(targetItem.getNavigableKey().getKey());
+        if (targetFrag == null) targetFrag = targetItem.getFragment();
+
+        FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.main_activity_fragment_container, targetFrag);
+        t.commit();
+
+        // Fix selected item on bottom navigation bar.
+        selectBottomNavigationItem(targetItem);
+    }
+
+    public void goBack() {
+        if (mBackStack.size() > 1) {
+            // Remove current item from backstack.
+            mBackStack.removeLast();
+
+            // Navigate to the previous one.
+            navigateToNavigableKey(mBackStack.peekLast().getNavigableKey(), false);
+        }
+    }
+
     // ---- UserManager.UserAuthenticationListener methods ----
     @Override
     public void onSessionCreated(User user) { updateUserSpecificContent(user); }
@@ -261,48 +321,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSessionRestorationFailure(String error) { updateUserSpecificContent(null); }
 
-    /**
-     * Displays/Hides the profile menu of the application.
-     */
-    private void displayProfileMenu(boolean display) {
-        if (display && !isProfileMenuEnabled) {
-            MainMenuFragment menuFrag;
-
-            if (!activeFragments.containsKey("profile_menu")) {
-                menuFrag = new MainMenuFragment();
-                activeFragments.put("profile_menu", menuFrag);
-            } else {
-                menuFrag = (MainMenuFragment) activeFragments.get("profile_menu");
-            }
-
-            FragmentTransaction t = getSupportFragmentManager().beginTransaction();
-            t.replace(R.id.main_fragment_container, menuFrag);
-            t.addToBackStack("profile_menu");
-            t.commit();
-
-            wasNavBarVisibleWhenProfileMenuDisplayed = isNavigationBarVisible();
-            // Bottom nav bar should be hidden during menu display.
-            hideNavigationBar();
-
-            isProfileMenuEnabled = true;
-
-        } else if (!display && isProfileMenuEnabled) {
-            getSupportFragmentManager().popBackStack(
-                    "profile_menu", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-            if (wasNavBarVisibleWhenProfileMenuDisplayed) showNavigationBar();
-
-            isProfileMenuEnabled = false;
-        }
-    }
-
-    private boolean isNavigationBarVisible() {
-        return navBar.getVisibility() == View.VISIBLE;
-    }
-
     private void updateUserSpecificContent(User user) {
         // Notify all child User Aware Fragments about the user change.
-        for (Fragment f : activeFragments.values()) {
+        for (BackstackItem item : mBackStack) {
+
+            Fragment f = item.getFragment();
+
             if (f instanceof UserAwareFragment) {
                 ((UserAwareFragment) f).notifyOnUserChange(user);
             }
@@ -310,5 +334,96 @@ public class MainActivity extends AppCompatActivity
 
         // Refresh the options menu, to properly display or hide user specific options.
         invalidateOptionsMenu();
+    }
+
+    private void executeStartupProcess() {
+
+        mStartupCompleted = false;
+
+        setVisibilityOfStartupLoadingScreen(true);
+
+        mStartupListener = new StartupManager.StartupProcessListener() {
+            @Override
+            public void onStartupCompleted() {
+                setVisibilityOfStartupLoadingScreen(false);
+                mStartupCompleted = true;
+            }
+        };
+
+        StartupManager manager = StartupManager.getStartupManager();
+        manager.registerStartupProcessListener(mStartupListener);
+        manager.startup();
+    }
+
+    private void setVisibilityOfStartupLoadingScreen(boolean show) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            if (!show) actionBar.show();
+            else actionBar.hide();
+        }
+
+        if (show) {
+            mStartupLoadingIcon.setVisibility(View.VISIBLE);
+            mStartupLoadingBg.setVisibility(View.VISIBLE);
+            mNavBar.setVisibility(View.GONE);
+            mFragmentContainer.setVisibility(View.GONE);
+
+            mStartupLoadingIcon.setImageDrawable(
+                    DrawableUtils.applyTintToDrawable(
+                            getResources().getDrawable(R.drawable.ecescon11_logo),
+                            R.color.white)
+            );
+
+            Animation pulseAnim = AnimationUtils.loadAnimation(
+                    this, R.anim.main_activity_startup_icon_pulse
+            );
+            mStartupLoadingIcon.startAnimation(pulseAnim);
+        } else {
+            mStartupLoadingIcon.clearAnimation();
+
+            mStartupLoadingIcon.setVisibility(View.GONE);
+            mStartupLoadingBg.setVisibility(View.GONE);
+            mNavBar.setVisibility(View.VISIBLE);
+            mFragmentContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void selectBottomNavigationItem(BackstackItem item) {
+        mIsFixingBottomNavigationSelection = true;
+
+        String tag = item.getNavigableKey().getKey();
+
+        // Initially, enable the ability of bottom navigation bar to display last clicked item.
+        mNavBar.getMenu().setGroupCheckable(0, true, true);
+
+        if (tag.equals(HOME_FRAGMENT_TAG)) mNavBar.setSelectedItemId(R.id.bot_nav_home);
+        else if (tag.equals(WORKSHOPS_FRAGMENT_TAG)) mNavBar.setSelectedItemId(R.id.bot_nav_workshops);
+        else if (tag.equals(PASSPORT_FRAGMENT_TAG)) mNavBar.setSelectedItemId(R.id.bot_nav_passport);
+        else if (tag.equals(BATTLES_FRAGMENT_TAG)) mNavBar.setSelectedItemId(R.id.bot_nav_battles);
+        else if (tag.equals(MAIN_MENU_FRAGMENT_TAG)) mNavBar.setSelectedItemId(R.id.bot_nav_main_menu);
+        else {
+            // If navigation leads to a target not reachable directly by bottom nav bar, then
+            // unselect all items.
+            mNavBar.getMenu().setGroupCheckable(0, false, true);
+        }
+
+        mIsFixingBottomNavigationSelection = false;
+    }
+
+
+    private class BackstackItem {
+        private NavigableKey mNavigableKey;
+        private Fragment mFragment;
+
+        public BackstackItem(NavigableKey navigableKey, Fragment fragment) {
+            mNavigableKey = navigableKey;
+            mFragment = fragment;
+        }
+
+        public NavigableKey getNavigableKey() { return mNavigableKey; }
+        public Fragment getFragment() { return mFragment; }
+
+        public void setFragment(Fragment fragment) { mFragment = fragment; }
+        public void setNavigableKey(NavigableKey navigableKey) { mNavigableKey = navigableKey; }
     }
 }

@@ -20,4 +20,6 @@ public interface TopLevelFragmentEventsListener {
      * Displays navigation elements.
      */
     void showNavigationBar();
+
+    public void navigateToNavigableKey(NavigableKey target, boolean skipCurrentOnBack);
 }
