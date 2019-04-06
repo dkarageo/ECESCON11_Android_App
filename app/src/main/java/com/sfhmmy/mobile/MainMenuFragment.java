@@ -1,14 +1,3 @@
-/*
- * MainMenuFragment.java
- *
- * Created for ECESCON11 Android Application by:
- *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
- *
- * This file is licensed under the license of ECESCON11 Android Application project.
- *
- * Version: 0.1
- */
-
 package com.sfhmmy.mobile;
 
 
@@ -23,39 +12,45 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
-import com.sfhmmy.mobile.about.AboutFragment;
-import com.sfhmmy.mobile.promo.InfoFragment;
-import com.sfhmmy.mobile.users.User;
-import com.sfhmmy.mobile.users.UserManager;
-import com.sfhmmy.mobile.users.UserProfileFragment;
-import com.sfhmmy.mobile.utils.DrawableUtils;
 
 
-public class MainMenuFragment extends UserAwareFragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link MainMenuFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class MainMenuFragment extends Fragment {
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     private TopLevelFragmentEventsListener mTopListener;
 
-    // Header handlers
-    private TextView mHeaderUserName;
-    private TextView mHeaderUserRole;
-    private View mHeaderWrapper;
-    private NestedScrollView mScrollView;
-    private ImageView mHeaderBackground;
-    private ImageView mHeaderProfileImage;
-
-    // Items list handlers
-    private ExpandableHeightListView mItemsList;
-
-    private boolean mIsHeaderExpanded;
-
-
     public MainMenuFragment() {
         // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment MainMenuFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static MainMenuFragment newInstance(String param1, String param2) {
+        MainMenuFragment fragment = new MainMenuFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -71,33 +66,19 @@ public class MainMenuFragment extends UserAwareFragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root = inflater.inflate(R.layout.fragment_main_menu, container, false);
-
-        // Fetch header handlers.
-        mHeaderUserName = root.findViewById(R.id.main_menu_header_user_name);
-        mHeaderUserRole = root.findViewById(R.id.main_menu_header_user_role);
-        mHeaderWrapper = root.findViewById(R.id.main_menu_header_wrapper);
-        mScrollView = root.findViewById(R.id.main_menu_root_view);
-        mHeaderBackground = root.findViewById(R.id.main_menu_header_bg);
-        mHeaderProfileImage = root.findViewById(R.id.main_menu_header_profile_img);
-
-        // Fetch items list handlers.
-        mItemsList = root.findViewById(R.id.main_menu_items_list);
-
-        mHeaderWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // On click of the header, expand and shrink the header.
-                setHeaderExpansion(!mIsHeaderExpanded);
-            }
-        });
-
-        mItemsList.setExpanded(true);
-
-        return root;
+        return inflater.inflate(R.layout.fragment_main_menu, container, false);
     }
 
     @Override

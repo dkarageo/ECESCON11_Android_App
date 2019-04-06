@@ -32,8 +32,4 @@
     <!-- Generic colors -->
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-
-    <!-- Shadow colors -->
-    <color name="shadow_black">#40000000</color>
-    <color name="shadow_white">#40ffffff</color>
 </resources>
