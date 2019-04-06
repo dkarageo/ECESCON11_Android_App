@@ -7,7 +7,7 @@
     <string name="bot_nav_workshops_title">Εργαστήρια</string>
     <string name="bot_nav_passport_title">Η Κάρτα μου</string>
     <string name="bot_nav_battles_title">Μάχες</string>
-    <string name="bot_nav_main_menu_title">Μενού</string>
+    <string name="bot_nav_info_title">Πληροφορίες</string>
 
     <!-- Fragment titles (as displayed on ActionBar of container Activity) -->
     <string name="home_title">Το σφημμυ μου</string>
@@ -16,15 +16,10 @@
     <string name="battles_title">Photoshop Battles</string>
     <string name="info_title">Το συνέδριό μας</string>
     <string name="profile_menu_tile">Λογαριασμός</string>
-    <string name="about_action_bar_title">Σχετικά</string>
-    <string name="user_profile_action_bar_title">Το προφίλ μου</string>
 
     <!-- Main Action Bar Titles -->
     <string name="mainactivity_actionbar_menu_profile_title">Προφίλ</string>
     <string name="mainactivity_actionbar_scanner_title">Σαρωτής QR</string>
-
-    <!-- Startup loading screen strings -->
-    <string name="main_activity_startup_loading_icon_content_desc">Εικονίδιο ΣΦΗΜΜΥ 11</string>
 
     <!-- Strings related to login -->
     <string name="loginForm_logoDescription">ECESCON 11 Logo</string>
@@ -60,17 +55,6 @@
     <string name="passport_unlogged_user_notification_text">Η είσοδος στην εφαρμογή σας δίνει τη δυνατότητα για εύκολο και απλό check-in από το κινητό σας!</string>
     <string name="passport_unlogged_user_notification_login_button_text">Θελω ευκολο check-in</string>
 
-    <!-- Main Menu related strings -->
-    <string name="main_menu_header_bg_content_desc">Θολωμένη εικόνα προφίλ στο παρασκήνιο</string>
-    <string name="main_menu_header_user_name_hint">Όνομα Επώνυμο</string>
-    <string name="main_menu_header_user_role_hint">Ιδιότητα</string>
-    <string name="main_menu_item_icon_content_desc">Εικονίδιο Αντικειμένου Μενού</string>
-    <string name="main_menu_item_view_profile_text">Το προφίλ μου</string>
-    <string name="main_menu_item_conference_info_text">Το συνέδριο</string>
-    <string name="main_menu_item_change_account_text">Αλλαγή λογαριασμού</string>
-    <string name="main_menu_item_about_text">Πληροφορίες εφαρμογής</string>
-    <string name="main_menu_item_sign_in">Είσοδος</string>
-    <string name="main_menu_header_generic_user_name">Ένας σπουδαίος μηχανικός&#8230;</string>
 
     <!-- String related to workshops screen -->
     <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
@@ -121,27 +105,6 @@
     <string name="checkin_users_list_item_no_checkin">Δεν έχει πραγματοποιηθεί ακόμη</string>
     <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
 
-    <!-- User related strings -->
-    <string name="user_role_visitor_text">Σύνεδρος</string>
-    <string name="user_role_secretary_text">Γραμματέας</string>
-    <string name="user_role_administrator_text">Διαχειριστής</string>
-    <string name="user_gender_male_text">Άνδρας</string>
-    <string name="user_gender_female_text">Γυναίκα</string>
-    <string name="user_gender_other_text">Άλλο</string>
-
-    <!-- User profile strings -->
-    <string name="user_profile_field_absence_text">-</string>
-    <string name="user_profile_gender_field_title">Φύλο</string>
-    <string name="user_profile_certificate_language_field_title">Γλώσσα Έκδοσης Πιστοποιητικού</string>
-    <string name="user_profile_education_level_field_title">Βαθμίδα Εκπαίδευσης</string>
-    <string name="user_profile_organization_field_title">Εκπαιδευτικό Ίδρυμα</string>
-    <string name="user_profile_department_field_title">Σχολή</string>
-    <string name="user_profile_department_specialization_field_title">Τμήμα</string>
-    <string name="user_profile_years_of_experience_field_title">Έτος Φοίτησης</string>
-
-    <!-- Generic strings -->
-    <string name="generic_edit_icon_content_description">Εικονίδιο Επεξεργασίας</string>
-
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s πριν</string>
     <string name="utils_elapsed_time_secs_single">δευτερόλεπτο</string>
@@ -156,10 +119,4 @@
     <string name="utils_elapsed_time_months_plural">μήνες</string>
     <string name="utils_elapsed_time_years_single">χρόνο</string>
     <string name="utils_elapsed_time_years_plural">χρόνια</string>
-
-    <!-- Ordinal conversion utility strings -->
-    <string name="utils_ordinal_suffix_first">ο</string>
-    <string name="utils_ordinal_suffix_second">ο</string>
-    <string name="utils_ordinal_suffix_third">ο</string>
-    <string name="utils_ordinal_suffix_generic">ο</string>
 </resources>

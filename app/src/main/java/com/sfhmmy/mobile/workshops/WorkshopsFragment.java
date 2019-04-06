@@ -79,7 +79,7 @@ public class WorkshopsFragment extends UserAwareFragment {
                 detailFrag.setWorkshopEnrollListener(new LocalWorkshopEnrollListener(detailFrag));
 
                 FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
-                t.replace(R.id.main_activity_fragment_container, detailFrag);
+                t.replace(R.id.main_fragment_container, detailFrag);
                 t.addToBackStack("workshopDetailFragment");
                 t.commit();
 
