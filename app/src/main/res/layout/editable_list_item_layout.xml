@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/user_profile_user_detail_list_item_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:enabled="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/user_profile_user_detail_list_item_edit_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:met_floatingLabel="normal"
+        app:met_floatingLabelTextColor="@color/colorTextOnPrimary"
+        app:met_floatingLabelTextSize="12sp"
+        app:met_hideUnderline="true"
+        app:met_iconPadding="8dp"
+        app:met_primaryColor="@color/colorPrimaryDark"
+        app:met_textColor="@drawable/user_profile_edit_text_color"
+        app:met_underlineColor="@color/colorPrimary"
+        app:met_floatingLabelAlwaysShown="true"
+        app:met_singleLineEllipsis="false"
+        app:met_bottomTextSize="0sp" />
+
+    <ImageButton
+        android:id="@+id/user_profile_user_detail_list_item_edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginStart="16dp"
+        android:contentDescription="@string/generic_edit_icon_content_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/user_profile_user_detail_list_item_text"
+        app:layout_constraintTop_toTopOf="@id/user_profile_user_detail_list_item_text"
+        app:layout_constraintBottom_toBottomOf="@id/user_profile_user_detail_list_item_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

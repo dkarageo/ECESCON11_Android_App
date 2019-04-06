@@ -6,7 +6,7 @@
     <string name="bot_nav_workshops_title">Workshops</string>
     <string name="bot_nav_passport_title">My Card</string>
     <string name="bot_nav_battles_title">Battles</string>
-    <string name="bot_nav_info_title">Info</string>
+    <string name="bot_nav_main_menu_title">More</string>
 
     <!-- Fragment titles (as displayed on ActionBar of container Activity) -->
     <string name="home_title">Home</string>
@@ -15,10 +15,15 @@
     <string name="battles_title">Photoshop Battles</string>
     <string name="info_title">The Conference</string>
     <string name="profile_menu_tile">Account</string>
+    <string name="about_action_bar_title">About</string>
+    <string name="user_profile_action_bar_title">My Profile</string>
 
     <!-- Main Action Bar Titles -->
     <string name="mainactivity_actionbar_menu_profile_title">Profile</string>
     <string name="mainactivity_actionbar_scanner_title">QR Scanner</string>
+
+    <!-- Startup loading screen strings -->
+    <string name="main_activity_startup_loading_icon_content_desc">ECESCON 11 Logo</string>
 
     <!-- Strings related to login -->
     <string name="loginForm_logoDescription">ECESCON 11 Logo</string>
@@ -86,6 +91,18 @@
     <string name="passport_unlogged_user_notification_text">By logging in you have the ability to check-in simply by your smartphone. Don\'t miss it!</string>
     <string name="passport_unlogged_user_notification_login_button_text">Give me simple check-ins</string>
 
+    <!-- Main Menu related strings -->
+    <string name="main_menu_header_bg_content_desc">Blurry Profile Image As Background</string>
+    <string name="main_menu_header_user_name_hint">Name Surname</string>
+    <string name="main_menu_header_user_role_hint">Role</string>
+    <string name="main_menu_item_icon_content_desc">Menu Item Icon</string>
+    <string name="main_menu_item_view_profile_text">My Profile</string>
+    <string name="main_menu_item_conference_info_text">Conference Info</string>
+    <string name="main_menu_item_change_account_text">Change Account</string>
+    <string name="main_menu_item_about_text">About</string>
+    <string name="main_menu_item_sign_in">Sign In</string>
+    <string name="main_menu_header_generic_user_name">Another great engineer&#8230;</string>
+
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Access to camera is required in order to use QR Code Scanner.</string>
     <string name="camera_scanner_permission_grant_button_text">Grant Permission</string>
@@ -105,6 +122,27 @@
     <string name="checkin_users_list_item_no_checkin">No check-in yet</string>
     <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
 
+    <!-- User related strings -->
+    <string name="user_role_visitor_text">Visitor</string>
+    <string name="user_role_secretary_text">Secretary</string>
+    <string name="user_role_administrator_text">Administrator</string>
+    <string name="user_gender_male_text">Male</string>
+    <string name="user_gender_female_text">Female</string>
+    <string name="user_gender_other_text">Other</string>
+
+    <!-- User profile strings -->
+    <string name="user_profile_field_absence_text">-</string>
+    <string name="user_profile_gender_field_title">Gender</string>
+    <string name="user_profile_certificate_language_field_title">Conference Certification Language</string>
+    <string name="user_profile_education_level_field_title">Education Level</string>
+    <string name="user_profile_organization_field_title">Educational Institution</string>
+    <string name="user_profile_department_field_title">School</string>
+    <string name="user_profile_department_specialization_field_title">Department</string>
+    <string name="user_profile_years_of_experience_field_title">Year of Study</string>
+
+    <!-- Generic strings -->
+    <string name="generic_edit_icon_content_description">Edit Icon</string>
+
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s ago</string>
     <string name="utils_elapsed_time_secs_single">second</string>
@@ -119,6 +157,12 @@
     <string name="utils_elapsed_time_months_plural">months</string>
     <string name="utils_elapsed_time_years_single">year</string>
     <string name="utils_elapsed_time_years_plural">years</string>
+
+    <!-- Ordinal conversion utility strings -->
+    <string name="utils_ordinal_suffix_first">st</string>
+    <string name="utils_ordinal_suffix_second">nd</string>
+    <string name="utils_ordinal_suffix_third">rd</string>
+    <string name="utils_ordinal_suffix_generic">th</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
