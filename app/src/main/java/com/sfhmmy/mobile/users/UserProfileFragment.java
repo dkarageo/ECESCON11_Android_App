@@ -1,110 +1,239 @@
+/*
+ * UserProfileFragment.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
+
 package com.sfhmmy.mobile.users;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
+import com.rengwuxian.materialedittext.MaterialEditText;
+import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
+import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
+import com.sfhmmy.mobile.utils.DrawableUtils;
+import com.sfhmmy.mobile.utils.TextUtils;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UserProfileFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UserProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UserProfileFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String USER_OBJECT_KEY = "user_object";
 
-    private OnFragmentInteractionListener mListener;
+    private TopLevelFragmentEventsListener mTopListener;
+
+    // Layout views handlers.
+    private CircleImageView          mProfileImage;
+    private MaterialEditText         mUserName;
+    private MaterialEditText         mUserSurname;
+    private ImageButton              mEditNameButton;
+    private ExpandableHeightListView mUserDetailList;
+    private TextView                 mUserEmail;
+
+    private User mAttachedUser;  // User to display;
+
+
+    public static UserProfileFragment newInstance(User user) {
+        UserProfileFragment fragment = new UserProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(USER_OBJECT_KEY, user);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public UserProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserProfileFragment newInstance(String param1, String param2) {
-        UserProfileFragment fragment = new UserProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_profile, container, false);
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+
+        if (context instanceof TopLevelFragmentEventsListener) {
+            mTopListener = (TopLevelFragmentEventsListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement TopLevelFragmentEventsListener");
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            mAttachedUser = savedInstanceState.getParcelable(USER_OBJECT_KEY);
+        } else if (getArguments() != null) {
+            mAttachedUser = getArguments().getParcelable(USER_OBJECT_KEY);
+        }
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_user_profile, container, false);
+
+        mProfileImage   = root.findViewById(R.id.user_profile_user_photo);
+        mUserName       = root.findViewById(R.id.user_profile_user_name);
+        mUserSurname    = root.findViewById(R.id.user_profile_user_surname);
+        mEditNameButton = root.findViewById(R.id.user_profile_edit_fullname_button);
+        mUserDetailList = root.findViewById(R.id.user_profile_user_detail_list);
+        mUserEmail      = root.findViewById(R.id.user_profile_email);
+
+        mEditNameButton.setOnClickListener(new View.OnClickListener() {
+
+            private boolean isEditModeOn = false;
+
+            @Override
+            public void onClick(View v) {
+                if (isEditModeOn) {
+                    mEditNameButton.setBackground(DrawableUtils.applyTintToDrawable(
+                            App.getAppResources().getDrawable(R.drawable.icon_edit),
+                            R.color.colorPrimaryDark
+                    ));
+
+                    mUserName.setEnabled(false);
+                    mUserSurname.setEnabled(false);
+                    mUserName.setHideUnderline(true);
+                    mUserSurname.setHideUnderline(true);
+
+                    // TODO: Send request.
+
+                } else {
+                    mEditNameButton.setBackground(DrawableUtils.applyTintToDrawable(
+                            App.getAppResources().getDrawable(R.drawable.check_mark),
+                            R.color.colorPrimaryDark
+                    ));
+
+                    mUserName.setEnabled(true);
+                    mUserSurname.setEnabled(true);
+                    mUserName.setHideUnderline(false);
+                    mUserSurname.setHideUnderline(false);
+
+                    mUserName.requestFocus();
+                    InputMethodManager imm = (InputMethodManager)
+                            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(mUserName, InputMethodManager.SHOW_IMPLICIT);
+                }
+
+                isEditModeOn = !isEditModeOn;
+            }
+        });
+        mEditNameButton.setBackground(DrawableUtils.applyTintToDrawable(
+                App.getAppResources().getDrawable(R.drawable.icon_edit),
+                R.color.colorPrimaryDark
+        ));
+
+        // TODO: Allow edit of name.
+        mEditNameButton.setVisibility(View.GONE);
+
+        if (mAttachedUser != null) bindUser(mAttachedUser);
+        mUserName.setEnabled(false);
+        mUserSurname.setEnabled(false);
+        mUserName.setHideUnderline(true);
+        mUserSurname.setHideUnderline(true);
+
+        return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (mTopListener != null) {
+            mTopListener.updateTitle(getString(R.string.user_profile_action_bar_title));
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mTopListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(USER_OBJECT_KEY, mAttachedUser);
+    }
+
+    private void bindUser(User user) {
+        mUserName.setText(user.getName());
+        mUserSurname.setText(user.getSurname());
+        mUserEmail.setText(user.getEmail());
+
+        Glide.with(mProfileImage)
+             .load(user.getProfilePictureURL())
+             .into(mProfileImage);
+
+        String absenceString = getString(R.string.user_profile_field_absence_text);
+
+        // TODO: Allow editing of fields.
+        EditableListAdapter adapter = new EditableListAdapter();
+        adapter.addEditableItem(user.getGenderText() != null ? user.getGenderText() : absenceString,
+                                getString(R.string.user_profile_gender_field_title),
+                                null,
+                                null,
+                                false)
+               .addEditableItem(user.getPreferedLanguage() != null ?
+                                        user.getPreferedLanguage() : absenceString,
+                                getString(R.string.user_profile_certificate_language_field_title),
+                                null,
+                                null,
+                                false)
+               .addEditableItem(user.getEducationLevel() != null ?
+                                        user.getEducationLevel() : absenceString,
+                                getString(R.string.user_profile_education_level_field_title),
+                                null,
+                                null,
+                                false)
+               .addEditableItem(user.getOrganization() != null ?
+                                        user.getOrganization() : absenceString,
+                                getString(R.string.user_profile_organization_field_title),
+                                null,
+                                null,
+                                false)
+               .addEditableItem(user.getDepartment() != null ? user.getDepartment() : absenceString,
+                                getString(R.string.user_profile_department_field_title),
+                                null,
+                                null,
+                                false)
+               .addEditableItem(user.getDepartmentSpecialization() != null ?
+                                        user.getDepartmentSpecialization() : absenceString,
+                                getString(R.string.user_profile_department_specialization_field_title),
+                                null,
+                                null,
+                                false)
+               .addEditableItem(user.getYearsOfExperience() > 0 ?
+                                        TextUtils.integerToOrdinalString(user.getYearsOfExperience()) :
+                                        absenceString,
+                                getString(R.string.user_profile_years_of_experience_field_title),
+                                null,
+                                null,
+                                false);
+        mUserDetailList.setAdapter(adapter);
+        mUserDetailList.setExpanded(true);
+        mUserDetailList.setVerticalScrollBarEnabled(false);
     }
 }

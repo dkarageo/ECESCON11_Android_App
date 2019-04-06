@@ -22,7 +22,7 @@
         android:title="@string/bot_nav_battles_title" />
 
     <item
-        android:id="@+id/bot_nav_info"
-        android:icon="@drawable/info_icon"
-        android:title="@string/bot_nav_info_title" />
+        android:id="@+id/bot_nav_main_menu"
+        android:icon="@drawable/icon_menu"
+        android:title="@string/bot_nav_main_menu_title" />
 </menu>
