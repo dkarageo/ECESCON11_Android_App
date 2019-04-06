@@ -17,6 +17,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.Fragment;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 import android.view.LayoutInflater;
@@ -247,11 +248,18 @@ public class MainMenuFragment extends UserAwareFragment {
         @Override
         public void onClick(View v) {
             if (mTopListener != null) {
-                mTopListener.navigateTo(
-                        UserProfileFragment.newInstance(
-                                UserManager.getUserManager().getCurrentUser()),
-                        "profile_frag"
-                );
+                mTopListener.navigateToNavigableKey(new NavigableKey() {
+                        @Override
+                        public String getKey() {
+                            return "user_profile_fragment";
+                        }
+
+                        @Override
+                        public Fragment createFragment() {
+                            return UserProfileFragment.newInstance(
+                                    UserManager.getUserManager().getCurrentUser());
+                        }
+                }, true);
             }
         }
     }
@@ -259,7 +267,19 @@ public class MainMenuFragment extends UserAwareFragment {
     private class InfoButtonHandler implements  View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if (mTopListener != null) mTopListener.navigateTo(new InfoFragment(), "info_frag");
+            if (mTopListener != null) {
+                mTopListener.navigateToNavigableKey(new NavigableKey() {
+                    @Override
+                    public String getKey() {
+                        return "conference_info_fragment";
+                    }
+
+                    @Override
+                    public Fragment createFragment() {
+                        return new InfoFragment();
+                    }
+                }, true);
+            }
         }
     }
 
@@ -267,7 +287,17 @@ public class MainMenuFragment extends UserAwareFragment {
         @Override
         public void onClick(View v) {
             if (mTopListener != null) {
-                mTopListener.navigateTo(new AboutFragment(),"about_frag");
+                mTopListener.navigateToNavigableKey(new NavigableKey() {
+                    @Override
+                    public String getKey() {
+                        return "about_fragment";
+                    }
+
+                    @Override
+                    public Fragment createFragment() {
+                        return new AboutFragment();
+                    }
+                }, true);
             }
         }
     }

@@ -16,7 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sfhmmy.mobile.NavigableKey;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.UserAwareFragment;
 import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
@@ -74,14 +75,28 @@ public class WorkshopsFragment extends UserAwareFragment {
         mWorkshopsRecyclerAdapter.setWorkshopDetailRequestListener(
                 new WorkshopsRecyclerAdapter.WorkshopDetailRequestListener() {
             @Override
-            public void onWorkshopDetailRequest(Workshop workshop) {
-                WorkshopDetailFragment detailFrag = WorkshopDetailFragment.newInstance(workshop);
-                detailFrag.setWorkshopEnrollListener(new LocalWorkshopEnrollListener(detailFrag));
+            public void onWorkshopDetailRequest(final Workshop workshop) {
 
-                FragmentTransaction t = getActivity().getSupportFragmentManager().beginTransaction();
-                t.replace(R.id.main_activity_fragment_container, detailFrag);
-                t.addToBackStack("workshopDetailFragment");
-                t.commit();
+                if (mTopListener != null) {
+                    mTopListener.navigateToNavigableKey(new NavigableKey() {
+                        Workshop bindedWorkshop = workshop;
+
+                        @Override
+                        public String getKey() {
+                            return String.format("workshop_detail_%d", workshop.getId());
+                        }
+
+                        @Override
+                        public Fragment createFragment() {
+                            WorkshopDetailFragment detailFrag
+                                    = WorkshopDetailFragment.newInstance(bindedWorkshop);
+                            detailFrag.setWorkshopEnrollListener(
+                                    new LocalWorkshopEnrollListener(detailFrag)
+                            );
+                            return detailFrag;
+                        }
+                    }, false);
+                }
 
                 // No navigation elements should be element on detail page.
                 mTopListener.hideNavigationBar();

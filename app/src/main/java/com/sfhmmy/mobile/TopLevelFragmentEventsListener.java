@@ -23,13 +23,5 @@ public interface TopLevelFragmentEventsListener {
      */
     void showNavigationBar();
 
-    /**
-     * Displays given fragment.
-     *
-     * All required operations for navigating away from that fragment are handled.
-     *
-     * @param target Fragment to be displayed.
-     * @param tag Tag for given fragment.
-     */
-    void navigateTo(Fragment target, String tag);
+    public void navigateToNavigableKey(NavigableKey target, boolean skipCurrentOnBack);
 }
