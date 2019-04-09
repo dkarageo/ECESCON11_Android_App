@@ -45,7 +45,8 @@ public class Workshop implements Parcelable {
     private String        mImageUrl;
     private String        mJoinQuestion;
     private String        mPlace;
-    private ZonedDateTime mDateTime;
+    private ZonedDateTime mBeginDate;
+    private ZonedDateTime mEndDate;
     private EnrollStatus  mEnrollStatus;
 
 
@@ -58,7 +59,8 @@ public class Workshop implements Parcelable {
         mImageUrl     = in.readString();
         mJoinQuestion = in.readString();
         mPlace        = in.readString();
-        mDateTime     = (ZonedDateTime) in.readSerializable();
+        mBeginDate    = (ZonedDateTime) in.readSerializable();
+        mEndDate      = (ZonedDateTime) in.readSerializable();
         mEnrollStatus = (EnrollStatus) in.readSerializable();
     }
 
@@ -68,7 +70,8 @@ public class Workshop implements Parcelable {
     public String getImageUrl() { return mImageUrl; }
     public String getJoinQuestion() { return mJoinQuestion; }
     public String getPlace() { return mPlace; }
-    public ZonedDateTime getDateTime() { return mDateTime; }
+    public ZonedDateTime getBeginDate() { return mBeginDate; }
+    public ZonedDateTime getEndDate() { return mEndDate; }
     public EnrollStatus getEnrollStatus() { return mEnrollStatus; }
 
     public void setId(int id) { mId = id; }
@@ -77,7 +80,8 @@ public class Workshop implements Parcelable {
     public void setImageUrl(String imageUrl) { mImageUrl = imageUrl; }
     public void setJoinQuestion(String joinQuestion) { mJoinQuestion = joinQuestion; }
     public void setPlace(String place) { mPlace = place; }
-    public void setDateTime(ZonedDateTime dateTime) { mDateTime = dateTime; }
+    public void setBeginDate(ZonedDateTime dateTime) { mBeginDate = dateTime; }
+    public void setEndDate(ZonedDateTime endDate) { mEndDate = endDate; }
     public void setEnrollStatus(EnrollStatus enrollStatus) { mEnrollStatus = enrollStatus; }
 
     @Override
@@ -91,7 +95,8 @@ public class Workshop implements Parcelable {
         dest.writeString(mImageUrl);
         dest.writeString(mJoinQuestion);
         dest.writeString(mPlace);
-        dest.writeSerializable(mDateTime);
+        dest.writeSerializable(mBeginDate);
+        dest.writeSerializable(mEndDate);
         dest.writeSerializable(mEnrollStatus);
     }
 }

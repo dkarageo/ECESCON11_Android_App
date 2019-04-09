@@ -78,7 +78,8 @@
     <string name="workshops_item_location_icon_content_desc">Εικονίδιο Τοποθεσίας</string>
     <string name="workshops_item_location_hint_text">Τοποθεσία</string>
     <string name="workshops_item_date_icon_content_desc">Εικονίδιο Ημερομηνίας</string>
-    <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
+    <string name="workshops_item_date_hint_text">dd-MM-YYYY</string>
+    <string name="workshops_item_time_hint_text">hh:mm - hh:mm</string>
     <string name="workshops_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένονυ να εγγραφείτε στα εργαστήρια, παρακαλούμε συνδεθείτε!</string>
     <string name="workshops_unlogged_user_notification_login_button_text">Είσοδος</string>
     <string name="workshops_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>

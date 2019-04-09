@@ -169,8 +169,12 @@ public class RemoteServerProxy {
         work1.setImageUrl("https://r4a.issel.ee.auth.gr/images/middleware.png");
         work1.setJoinQuestion("Do you love robotics?");
         work1.setPlace("Inside a NAO");
-        work1.setDateTime(ZonedDateTime.parse(
+        work1.setBeginDate(ZonedDateTime.parse(
                 "2019-04-21T14:30:00.000+02:00[Europe/Athens]",
+                DateTimeFormatter.ISO_ZONED_DATE_TIME
+        ));
+        work1.setEndDate(ZonedDateTime.parse(
+                "2019-04-21T17:30:00.000+02:00[Europe/Athens]",
                 DateTimeFormatter.ISO_ZONED_DATE_TIME
         ));
         work1.setDescription("Learn everything about robots!");
@@ -181,8 +185,12 @@ public class RemoteServerProxy {
         work2.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/IT/Dimitrios_Karageorgiou.jpg");
         work2.setJoinQuestion("Is there any reason to join that workshop?");
         work2.setPlace("Στο τσαντίρι του");
-        work2.setDateTime(ZonedDateTime.parse(
+        work2.setBeginDate(ZonedDateTime.parse(
                 "2019-04-21T18:00:00.000+02:00[Europe/Athens]",
+                DateTimeFormatter.ISO_ZONED_DATE_TIME
+        ));
+        work2.setEndDate(ZonedDateTime.parse(
+                "2019-04-21T20:00:00.000+02:00[Europe/Athens]",
                 DateTimeFormatter.ISO_ZONED_DATE_TIME
         ));
         work2.setDescription("Ένα εργαστήριο γεμάτο εκπλήξεις! ;)");

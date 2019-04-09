@@ -56,7 +56,8 @@
     <string name="workshops_item_location_icon_content_desc">Location Icon</string>
     <string name="workshops_item_location_hint_text">Location</string>
     <string name="workshops_item_date_icon_content_desc">Date Icon</string>
-    <string name="workshops_item_date_hint_text">hh:mm dd-MM-YYYY</string>
+    <string name="workshops_item_date_hint_text">dd-MM-YYYY</string>
+    <string name="workshops_item_time_hint_text">hh:mm - hh:mm</string>
     <string name="workshops_unlogged_user_notification_text">You have not logged in yet. In order to enroll into workshops, please log in!</string>
     <string name="workshops_unlogged_user_notification_login_button_text">Login</string>
     <string name="workshops_unlogged_user_notification_icon_content_desc">Info Icon</string>

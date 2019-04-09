@@ -48,7 +48,8 @@ public class WorkshopsRecyclerAdapter
         TextView  mName;
         ImageView mImage;
         TextView  mLocation;
-        TextView  mDateTime;
+        TextView  mDate;
+        TextView  mTime;
         CardView  mContainerCard;
 
         WorkshopVH(View v) {
@@ -56,7 +57,8 @@ public class WorkshopsRecyclerAdapter
             mName          = v.findViewById(R.id.workshops_item_name);
             mImage         = v.findViewById(R.id.workshops_item_image);
             mLocation      = v.findViewById(R.id.workshops_item_location);
-            mDateTime      = v.findViewById(R.id.workshops_item_date);
+            mDate          = v.findViewById(R.id.workshops_item_date);
+            mTime          = v.findViewById(R.id.workshops_item_time);
             mContainerCard = v.findViewById(R.id.workshops_item_container);
         }
     }
@@ -173,8 +175,22 @@ public class WorkshopsRecyclerAdapter
         holder.mName.setText(curWorkshop.getName());
         holder.mLocation.setText(curWorkshop.getPlace());
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm  dd-MM-yyyy");
-        holder.mDateTime.setText(curWorkshop.getDateTime().format(formatter));
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        if (curWorkshop.getBeginDate() != null) {
+            holder.mDate.setText(curWorkshop.getBeginDate().format(dateFormatter));
+
+            if (curWorkshop.getEndDate() != null) {
+                holder.mTime.setText(String.format(
+                        "%s - %s",
+                        curWorkshop.getBeginDate().format(timeFormatter),
+                        curWorkshop.getEndDate().format(timeFormatter)
+                ));
+            } else {
+                holder.mTime.setText(curWorkshop.getBeginDate().format(timeFormatter));
+            }
+        }
 
         holder.mContainerCard.setOnClickListener(new WorkshopCardClickListener(curWorkshop));
 

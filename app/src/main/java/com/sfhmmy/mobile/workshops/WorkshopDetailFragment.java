@@ -41,6 +41,7 @@ public class WorkshopDetailFragment extends Fragment {
     private ImageView mWorkshopImage;
     private TextView  mLocation;
     private TextView  mDate;
+    private TextView  mTime;
     private TextView  mDescription;
     private Button    mEnrollButton;
 
@@ -83,6 +84,7 @@ public class WorkshopDetailFragment extends Fragment {
         mWorkshopImage    = root.findViewById(R.id.workshop_detail_image);
         mLocation         = root.findViewById(R.id.workshop_detail_location);
         mDate             = root.findViewById(R.id.workshop_detail_date);
+        mTime             = root.findViewById(R.id.workshop_detail_time);
         mDescription      = root.findViewById(R.id.workshop_detail_description);
         mEnrollButton     = root.findViewById(R.id.workshop_detail_enroll_button);
 
@@ -138,9 +140,21 @@ public class WorkshopDetailFragment extends Fragment {
         if (workshop.getPlace() != null) mLocation.setText(workshop.getPlace());
         if (workshop.getDescription() != null) mDescription.setText(workshop.getDescription());
 
-        if (workshop.getDateTime() != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm  dd-MM-yyyy");
-            mDate.setText(workshop.getDateTime().format((formatter)));
+        if (workshop.getBeginDate() != null) {
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            mDate.setText(workshop.getBeginDate().format((dateFormatter)));
+
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            if (workshop.getEndDate() != null) {
+                mTime.setText(String.format(
+                        "%s - %s",
+                        workshop.getBeginDate().format(timeFormatter),
+                        workshop.getEndDate().format(timeFormatter)
+                ));
+            } else {
+                mTime.setText(workshop.getBeginDate().format(timeFormatter));
+            }
         }
 
         if (workshop.getEnrollStatus() != null) setEnrollStatus(workshop.getEnrollStatus());
