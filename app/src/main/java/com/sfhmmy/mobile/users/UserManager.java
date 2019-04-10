@@ -184,7 +184,10 @@ public class UserManager {
             spe.putString(USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY,
                           u.getDepartmentSpecialization());
             spe.putInt(USER_PREFERENCES_YEARS_OF_EXPERIENCE_KEY, u.getYearsOfExperience());
-            spe.putString(USER_PREFERENCES_GENDER_KEY, u.getGender().name());
+
+            if (u.getGender() != null) spe.putString(USER_PREFERENCES_GENDER_KEY, u.getGender().name());
+            else spe.remove(USER_PREFERENCES_GENDER_KEY);
+
             spe.putString(USER_PREFERENCES_PREFERED_LANGUAGE_KEY, u.getPreferedLanguage());
             spe.putString(USER_PREFERENCES_REGISTRATION_DATE_KEY,
                           u.getRegistrationDate() != null ?
