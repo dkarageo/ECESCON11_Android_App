@@ -16,16 +16,14 @@ import android.os.AsyncTask;
 import com.sfhmmy.mobile.ImagePost;
 import com.sfhmmy.mobile.cache.CacheProvider;
 
-import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class PhotoWallService {
 
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 15;
     private static final String CACHE_KEY = "remoteserver.PhotoWallService.cacheFile";
 
     private PhotoWallServiceListener mListener;
@@ -135,36 +133,8 @@ public class PhotoWallService {
 
             int curPage = args[0];  // Current page when async task created.
 
-            // TODO: Fetch posts list from remote API of page curPage + 1.
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException ex) {}
-
-            ArrayList<ImagePost> imagePosts = new ArrayList<>();
-
-            ImagePost post1 = new ImagePost();
-            post1.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/Teams/IT.jpg");
-            post1.setDescription("The best IT team ever.");
-            post1.setUploader("Ecescon 11 Organizing Committee");
-            post1.setUploadedDate(ZonedDateTime.parse(
-                    "2019-03-14T01:25:38.492+02:00[Europe/Athens]",
-                    DateTimeFormatter.ISO_ZONED_DATE_TIME
-            ));
-
-            ImagePost post2 = new ImagePost();
-            post2.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/Teams/IT.jpg");
-            post2.setDescription("Once more, the best IT team ever.");
-            post2.setUploader("Ecescon 11 Organizing Committee");
-            post2.setUploadedDate(ZonedDateTime.parse(
-                    "2019-02-10T12:25:38.492+02:00[Europe/Athens]",
-                    DateTimeFormatter.ISO_ZONED_DATE_TIME
-            ));
-
-            imagePosts.add(post1);
-            imagePosts.add(post2);
-
-            // TODO: Fetch pages count from remote API.
-            int lastPage = 5;
+            RemoteServerProxy proxy = new RemoteServerProxy();
+            ContentPage<ImagePost> newPage = proxy.getPhotoWallPage(curPage+1);
 
             // Always let a simultaneous loading from cache to complete first, so new content
             // overrides cached one.
@@ -176,12 +146,24 @@ public class PhotoWallService {
                 }
             }
 
-            // Store only first page to cache. It's enough.
-            if (curPage == 0) {
-                CacheProvider.getCacheProvider().storeObject(CACHE_KEY, imagePosts);
-            }
+            if (newPage != null) {  // New page retrieved successfully.
 
-            return new Object[] { imagePosts, curPage, lastPage };
+                List<ImagePost> imagePosts = newPage.getContentList();
+                int lastPage = newPage.getTotalPages();
+
+                // Store only first page to cache. It's enough.
+                if (curPage == 0) {
+                    // Make sure that posts list is a serializable list.
+                    Serializable serializableList;
+                    if (imagePosts instanceof Serializable) serializableList = (Serializable) imagePosts;
+                    else serializableList = new ArrayList<>(imagePosts);
+
+                    CacheProvider.getCacheProvider().storeObject(CACHE_KEY, serializableList);
+                }
+
+                return new Object[] { imagePosts, curPage, lastPage };
+
+            } else return null;  // Failed to retrieve new page.
         }
 
         @Override

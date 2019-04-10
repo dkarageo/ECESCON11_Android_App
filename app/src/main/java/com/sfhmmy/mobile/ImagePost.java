@@ -11,6 +11,8 @@
 
 package com.sfhmmy.mobile;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.threeten.bp.ZonedDateTime;
 
 import java.io.Serializable;
@@ -18,16 +20,30 @@ import java.io.Serializable;
 
 public class ImagePost implements Serializable {
 
-    private String        mUploader;
+    @SerializedName("id")
+    private long mId;
+    @SerializedName("uploader_name")
+    private String mUploader;
+    @SerializedName("created_at")
     private ZonedDateTime mUploadedDate;
-    private String        mDescription;
-    private String        mImageUrl;
+    @SerializedName("description")
+    private String mDescription;
+    @SerializedName("url")
+    private String mImageUrl;
+    @SerializedName("uploader_username")
+//    private String mUploaderUsername;
+//    @SerializedName("picture_mime")
+//    private String mPictureMime;
+//    @SerializedName("picture")
+//    private String mPictureFilename;
 
+    public long getId() { return mId; }
     public String getUploader() { return mUploader; }
     public ZonedDateTime getUploadedDate() { return mUploadedDate; }
     public String getDescription() { return mDescription; }
     public String getImageUrl() { return mImageUrl; }
 
+    public void setId(long id) { mId = id; }
     public void setUploader(String uploader) { mUploader = uploader; }
     public void setUploadedDate(ZonedDateTime uploadedDate) { mUploadedDate = uploadedDate; }
     public void setDescription(String description) { mDescription = description; }

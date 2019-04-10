@@ -16,8 +16,10 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sfhmmy.mobile.ImagePost;
 import com.sfhmmy.mobile.cache.CacheProvider;
 import com.sfhmmy.mobile.remoteserver.deserializers.AccessTokenDeserializer;
+import com.sfhmmy.mobile.remoteserver.deserializers.ContentPageDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ListDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.UserDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ZonedDateTimeDeserializer;
@@ -72,6 +74,7 @@ public class RemoteServerProxy {
             .registerTypeAdapter(User.class, new UserDeserializer())
             .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeDeserializer())
             .registerTypeAdapter(List.class, new ListDeserializer())
+            .registerTypeAdapter(ContentPage.class, new ContentPageDeserializer())
             .setLenient()
             .create();
 
@@ -360,6 +363,21 @@ public class RemoteServerProxy {
         return list;
     }
 
+    public ContentPage<ImagePost> getPhotoWallPage(int page) {
+
+        ContentPage<ImagePost> pageContainer;
+
+        EcesconAPI api = createService(EcesconAPI.class);
+        Call<ContentPage<ImagePost>> call = api.getPhotoWallList(page);
+        try {
+            pageContainer = call.execute().body();
+        } catch (IOException ex) {
+            pageContainer = null;
+        }
+
+        return pageContainer;
+    }
+
     public ResponseContainer<List<User>> getUsersList(String accessToken) {
 
         ResponseContainer<List<User>> rc = new ResponseContainer<>();
@@ -513,5 +531,8 @@ public class RemoteServerProxy {
 
         @GET("education_ranks")
         Call<List<EducationRank>> getEducationRanksList(@Query("page") int page);
+
+        @GET("pictures")
+        Call<ContentPage<ImagePost>> getPhotoWallList(@Query("page") int page);
     }
 }
