@@ -1,3 +1,14 @@
+/*
+ * UserManager.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.2
+ */
+
 package com.sfhmmy.mobile.users;
 
 import com.sfhmmy.mobile.App;
@@ -13,6 +24,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * User Manager is the central point for managing users.
@@ -49,7 +61,8 @@ public class UserManager {
     private static final String USER_PREFERENCES_GENDER_KEY = "com.sfhmmy.mobile.users.gender";
     private static final String USER_PREFERENCES_PREFERED_LANGUAGE_KEY
             = "com.sfhmmy.mobile.prefered_language";
-
+    private static final String USER_PREFERENCES_REGISTRATION_DATE_KEY
+            = "com.sfhmmy.mobile.registration_date";
 
     // Singleton reference of UserManager.
     private static UserManager mUserManager = null;
@@ -162,10 +175,10 @@ public class UserManager {
             spe.putString(USER_PREFERENCES_ORGANIZATION_KEY, u.getOrganization());
             spe.putString(USER_PREFERENCES_PASSPORT_VALUE_KEY, u.getPassportValue());
             spe.putString(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY,
-                    u.getLastCheckInDate() != null ?
-                            u.getLastCheckInDate().format(DateTimeFormatter.ISO_ZONED_DATE_TIME) :
-                            null
-                    );
+                          u.getLastCheckInDate() != null ?
+                                  u.getLastCheckInDate().format(DateTimeFormatter.ISO_ZONED_DATE_TIME) :
+                                  null
+            );
             spe.putString(USER_PREFERENCES_EDUCATION_LEVEL_KEY, u.getEducationLevel());
             spe.putString(USER_PREFERENCES_DEPARTMENT_KEY, u.getDepartment());
             spe.putString(USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY,
@@ -173,6 +186,11 @@ public class UserManager {
             spe.putInt(USER_PREFERENCES_YEARS_OF_EXPERIENCE_KEY, u.getYearsOfExperience());
             spe.putString(USER_PREFERENCES_GENDER_KEY, u.getGender().name());
             spe.putString(USER_PREFERENCES_PREFERED_LANGUAGE_KEY, u.getPreferedLanguage());
+            spe.putString(USER_PREFERENCES_REGISTRATION_DATE_KEY,
+                          u.getRegistrationDate() != null ?
+                                  u.getRegistrationDate().format(DateTimeFormatter.ISO_ZONED_DATE_TIME) :
+                                  null
+            );
 
         } else {
             spe.remove(USER_PREFERENCES_UID_KEY);
@@ -191,6 +209,7 @@ public class UserManager {
             spe.remove(USER_PREFERENCES_YEARS_OF_EXPERIENCE_KEY);
             spe.remove(USER_PREFERENCES_GENDER_KEY);
             spe.remove(USER_PREFERENCES_PREFERED_LANGUAGE_KEY);
+            spe.remove(USER_PREFERENCES_REGISTRATION_DATE_KEY);
         }
 
         spe.apply();
@@ -248,6 +267,14 @@ public class UserManager {
                         dateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
                 );
                 u.setLastCheckInDate(dateTime);
+            }
+
+            String registrationDateString = sp.getString(USER_PREFERENCES_REGISTRATION_DATE_KEY, null);
+            if (registrationDateString != null) {
+                ZonedDateTime dateTime = ZonedDateTime.parse(
+                        dateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
+                );
+                u.setRegistrationDate(dateTime);
             }
         }
 

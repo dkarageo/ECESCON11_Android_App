@@ -1,3 +1,14 @@
+/*
+ * User.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.2
+ */
+
 package com.sfhmmy.mobile.users;
 
 import android.os.Parcel;
@@ -47,6 +58,7 @@ public class User implements Parcelable {
     private ZonedDateTime mLastCheckInDate;
     private Gender mGender;
     private String mPreferedLanguage;
+    private ZonedDateTime mRegistrationDate;
 
     public User() {}
 
@@ -73,6 +85,7 @@ public class User implements Parcelable {
         mLastCheckInDate   = (ZonedDateTime) source.readSerializable();
         mGender            = (Gender) source.readSerializable();
         mPreferedLanguage  = source.readString();
+        mRegistrationDate  = (ZonedDateTime) source.readSerializable();
     }
 
     public long getUid() { return mUid; }
@@ -91,6 +104,7 @@ public class User implements Parcelable {
     public ZonedDateTime getLastCheckInDate() { return mLastCheckInDate; }
     public Gender getGender() { return mGender; }
     public String getPreferedLanguage() { return mPreferedLanguage; }
+    public ZonedDateTime getRegistrationDate() { return mRegistrationDate; }
 
     public void setUid(long uid) { mUid = uid; }
     public void setEmail(String email) { mEmail = email; }
@@ -106,6 +120,7 @@ public class User implements Parcelable {
     public void setLastCheckInDate(ZonedDateTime lastCheckInDate) { mLastCheckInDate = lastCheckInDate; }
     public void setGender(Gender gender) { mGender = gender; }
     public void setPreferedLanguage(String preferedLanguage) { mPreferedLanguage = preferedLanguage; }
+    public void setRegistrationDate(ZonedDateTime registrationDate) { mRegistrationDate = registrationDate; }
 
     public void setDepartmentSpecialization(String departmentSpecialization) {
         mDepartmentSpecialization = departmentSpecialization;
@@ -186,5 +201,6 @@ public class User implements Parcelable {
         dest.writeSerializable(mLastCheckInDate);
         dest.writeSerializable(mGender);
         dest.writeString(mPreferedLanguage);
+        dest.writeSerializable(mRegistrationDate);
     }
 }
