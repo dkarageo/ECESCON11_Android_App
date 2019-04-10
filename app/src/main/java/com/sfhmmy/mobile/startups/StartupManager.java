@@ -14,7 +14,10 @@ package com.sfhmmy.mobile.startups;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+
 import com.sfhmmy.mobile.App;
+import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
 
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import okhttp3.OkHttpClient;
 
 
 public class StartupManager {
@@ -38,6 +42,7 @@ public class StartupManager {
 
     private boolean mUserRestoreProcessCompleted;
     private UserManager.UserAuthenticationListener mUserAuthenticationListener;
+    private boolean mCacheBuildingCompleted;
 
     public static StartupManager getStartupManager() {
         if (mActiveStartupManager == null) mActiveStartupManager = new StartupManager();
@@ -58,6 +63,7 @@ public class StartupManager {
      */
     public void startup() {
         startUserSessionRestorationProcess();
+        startCacheBuilding();
     }
 
     public void terminateFirstRun() {
@@ -79,9 +85,11 @@ public class StartupManager {
 //        }
     }
 
-    private void notifyOnStartupCompleted() {
+   synchronized private void notifyOnStartupCompleted() {
 
-        boolean allCompleted = mUserRestoreProcessCompleted;
+        boolean allCompleted = true;
+        allCompleted &= mUserRestoreProcessCompleted;
+        allCompleted &= mCacheBuildingCompleted;
 
         if (allCompleted) {
             for (StartupProcessListener l : mStartupListeners) {
@@ -141,8 +149,32 @@ public class StartupManager {
         manager.asyncRestoreLastSession();
     }
 
+    private void startCacheBuilding() {
+        mCacheBuildingCompleted = false;
+        new CacheBuilder().execute();
+    }
 
     public interface StartupProcessListener {
         void onStartupCompleted();
+    }
+
+    private class CacheBuilder extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Try to fetch data from remote api, in order to build caches.
+            RemoteServerProxy proxy = new RemoteServerProxy();
+            proxy.getEducationRanksList();
+            proxy.getFacultiesList();
+            proxy.getInstitutionsList();
+            proxy.getSchoolsList();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            mCacheBuildingCompleted = true;
+            notifyOnStartupCompleted();
+        }
     }
 }
