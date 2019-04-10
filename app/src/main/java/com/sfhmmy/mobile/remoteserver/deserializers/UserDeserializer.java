@@ -11,6 +11,8 @@
 
 package com.sfhmmy.mobile.remoteserver.deserializers;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -18,6 +20,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.sfhmmy.mobile.App;
+import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
 import com.sfhmmy.mobile.users.EducationRank;
 import com.sfhmmy.mobile.users.Faculty;
@@ -55,6 +59,41 @@ public class UserDeserializer implements JsonDeserializer<User> {
             } else if (roleText.equals("secretariat")) {
                 user.setRole(User.Role.SECRETARY);
             }
+        }
+
+        // Deserialize gender.
+        String genderText = data.get("gender").getAsString();
+        switch (genderText) {
+            case "male" :
+                user.setGender(User.Gender.MALE);
+                break;
+
+            case "female":
+                user.setGender(User.Gender.FEMALE);
+                break;
+
+            case "other":
+                user.setGender(User.Gender.OTHER);
+                break;
+
+            default:
+                Log.e("UserDeserializer", String.format("Invalid gender type: %s", genderText));
+                user.setGender(null);
+        }
+
+        // Deserialize locale.
+        String localeText = data.get("locale").getAsString();
+        switch (localeText) {
+            case "el" :
+                user.setPreferedLanguage(
+                        App.getAppContext().getString(R.string.user_preferred_language_el_text)
+                );
+                break;
+
+            default:
+                user.setPreferedLanguage(
+                        App.getAppContext().getString(R.string.user_preferred_language_en_text)
+                );
         }
 
         long organizationId      = data.get("institution_id").getAsLong();

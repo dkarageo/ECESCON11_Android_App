@@ -130,6 +130,8 @@
     <string name="user_gender_male_text">Male</string>
     <string name="user_gender_female_text">Female</string>
     <string name="user_gender_other_text">Other</string>
+    <string name="user_preferred_language_en_text">English</string>
+    <string name="user_preferred_language_el_text">Greek</string>
 
     <!-- User profile strings -->
     <string name="user_profile_field_absence_text">-</string>

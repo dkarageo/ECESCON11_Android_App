@@ -129,6 +129,8 @@
     <string name="user_gender_male_text">Άνδρας</string>
     <string name="user_gender_female_text">Γυναίκα</string>
     <string name="user_gender_other_text">Άλλο</string>
+    <string name="user_preferred_language_en_text">Αγγλικά</string>
+    <string name="user_preferred_language_el_text">Ελληνικά</string>
 
     <!-- User profile strings -->
     <string name="user_profile_field_absence_text">-</string>
