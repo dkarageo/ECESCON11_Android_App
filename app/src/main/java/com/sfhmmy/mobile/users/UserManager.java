@@ -275,7 +275,7 @@ public class UserManager {
             String registrationDateString = sp.getString(USER_PREFERENCES_REGISTRATION_DATE_KEY, null);
             if (registrationDateString != null) {
                 ZonedDateTime dateTime = ZonedDateTime.parse(
-                        dateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
+                        registrationDateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
                 );
                 u.setRegistrationDate(dateTime);
             }
