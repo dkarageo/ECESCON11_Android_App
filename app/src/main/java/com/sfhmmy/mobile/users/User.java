@@ -18,6 +18,7 @@ import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
 
 import org.threeten.bp.ZonedDateTime;
+import com.google.gson.annotations.SerializedName;
 
 
 public class User implements Parcelable {
@@ -42,22 +43,30 @@ public class User implements Parcelable {
         OTHER
     }
 
+    @SerializedName("id")
     private long mUid;
+    @SerializedName("email")
     private String mEmail;
+    @SerializedName("name")
     private String mName;
+    @SerializedName("surname")
     private String mSurname;
     private String mEducationLevel;
     private String mOrganization;
     private String mDepartment;
     private String mDepartmentSpecialization;
+    @SerializedName("years_of_experience")
     private int mYearsOfExperience;
     private String mToken;
     private Role mRole;
+    @SerializedName("profile_image_url")
     private String mProfilePictureURL;
+    @SerializedName("passport_id")
     private String mPassportValue;
     private ZonedDateTime mLastCheckInDate;
     private Gender mGender;
     private String mPreferedLanguage;
+    @SerializedName("created_at")
     private ZonedDateTime mRegistrationDate;
 
     public User() {}

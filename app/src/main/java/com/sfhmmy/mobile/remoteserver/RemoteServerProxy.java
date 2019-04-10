@@ -11,16 +11,40 @@
 
 package com.sfhmmy.mobile.remoteserver;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.sfhmmy.mobile.cache.CacheProvider;
+import com.sfhmmy.mobile.remoteserver.deserializers.AccessTokenDeserializer;
+import com.sfhmmy.mobile.remoteserver.deserializers.ListDeserializer;
+import com.sfhmmy.mobile.remoteserver.deserializers.UserDeserializer;
+import com.sfhmmy.mobile.remoteserver.deserializers.ZonedDateTimeDeserializer;
+import com.sfhmmy.mobile.users.AccessToken;
+import com.sfhmmy.mobile.users.EducationRank;
+import com.sfhmmy.mobile.users.Faculty;
+import com.sfhmmy.mobile.users.Institution;
+import com.sfhmmy.mobile.users.School;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.workshops.Workshop;
 
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 
 public class RemoteServerProxy {
@@ -29,83 +53,311 @@ public class RemoteServerProxy {
     public static final int RESPONSE_ERROR = 1;
     public static final int RESPONSE_WARNING = 2;
 
-    String baseUrl = "https://sfhmmy.gr/";
-    String clientKey = "";
+    private static final String BASE_URL = "https://sfhmmy.gr/api/";
 
-    public String acquireOAuth2Token(String email, String password) {
-        // TODO: Implemente OAuth2 ROPC flow.
+    private static final String INSTITUTIONS_LIST_CACHE_KEY
+            = "remoteserver.RemoteServerProxy.INSTITUTIONS_LIST_CACHE_KEY";
+    private static final String FACULTIES_LIST_CACHE_KEY
+            = "remoteserver.RemoteServerProxy.FACULTIES_LIST_CACHE_KEY";
+    private static final String SCHOOLS_LIST_CACHE_KEY
+            = "remoteserver.RemoteServerProxy.SCHOOLS_LIST_CACHE_KEY";
+    private static final String EDUCATION_RANKS_LIST_CACHE_KEY
+            = "remoteserver.RemoteServerProxy.EDUCATION_RANKS_LIST_CACHE_KEY";
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {}
 
-        if (email.equals("user@gmail.com") && password.equals("user")) return "user123token";
-        else if(email.equals("secretary@gmail.com") && password.equals("secretary")) return "secretary123token";
-        else return null;
+    // - Static networking objects -
+
+    private static Gson gson = new GsonBuilder()
+            .registerTypeAdapter(AccessToken.class, new AccessTokenDeserializer())
+            .registerTypeAdapter(User.class, new UserDeserializer())
+            .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeDeserializer())
+            .registerTypeAdapter(List.class, new ListDeserializer())
+            .setLenient()
+            .create();
+
+    private static OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
+
+    private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(httpClientBuilder.build())
+            .addConverterFactory(GsonConverterFactory.create(gson));
+
+    private static Retrofit retrofit = retrofitBuilder.build();
+
+    private static HttpLoggingInterceptor loggingInterceptor
+            = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+
+
+    private static <S> S createService(Class<S> serviceClass) {
+        boolean shouldBuild = false;
+
+        // Add logging interceptor. // TODO: Comment out to disable logging.
+        if (!httpClientBuilder.interceptors().contains(loggingInterceptor)) {
+            httpClientBuilder.addInterceptor(loggingInterceptor);
+            retrofitBuilder.client(httpClientBuilder.build());
+            shouldBuild = true;
+        }
+
+        if (shouldBuild) retrofit = retrofitBuilder.build();
+
+        return retrofit.create(serviceClass);
     }
 
-    public String refreshOAuth2Token(String refreshToken) {
-        // TODO: Implement OAuth2 Refresh flow.
+    public String acquireOAuth2Token(String email, String password) {
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {}
+        String token = null;
 
-        return "abcdef123";
+        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+            EcesconAPI api = createService(EcesconAPI.class);
+            Call<AccessToken> call = api.login(email, password);
+
+            try {
+                AccessToken accessToken = call.execute().body();
+                if (accessToken != null) token = accessToken.getAccessToken();
+
+            } catch (IOException ex) {}
+        }
+
+        return token;
     }
 
     public boolean isOAuth2TokenValid(String token) {
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {}
-
+        // TODO: Implement token validation.
         return true;
     }
 
     public User getUserProfile(String accessToken) {
-        // TODO: Implement profile request.
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {}
+        User user = null;
 
-        User u = null;
+        Log.d("getUserProfile", "Entering getUserProfile");
 
-        if (accessToken.equals("secretary123token")) {
-            u = new User(5, "secretary@gmail.com", "Fat");
-            u.setSurname("Elephant");
-            u.setToken(accessToken);
-            u.setRole(User.Role.SECRETARY);
-            u.setOrganization("ECESCON11 Organizing Committee");
-            u.setPassportValue("ecescon11://secretary");
-            u.setProfilePictureURL("https://sfhmmy.gr/img/pages/conference/organizing_committee/IT/Dimitrios_Karageorgiou.jpg");
-            u.setEducationLevel("Προπτυχιακός Φοιτητής");
-            u.setDepartment("Πολυτεχνική Σχολή");
-            u.setGender(User.Gender.MALE);
-            u.setDepartmentSpecialization("Τμήμα Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών");
-            u.setPreferedLanguage("Ελληνικά");
-            u.setYearsOfExperience(5);
+        if (!TextUtils.isEmpty(accessToken)) {
+            EcesconAPI api = createService(EcesconAPI.class);
 
-        } else if (accessToken.equals("user123token")) {
-            u = new User(1001, "user@gmail.com", "Kostas");
-            u.setSurname("Dimitriou");
-            u.setToken(accessToken);
-            u.setRole(User.Role.VISITOR);
-            u.setOrganization("Aristotle University Of Thessaloniki");
-            u.setPassportValue("ecescon11://user");
-            u.setEducationLevel("Προπτυχιακός Φοιτητής");
-            u.setDepartment("Πολυτεχνική Σχολή");
-            u.setGender(User.Gender.FEMALE);
-            u.setDepartmentSpecialization("Τμήμα Ηλεκτρολόγων Μηχανικών και Μηχανικών Υπολογιστών");
-            u.setPreferedLanguage("Ελληνικά");
-            u.setYearsOfExperience(2);
+            Call<User> call = api.getMyProfile("Bearer " + accessToken);
+            try {
+                user = call.execute().body();
+                if (user == null) Log.d("getUserProfile", "Received user is null");
 
-            Calendar cal = GregorianCalendar.getInstance();
-            cal.set(2019, 2, 8);
-            u.setLastCheckInDate(ZonedDateTime.now());
+            } catch (Exception ex){}
         }
 
-        return u;
+        return user;
+    }
+
+    public School getSchool(long id) {
+
+        List<School> schoolsList = getSchoolsList();
+        School school = null;
+
+        if (schoolsList != null) {
+            for (School s : schoolsList) {
+                if (s.getId() == id) {
+                    school = s;
+                    break;
+                }
+            }
+        }
+
+        return school;
+    }
+
+    public List<School> getSchoolsList() {
+
+        ArrayList<School> list;
+
+        // Firstly, try to restore cache.
+        CacheProvider cache = CacheProvider.getCacheProvider();
+        list = (ArrayList<School>) cache.retrieveObject(SCHOOLS_LIST_CACHE_KEY);
+
+        // When no cached object could be restored, get it from remote api.
+        if (list == null) {
+            list = new ArrayList<>();
+
+            EcesconAPI api = createService(EcesconAPI.class);
+            List<School> page = null;
+            int curPage = 1;
+
+            do {
+                Call<List<School>> call = api.getSchoolsList(curPage);
+
+                try {
+                    page = call.execute().body();
+                } catch(Exception ex) {
+                    list = null;
+                    break;
+                }
+
+                if (page != null) list.addAll(page);
+                ++curPage;
+
+            } while (page != null && page.size() > 0);
+
+            if (list != null) cache.storeObject(SCHOOLS_LIST_CACHE_KEY, list);
+        }
+
+        return list;
+    }
+
+    public Faculty getFaculty(long id) {
+
+        List<Faculty> facultiesList = getFacultiesList();
+        Faculty faculty = null;
+
+        if (facultiesList != null) {
+            for (Faculty f : facultiesList) {
+                if (f.getId() == id) {
+                    faculty = f;
+                    break;
+                }
+            }
+        }
+
+        return faculty;
+    }
+
+    public List<Faculty> getFacultiesList() {
+
+        ArrayList<Faculty> list;
+
+        // Firstly, try to restore cache.
+        CacheProvider cache = CacheProvider.getCacheProvider();
+        list = (ArrayList<Faculty>) cache.retrieveObject(FACULTIES_LIST_CACHE_KEY);
+
+        // When no cached object could be restored, get it from remote api.
+        if (list == null) {
+            list = new ArrayList<>();
+
+            EcesconAPI api = createService(EcesconAPI.class);
+            List<Faculty> page = null;
+            int curPage = 1;
+
+            do {
+                Call<List<Faculty>> call = api.getFacultiesList(curPage);
+
+                try {
+                    page = call.execute().body();
+                } catch(Exception ex) {
+                    list = null;
+                    break;
+                }
+
+                if (page != null) list.addAll(page);
+                ++curPage;
+
+            } while (page != null && page.size() > 0);
+
+            if (list != null) cache.storeObject(FACULTIES_LIST_CACHE_KEY, list);
+        }
+
+        return list;
+    }
+
+    public Institution getInstitution(long id) {
+
+        List<Institution> institutionsList = getInstitutionsList();
+        Institution institution = null;
+
+        if (institutionsList != null) {
+            for (Institution i : institutionsList) {
+                if (i.getId() == id) {
+                    institution = i;
+                    break;
+                }
+            }
+        }
+
+        return institution;
+    }
+
+    public List<Institution> getInstitutionsList() {
+        ArrayList<Institution> list;
+
+        // Firstly, try to restore cache.
+        CacheProvider cache = CacheProvider.getCacheProvider();
+        list = (ArrayList<Institution>) cache.retrieveObject(INSTITUTIONS_LIST_CACHE_KEY);
+
+        // When no cached object could be restored, get it from remote api.
+        if (list == null) {
+            list = new ArrayList<>();
+
+            EcesconAPI api = createService(EcesconAPI.class);
+            List<Institution> page = null;
+            int curPage = 1;
+
+            do {
+                Call<List<Institution>> call = api.getInstitutionsList(curPage);
+
+                try {
+                    page = call.execute().body();
+                } catch(Exception ex) {
+                    list = null;
+                    break;
+                }
+
+                if (page != null) list.addAll(page);
+                ++curPage;
+
+            } while (page != null && page.size() > 0);
+
+            if (list != null) cache.storeObject(INSTITUTIONS_LIST_CACHE_KEY, list);
+        }
+
+        return list;
+    }
+
+    public EducationRank getEducationRank(long id) {
+
+        List<EducationRank> ranksList = getEducationRanksList();
+        EducationRank rank = null;
+
+        if (ranksList != null) {
+            for (EducationRank r : ranksList) {
+                if (r.getId() == id) {
+                    rank = r;
+                    break;
+                }
+            }
+        }
+
+        return rank;
+    }
+
+    public List<EducationRank> getEducationRanksList() {
+        ArrayList<EducationRank> list;
+
+        // Firstly, try to restore cache.
+        CacheProvider cache = CacheProvider.getCacheProvider();
+        list = (ArrayList<EducationRank>) cache.retrieveObject(EDUCATION_RANKS_LIST_CACHE_KEY);
+
+        // When no cached object could be restored, get it from remote api.
+        if (list == null) {
+            list = new ArrayList<>();
+
+            EcesconAPI api = createService(EcesconAPI.class);
+            List<EducationRank> page = null;
+            int curPage = 1;
+
+            do {
+                Call<List<EducationRank>> call = api.getEducationRanksList(curPage);
+
+                try {
+                    page = call.execute().body();
+                } catch(Exception ex) {
+                    list = null;
+                    break;
+                }
+
+                if (page != null) list.addAll(page);
+                ++curPage;
+
+            } while (page != null && page.size() > 0);
+
+            if (list != null) cache.storeObject(EDUCATION_RANKS_LIST_CACHE_KEY, list);
+        }
+
+        return list;
     }
 
     public ResponseContainer<List<User>> getUsersList(String accessToken) {
@@ -227,6 +479,7 @@ public class RemoteServerProxy {
         return rc;
     }
 
+
     public class ResponseContainer<T> {
         private T      mObject;
         private int    mCode;
@@ -239,5 +492,26 @@ public class RemoteServerProxy {
         public void setObject(T object) { mObject = object; }
         public void setCode(int code) { mCode = code; }
         public void setMessage(String message) { mMessage = message; }
+    }
+
+
+    private interface EcesconAPI {
+        @POST("login")
+        Call<AccessToken> login(@Query("email") String email, @Query("password") String password);
+
+        @GET("me")
+        Call<User> getMyProfile(@Header("Authorization") String accessToken);
+
+        @GET("schools")
+        Call<List<School>> getSchoolsList(@Query("page") int page);
+
+        @GET("faculties")
+        Call<List<Faculty>> getFacultiesList(@Query("page") int page);
+
+        @GET("institutions")
+        Call<List<Institution>> getInstitutionsList(@Query("page") int page);
+
+        @GET("education_ranks")
+        Call<List<EducationRank>> getEducationRanksList(@Query("page") int page);
     }
 }
