@@ -22,6 +22,7 @@ import com.sfhmmy.mobile.remoteserver.deserializers.AccessTokenDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ContentPageDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ListDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.UserDeserializer;
+import com.sfhmmy.mobile.remoteserver.deserializers.WorkshopDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ZonedDateTimeDeserializer;
 import com.sfhmmy.mobile.users.AccessToken;
 import com.sfhmmy.mobile.users.EducationRank;
@@ -32,7 +33,6 @@ import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.workshops.Workshop;
 
 import org.threeten.bp.ZonedDateTime;
-import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,7 +65,8 @@ public class RemoteServerProxy {
             = "remoteserver.RemoteServerProxy.SCHOOLS_LIST_CACHE_KEY";
     private static final String EDUCATION_RANKS_LIST_CACHE_KEY
             = "remoteserver.RemoteServerProxy.EDUCATION_RANKS_LIST_CACHE_KEY";
-
+    private static final String WORKSHOPS_LIST_CACHE_KEY
+            = "remoteserver.RemoteServerProxy.WORKSHOPS_LIST_CACHE_KEY";
 
     // - Static networking objects -
 
@@ -75,6 +76,7 @@ public class RemoteServerProxy {
             .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeDeserializer())
             .registerTypeAdapter(List.class, new ListDeserializer())
             .registerTypeAdapter(ContentPage.class, new ContentPageDeserializer())
+            .registerTypeAdapter(Workshop.class, new WorkshopDeserializer())
             .setLenient()
             .create();
 
@@ -145,6 +147,8 @@ public class RemoteServerProxy {
 
             } catch (Exception ex){}
         }
+
+        if (user != null) user.setToken(accessToken);
 
         return user;
     }
@@ -428,57 +432,39 @@ public class RemoteServerProxy {
         return rc;
     }
 
-    public ResponseContainer<List<Workshop>> getWorkshopsList(String accessToken) {
+    public ResponseContainer<List<Workshop>> getWorkshopsList(String accessToken,
+                                                              boolean forceRefresh) {
+
         ResponseContainer<List<Workshop>> rc = new ResponseContainer<>();
 
-        List<Workshop> workshops = new ArrayList<>();
+        ContentPage<Workshop> workshopsPage = null;
 
-        Workshop work1 = new Workshop();
-        work1.setId(0);
-        work1.setName("R4A Workshop");
-        work1.setImageUrl("https://r4a.issel.ee.auth.gr/images/middleware.png");
-        work1.setJoinQuestion("Do you love robotics?");
-        work1.setPlace("Inside a NAO");
-        work1.setBeginDate(ZonedDateTime.parse(
-                "2019-04-21T14:30:00.000+02:00[Europe/Athens]",
-                DateTimeFormatter.ISO_ZONED_DATE_TIME
-        ));
-        work1.setEndDate(ZonedDateTime.parse(
-                "2019-04-21T17:30:00.000+02:00[Europe/Athens]",
-                DateTimeFormatter.ISO_ZONED_DATE_TIME
-        ));
-        work1.setDescription("Learn everything about robots!");
-
-        Workshop work2 = new Workshop();
-        work2.setId(1);
-        work2.setName("Mhtsos Workshop");
-        work2.setImageUrl("https://sfhmmy.gr/img/pages/conference/organizing_committee/IT/Dimitrios_Karageorgiou.jpg");
-        work2.setJoinQuestion("Is there any reason to join that workshop?");
-        work2.setPlace("Στο τσαντίρι του");
-        work2.setBeginDate(ZonedDateTime.parse(
-                "2019-04-21T18:00:00.000+02:00[Europe/Athens]",
-                DateTimeFormatter.ISO_ZONED_DATE_TIME
-        ));
-        work2.setEndDate(ZonedDateTime.parse(
-                "2019-04-21T20:00:00.000+02:00[Europe/Athens]",
-                DateTimeFormatter.ISO_ZONED_DATE_TIME
-        ));
-        work2.setDescription("Ένα εργαστήριο γεμάτο εκπλήξεις! ;)");
-
-        if (accessToken != null) {
-            work1.setEnrollStatus(Workshop.EnrollStatus.AVAILABLE);
-            work2.setEnrollStatus(Workshop.EnrollStatus.AVAILABLE);
-        } else {
-            work1.setEnrollStatus(Workshop.EnrollStatus.UNAVAILABLE);
-            work2.setEnrollStatus(Workshop.EnrollStatus.UNAVAILABLE);
+        CacheProvider cache = CacheProvider.getCacheProvider();
+        // Firstly, try to restore cache.
+        if (!forceRefresh) {
+            workshopsPage = (ContentPage<Workshop>) cache.retrieveObject(WORKSHOPS_LIST_CACHE_KEY);
         }
 
-        workshops.add(work1);
-        workshops.add(work2);
+        // If no data loaded from cache, fetch them from remote api.
+        if (workshopsPage == null && !TextUtils.isEmpty(accessToken)) {
+            EcesconAPI api = createService(EcesconAPI.class);
+            Call<ContentPage<Workshop>> call = api.getWorkshopsList("Bearer " + accessToken);
+            try {
+                workshopsPage = call.execute().body();
+            } catch (IOException ex) {}
 
-        rc.setCode(RESPONSE_SUCCESS);
-        rc.setMessage("Success.");
-        rc.setObject(workshops);
+            if (workshopsPage != null) cache.storeObject(WORKSHOPS_LIST_CACHE_KEY, workshopsPage);
+        }
+
+        if (workshopsPage != null) {
+            rc.setObject(workshopsPage.getContentList());
+            rc.setCode(RESPONSE_SUCCESS);
+            rc.setMessage("Success");
+        } else {
+            rc.setObject(null);
+            rc.setCode(RESPONSE_ERROR);
+            rc.setMessage("Failed to acquire workshops.");
+        }
 
         return rc;
     }
@@ -534,5 +520,8 @@ public class RemoteServerProxy {
 
         @GET("pictures")
         Call<ContentPage<ImagePost>> getPhotoWallList(@Query("page") int page);
+
+        @GET("workshops")
+        Call<ContentPage<Workshop>> getWorkshopsList(@Header("Authorization") String accessToken);
     }
 }
