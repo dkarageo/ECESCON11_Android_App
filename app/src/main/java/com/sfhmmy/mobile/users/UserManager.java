@@ -237,6 +237,7 @@ public class UserManager {
             u.setName(sp.getString(USER_PREFERENCES_NAME_KEY, null));
             u.setSurname(sp.getString(USER_PREFERENCES_SURNAME_KEY, null));
             u.setToken(sp.getString(USER_PREFERENCES_TOKEN_KEY, null));
+            u.setPassportValue(sp.getString(USER_PREFERENCES_PASSPORT_VALUE_KEY, null));
             u.setProfilePictureURL(sp.getString(USER_PREFERENCES_PROFILE_PIC_URL_KEY, null));
             u.setOrganization(sp.getString(USER_PREFERENCES_ORGANIZATION_KEY, null));
             u.setEducationLevel(sp.getString(USER_PREFERENCES_EDUCATION_LEVEL_KEY, null));
