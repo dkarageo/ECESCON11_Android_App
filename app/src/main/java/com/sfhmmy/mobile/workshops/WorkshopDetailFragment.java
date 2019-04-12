@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.sfhmmy.mobile.R;
 
 import org.threeten.bp.format.DateTimeFormatter;
@@ -39,11 +40,9 @@ public class WorkshopDetailFragment extends Fragment {
     private ImageView mEnrollStatusIcon;
     private TextView  mEnrollStatus;
     private ImageView mWorkshopImage;
-    private TextView  mLocation;
-    private TextView  mDate;
-    private TextView  mTime;
     private TextView  mDescription;
     private Button    mEnrollButton;
+    private ExpandableHeightListView mEventsList;
 
     private Workshop  mWorkshop;  // Workshop to display.
 
@@ -82,9 +81,7 @@ public class WorkshopDetailFragment extends Fragment {
         mEnrollStatusIcon = root.findViewById(R.id.workshop_detail_enroll_status_icon);
         mEnrollStatus     = root.findViewById(R.id.workshop_detail_enroll_status);
         mWorkshopImage    = root.findViewById(R.id.workshop_detail_image);
-        mLocation         = root.findViewById(R.id.workshop_detail_location);
-        mDate             = root.findViewById(R.id.workshop_detail_date);
-        mTime             = root.findViewById(R.id.workshop_detail_time);
+        mEventsList       = root.findViewById(R.id.workshop_detail_events_list);
         mDescription      = root.findViewById(R.id.workshop_detail_description);
         mEnrollButton     = root.findViewById(R.id.workshop_detail_enroll_button);
 
@@ -137,31 +134,19 @@ public class WorkshopDetailFragment extends Fragment {
 
     private void displayWorkshop(Workshop workshop) {
 
-        if (workshop.getPlace() != null) mLocation.setText(workshop.getPlace());
         if (workshop.getDescription() != null) mDescription.setText(workshop.getDescription());
-
-        if (workshop.getBeginDate() != null) {
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            mDate.setText(workshop.getBeginDate().format((dateFormatter)));
-
-            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-
-            if (workshop.getEndDate() != null) {
-                mTime.setText(String.format(
-                        "%s - %s",
-                        workshop.getBeginDate().format(timeFormatter),
-                        workshop.getEndDate().format(timeFormatter)
-                ));
-            } else {
-                mTime.setText(workshop.getBeginDate().format(timeFormatter));
-            }
-        }
-
         if (workshop.getEnrollStatus() != null) setEnrollStatus(workshop.getEnrollStatus());
         else setEnrollStatus(Workshop.EnrollStatus.UNAVAILABLE);
 
         if (workshop.getImageUrl() != null) {
             Glide.with(mWorkshopImage.getContext()).load(workshop.getImageUrl()).into(mWorkshopImage);
+        }
+
+        if (workshop.getWorkshopEvents() != null) {
+            mEventsList.setAdapter(
+                    new WorkshopEventsListAdapter(getContext(), workshop.getWorkshopEvents())
+            );
+            mEventsList.setExpanded(true);
         }
     }
 

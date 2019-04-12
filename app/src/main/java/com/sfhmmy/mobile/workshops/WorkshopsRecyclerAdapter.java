@@ -171,24 +171,26 @@ public class WorkshopsRecyclerAdapter
 
     private void bindWorkshopVH(WorkshopVH holder, int position) {
         Workshop curWorkshop = mWorkshops.get(position);
+        WorkshopEvent primeEvent = curWorkshop.getWorkshopEvents() != null ?
+                curWorkshop.getWorkshopEvents().get(0) : null;
 
         holder.mName.setText(curWorkshop.getName());
-        holder.mLocation.setText(curWorkshop.getPlace());
+        holder.mLocation.setText(primeEvent != null ? primeEvent.getLocation() : null);
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        if (curWorkshop.getBeginDate() != null) {
-            holder.mDate.setText(curWorkshop.getBeginDate().format(dateFormatter));
+        if (primeEvent != null && primeEvent.getBeginDate() != null) {
+            holder.mDate.setText(primeEvent.getBeginDate().format(dateFormatter));
 
-            if (curWorkshop.getEndDate() != null) {
+            if (primeEvent.getEndDate() != null) {
                 holder.mTime.setText(String.format(
                         "%s - %s",
-                        curWorkshop.getBeginDate().format(timeFormatter),
-                        curWorkshop.getEndDate().format(timeFormatter)
+                        primeEvent.getBeginDate().format(timeFormatter),
+                        primeEvent.getEndDate().format(timeFormatter)
                 ));
             } else {
-                holder.mTime.setText(curWorkshop.getBeginDate().format(timeFormatter));
+                holder.mTime.setText(primeEvent.getBeginDate().format(timeFormatter));
             }
         }
 

@@ -87,6 +87,7 @@
     <!-- String related to workshops detail screen -->
     <string name="workshop_detail_description_header_text">Τι θα δείτε;</string>
     <string name="workshop_detail_description_hint_text">Περιγραφή</string>
+    <string name="workshop_detail_events_list_header_text">Διαθέσιμες ημερομηνίες</string>
     <string name="workshop_detail_join_button_text">Εγγραφή</string>
     <string name="workshop_detail_enroll_rules_header_text">Απαιτήσεις εγγραφής</string>
     <string name="workshop_detail_enroll_rules_text">- Απάντηση ερώτησης σχετικής με το εργαστήριο.</string>

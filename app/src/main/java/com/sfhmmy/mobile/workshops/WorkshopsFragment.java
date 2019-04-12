@@ -191,7 +191,7 @@ public class WorkshopsFragment extends UserAwareFragment {
         protected Object[] doInBackground(WorkshopsFragment... workshopsFragments) {
             User user = UserManager.getUserManager().getCurrentUser();
             RemoteServerProxy.ResponseContainer<List<Workshop>> rc =
-                    new RemoteServerProxy().getWorkshopsList(user != null ? user.getToken() : null);
+                    new RemoteServerProxy().getWorkshopsList(user != null ? user.getToken() : null, false);
 
             return new Object[] { rc, workshopsFragments[0] };
         }

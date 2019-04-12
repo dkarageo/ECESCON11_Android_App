@@ -14,7 +14,12 @@ package com.sfhmmy.mobile.workshops;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.threeten.bp.ZonedDateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Workshop implements Parcelable {
@@ -39,16 +44,19 @@ public class Workshop implements Parcelable {
         PENDING
     }
 
-    private int           mId;
-    private String        mName;
-    private String        mDescription;
-    private String        mImageUrl;
-    private String        mJoinQuestion;
-    private String        mPlace;
-    private ZonedDateTime mBeginDate;
-    private ZonedDateTime mEndDate;
-    private EnrollStatus  mEnrollStatus;
-
+    @SerializedName("id")
+    private int mId;
+    @SerializedName("title")
+    private String mName;
+    @SerializedName("description")
+    private String mDescription;
+    @SerializedName("image_url")
+    private String mImageUrl;
+    @SerializedName("join_question")
+    private String mJoinQuestion;
+    private EnrollStatus mEnrollStatus;
+    @SerializedName("workshop_programs")
+    private ArrayList<WorkshopEvent> mEvents;
 
     public Workshop() {}
 
@@ -58,9 +66,7 @@ public class Workshop implements Parcelable {
         mDescription  = in.readString();
         mImageUrl     = in.readString();
         mJoinQuestion = in.readString();
-        mPlace        = in.readString();
-        mBeginDate    = (ZonedDateTime) in.readSerializable();
-        mEndDate      = (ZonedDateTime) in.readSerializable();
+        mEvents       = (ArrayList<WorkshopEvent>) in.readSerializable();
         mEnrollStatus = (EnrollStatus) in.readSerializable();
     }
 
@@ -69,20 +75,19 @@ public class Workshop implements Parcelable {
     public String getDescription() { return mDescription; }
     public String getImageUrl() { return mImageUrl; }
     public String getJoinQuestion() { return mJoinQuestion; }
-    public String getPlace() { return mPlace; }
-    public ZonedDateTime getBeginDate() { return mBeginDate; }
-    public ZonedDateTime getEndDate() { return mEndDate; }
     public EnrollStatus getEnrollStatus() { return mEnrollStatus; }
+    public List<WorkshopEvent> getWorkshopEvents() { return mEvents; }
 
     public void setId(int id) { mId = id; }
     public void setName(String name) { mName = name; }
     public void setDescription(String description) { mDescription = description; }
     public void setImageUrl(String imageUrl) { mImageUrl = imageUrl; }
     public void setJoinQuestion(String joinQuestion) { mJoinQuestion = joinQuestion; }
-    public void setPlace(String place) { mPlace = place; }
-    public void setBeginDate(ZonedDateTime dateTime) { mBeginDate = dateTime; }
-    public void setEndDate(ZonedDateTime endDate) { mEndDate = endDate; }
     public void setEnrollStatus(EnrollStatus enrollStatus) { mEnrollStatus = enrollStatus; }
+
+    public void setWorkshopEvents(List<WorkshopEvent> workshopEvents) {
+        mEvents = new ArrayList<>(workshopEvents);
+    }
 
     @Override
     public int describeContents() { return 0; }
@@ -94,9 +99,7 @@ public class Workshop implements Parcelable {
         dest.writeString(mDescription);
         dest.writeString(mImageUrl);
         dest.writeString(mJoinQuestion);
-        dest.writeString(mPlace);
-        dest.writeSerializable(mBeginDate);
-        dest.writeSerializable(mEndDate);
+        dest.writeSerializable(mEvents);
         dest.writeSerializable(mEnrollStatus);
     }
 }
