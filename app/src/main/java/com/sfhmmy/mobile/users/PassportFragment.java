@@ -12,6 +12,7 @@ package com.sfhmmy.mobile.users;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +30,11 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.UserAwareFragment;
 import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
+import com.sfhmmy.mobile.cache.CacheProvider;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 
 import androidx.annotation.NonNull;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -44,6 +50,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PassportFragment extends UserAwareFragment {
 
+    private static final String QR_IMAGE_CACHE_KEY_BASE = "PassportFragment.QR_IMAGE_";
+
     private TopLevelFragmentEventsListener mTopListener;
 
     private ImageView       mQRCode;
@@ -57,7 +65,6 @@ public class PassportFragment extends UserAwareFragment {
     private Button          mLoginButton;
 
     private Bitmap qrImg = null;  // Bitmap of QR Code, generated once upon fragment's creation.
-
 
     public PassportFragment() {
         // Required empty public constructor
@@ -143,7 +150,25 @@ public class PassportFragment extends UserAwareFragment {
 
         // The first time fragment is created, generate a QRCode Bitmap.
         // TODO: Decouple QR Bitmap generation from fragment's lifecycle.
-        if (qrImg == null) qrImg = email != null ? generateQRCodeBitmap(email) : null;
+        if (qrImg == null && user.getPassportValue() != null) {
+            CacheProvider cache = CacheProvider.getCacheProvider();
+            SerialBitmap serialBitmap = (SerialBitmap) cache.retrieveObject(String.format(
+                    "%s%s", QR_IMAGE_CACHE_KEY_BASE, user.getPassportValue()
+            ));
+
+            if (serialBitmap == null) {
+                qrImg = generateQRCodeBitmap(String.format("sfhmmy11://%s", user.getPassportValue()));
+
+                serialBitmap = new SerialBitmap(qrImg);
+                cache.storeObject(String.format(
+                        "%s%s", QR_IMAGE_CACHE_KEY_BASE, user.getPassportValue()),
+                        serialBitmap
+                );
+
+            } else {
+                qrImg = serialBitmap.getBitmap();
+            }
+        }
 
         if (qrImg != null) mQRCode.setImageBitmap(qrImg);
         if (name  != null) mNameSurname.setText(String.format("%s %s", name, surname));
@@ -202,5 +227,35 @@ public class PassportFragment extends UserAwareFragment {
         } catch (WriterException e) {}
 
         return qrCodeBmp;
+    }
+
+
+    private class SerialBitmap implements Serializable {
+
+        private Bitmap mBitmap;
+
+        SerialBitmap(Bitmap bitmap) {
+            mBitmap = bitmap;
+        }
+
+        public Bitmap getBitmap() { return mBitmap; }
+
+        // Converts the Bitmap into a byte array for serialization
+        private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 0, byteStream);
+            byte bitmapBytes[] = byteStream.toByteArray();
+            out.write(bitmapBytes, 0, bitmapBytes.length);
+        }
+
+        // Deserializes a byte array representing the Bitmap and decodes it.
+        private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            int b;
+            while((b = in.read()) != -1)
+                byteStream.write(b);
+            byte bitmapBytes[] = byteStream.toByteArray();
+            mBitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+        }
     }
 }
