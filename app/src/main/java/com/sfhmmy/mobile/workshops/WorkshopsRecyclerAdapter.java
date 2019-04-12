@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
 
 import org.threeten.bp.format.DateTimeFormatter;
@@ -50,16 +51,18 @@ public class WorkshopsRecyclerAdapter
         TextView  mLocation;
         TextView  mDate;
         TextView  mTime;
+        TextView  mMoreSessionsNotifier;
         CardView  mContainerCard;
 
         WorkshopVH(View v) {
             super(v);
-            mName          = v.findViewById(R.id.workshops_item_name);
-            mImage         = v.findViewById(R.id.workshops_item_image);
-            mLocation      = v.findViewById(R.id.workshops_item_location);
-            mDate          = v.findViewById(R.id.workshops_item_date);
-            mTime          = v.findViewById(R.id.workshops_item_time);
-            mContainerCard = v.findViewById(R.id.workshops_item_container);
+            mName                 = v.findViewById(R.id.workshops_item_name);
+            mImage                = v.findViewById(R.id.workshops_item_image);
+            mLocation             = v.findViewById(R.id.workshops_item_location);
+            mDate                 = v.findViewById(R.id.workshops_item_date);
+            mTime                 = v.findViewById(R.id.workshops_item_time);
+            mContainerCard        = v.findViewById(R.id.workshops_item_container);
+            mMoreSessionsNotifier = v.findViewById(R.id.workshops_item_more_dates);
         }
     }
 
@@ -171,27 +174,51 @@ public class WorkshopsRecyclerAdapter
 
     private void bindWorkshopVH(WorkshopVH holder, int position) {
         Workshop curWorkshop = mWorkshops.get(position);
-        WorkshopEvent primeEvent = curWorkshop.getWorkshopEvents() != null ?
-                curWorkshop.getWorkshopEvents().get(0) : null;
+        List<WorkshopEvent> events = curWorkshop.getWorkshopEvents();
+
 
         holder.mName.setText(curWorkshop.getName());
-        holder.mLocation.setText(primeEvent != null ? primeEvent.getLocation() : null);
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        if (events != null) {
+            WorkshopEvent primeEvent = events.get(0);
 
-        if (primeEvent != null && primeEvent.getBeginDate() != null) {
-            holder.mDate.setText(primeEvent.getBeginDate().format(dateFormatter));
+            holder.mLocation.setText(primeEvent != null ? primeEvent.getLocation() : null);
 
-            if (primeEvent.getEndDate() != null) {
-                holder.mTime.setText(String.format(
-                        "%s - %s",
-                        primeEvent.getBeginDate().format(timeFormatter),
-                        primeEvent.getEndDate().format(timeFormatter)
-                ));
-            } else {
-                holder.mTime.setText(primeEvent.getBeginDate().format(timeFormatter));
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+            if (primeEvent != null && primeEvent.getBeginDate() != null) {
+                holder.mDate.setText(primeEvent.getBeginDate().format(dateFormatter));
+
+                if (primeEvent.getEndDate() != null) {
+                    holder.mTime.setText(String.format(
+                            "%s - %s",
+                            primeEvent.getBeginDate().format(timeFormatter),
+                            primeEvent.getEndDate().format(timeFormatter)
+                    ));
+                } else {
+                    holder.mTime.setText(primeEvent.getBeginDate().format(timeFormatter));
+                }
             }
+
+            if (events.size() == 2) {  // Text for one more event.
+                holder.mMoreSessionsNotifier.setText(String.format(
+                        App.getAppResources().getString(R.string.workshops_item_more_dates_text_single),
+                        events.size() - 1
+                ));
+                holder.mMoreSessionsNotifier.setVisibility(View.VISIBLE);
+
+            } else if (events.size() > 2) {  // Text for more than one more events.
+                holder.mMoreSessionsNotifier.setText(String.format(
+                        App.getAppResources().getString(R.string.workshops_item_more_dates_text_plural),
+                        events.size()-1
+                ));
+                holder.mMoreSessionsNotifier.setVisibility(View.VISIBLE);
+
+            } else {
+                holder.mMoreSessionsNotifier.setVisibility(View.GONE);
+            }
+
         }
 
         holder.mContainerCard.setOnClickListener(new WorkshopCardClickListener(curWorkshop));

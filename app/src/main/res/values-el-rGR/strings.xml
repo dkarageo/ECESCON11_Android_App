@@ -80,6 +80,8 @@
     <string name="workshops_item_date_icon_content_desc">Εικονίδιο Ημερομηνίας</string>
     <string name="workshops_item_date_hint_text">dd-MM-YYYY</string>
     <string name="workshops_item_time_hint_text">hh:mm - hh:mm</string>
+    <string name="workshops_item_more_dates_text_single">και %d ακόμη ημερομηνία&#8230;</string>
+    <string name="workshops_item_more_dates_text_plural">και %d ακόμη ημερομηνία&#8230;</string>
     <string name="workshops_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένονυ να εγγραφείτε στα εργαστήρια, παρακαλούμε συνδεθείτε!</string>
     <string name="workshops_unlogged_user_notification_login_button_text">Είσοδος</string>
     <string name="workshops_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>
