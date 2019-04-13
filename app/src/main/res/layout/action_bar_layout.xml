@@ -46,7 +46,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/action_bar_main_bg_icon"
         app:layout_constraintEnd_toStartOf="@id/action_bar_secondary_bg_icon"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginStart="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
