@@ -10,7 +10,7 @@
     <string name="bot_nav_main_menu_title">Μενού</string>
 
     <!-- Fragment titles (as displayed on ActionBar of container Activity) -->
-    <string name="home_title">Το σφημμυ μου</string>
+    <string name="home_title">Το ΣΦΗΜΜΥ μου</string>
     <string name="workshops_title">Οι δραστηριότητές μου</string>
     <string name="passport_title">Κάρτα συνεδρίου</string>
     <string name="battles_title">Photoshop Battles</string>
