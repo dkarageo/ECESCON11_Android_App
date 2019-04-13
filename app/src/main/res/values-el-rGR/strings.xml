@@ -11,7 +11,7 @@
 
     <!-- Fragment titles (as displayed on ActionBar of container Activity) -->
     <string name="home_title">Το ΣΦΗΜΜΥ μου</string>
-    <string name="workshops_title">Οι δραστηριότητές μου</string>
+    <string name="workshops_title">Τα εργαστήριά μου</string>
     <string name="passport_title">Κάρτα συνεδρίου</string>
     <string name="battles_title">Photoshop Battles</string>
     <string name="info_title">Το συνέδριό μας</string>
