@@ -1,5 +1,5 @@
 /*
- * WorkshopDeserializer.java
+ * WorkshopEnrollStatusDeserializer.java
  *
  * Created for ECESCON11 Android Application by:
  *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
@@ -20,55 +20,55 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.sfhmmy.mobile.workshops.Workshop;
-
-import org.threeten.bp.ZonedDateTime;
+import com.sfhmmy.mobile.workshops.WorkshopEnrollStatusHelper;
 
 import java.lang.reflect.Type;
 
 
-public class WorkshopDeserializer implements JsonDeserializer<Workshop> {
+public class WorkshopEnrollStatusDeserializer implements JsonDeserializer<WorkshopEnrollStatusHelper> {
 
     @Override
-    public Workshop deserialize(JsonElement je, Type type, JsonDeserializationContext jdc) {
+    public WorkshopEnrollStatusHelper deserialize(JsonElement je, Type type,
+                                                  JsonDeserializationContext jdc) {
 
         JsonObject jsonObject = je.getAsJsonObject();
 
         // Deserialize all fields matching to the model.
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeDeserializer())
-                .create();
-        Workshop workshop = gson.fromJson(jsonObject, Workshop.class);
+        Gson gson = new GsonBuilder().create();
+        WorkshopEnrollStatusHelper enrollStatus = gson.fromJson(
+                jsonObject, WorkshopEnrollStatusHelper.class
+        );
 
         String enrollStatusText = jsonObject.get("enroll_status").getAsString();
         switch(enrollStatusText) {
 
             case "available":
-                workshop.setEnrollStatus(Workshop.EnrollStatus.AVAILABLE);
+                enrollStatus.setEnrollStatus(Workshop.EnrollStatus.AVAILABLE);
                 break;
 
             case "unavailable":
-                workshop.setEnrollStatus(Workshop.EnrollStatus.UNAVAILABLE);
+                enrollStatus.setEnrollStatus(Workshop.EnrollStatus.UNAVAILABLE);
                 break;
 
             case "accepted":
-                workshop.setEnrollStatus(Workshop.EnrollStatus.ACCEPTED);
+                enrollStatus.setEnrollStatus(Workshop.EnrollStatus.ACCEPTED);
                 break;
 
             case "rejected":
-                workshop.setEnrollStatus(Workshop.EnrollStatus.REJECTED);
+                enrollStatus.setEnrollStatus(Workshop.EnrollStatus.REJECTED);
                 break;
 
             case "pending":
-                workshop.setEnrollStatus(Workshop.EnrollStatus.PENDING);
+                enrollStatus.setEnrollStatus(Workshop.EnrollStatus.PENDING);
                 break;
 
             default:
-                workshop.setEnrollStatus(null);
+                enrollStatus.setEnrollStatus(null);
                 Log.e("WorkshopDeserializer",
                       String.format("Invalid role format received: %s", enrollStatusText));
         }
 
-        return workshop;
+        return enrollStatus;
 
     }
 }

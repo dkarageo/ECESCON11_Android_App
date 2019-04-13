@@ -22,7 +22,7 @@ import com.sfhmmy.mobile.remoteserver.deserializers.AccessTokenDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ContentPageDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ListDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.UserDeserializer;
-import com.sfhmmy.mobile.remoteserver.deserializers.WorkshopDeserializer;
+import com.sfhmmy.mobile.remoteserver.deserializers.WorkshopEnrollStatusDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ZonedDateTimeDeserializer;
 import com.sfhmmy.mobile.users.AccessToken;
 import com.sfhmmy.mobile.users.EducationRank;
@@ -31,6 +31,7 @@ import com.sfhmmy.mobile.users.Institution;
 import com.sfhmmy.mobile.users.School;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.workshops.Workshop;
+import com.sfhmmy.mobile.workshops.WorkshopEnrollStatusHelper;
 
 import org.threeten.bp.ZonedDateTime;
 
@@ -76,7 +77,7 @@ public class RemoteServerProxy {
             .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeDeserializer())
             .registerTypeAdapter(List.class, new ListDeserializer())
             .registerTypeAdapter(ContentPage.class, new ContentPageDeserializer())
-            .registerTypeAdapter(Workshop.class, new WorkshopDeserializer())
+            .registerTypeAdapter(WorkshopEnrollStatusHelper.class, new WorkshopEnrollStatusDeserializer())
             .setLenient()
             .create();
 
@@ -446,11 +447,30 @@ public class RemoteServerProxy {
         }
 
         // If no data loaded from cache, fetch them from remote api.
-        if (workshopsPage == null && !TextUtils.isEmpty(accessToken)) {
+        if (workshopsPage == null) {
             EcesconAPI api = createService(EcesconAPI.class);
-            Call<ContentPage<Workshop>> call = api.getWorkshopsList("Bearer " + accessToken);
+            Call<ContentPage<Workshop>> call = api.getWorkshopsList();
             try {
                 workshopsPage = call.execute().body();
+
+                // When access token is ready, fill workshops with enroll status of the user.
+                if (workshopsPage != null && !TextUtils.isEmpty(accessToken)) {
+                    Call<ContentPage<WorkshopEnrollStatusHelper>> statusesCall =
+                            api.getWorkshopsEnrollStatusesList("Bearer " + accessToken);
+                    ContentPage<WorkshopEnrollStatusHelper> statusesPage = statusesCall.execute().body();
+
+                    if (statusesPage != null) {
+                        List<WorkshopEnrollStatusHelper> statuses = statusesPage.getContentList();
+                        for (WorkshopEnrollStatusHelper s : statuses) {
+                            for (Workshop w : workshopsPage.getContentList()) {
+                                if (w.getId() == s.getWorkshopId()) {
+                                    w.setEnrollStatus(s.getEnrollStatus());
+                                }
+                            }
+                        }
+                    }
+                }
+
             } catch (IOException ex) {}
 
             if (workshopsPage != null) cache.storeObject(WORKSHOPS_LIST_CACHE_KEY, workshopsPage);
@@ -518,10 +538,14 @@ public class RemoteServerProxy {
         @GET("education_ranks")
         Call<List<EducationRank>> getEducationRanksList(@Query("page") int page);
 
-        @GET("pictures")
+        @GET("public/pictures")
         Call<ContentPage<ImagePost>> getPhotoWallList(@Query("page") int page);
 
+        @GET("public/workshops")
+        Call<ContentPage<Workshop>> getWorkshopsList();
+
         @GET("workshops")
-        Call<ContentPage<Workshop>> getWorkshopsList(@Header("Authorization") String accessToken);
+        Call<ContentPage<WorkshopEnrollStatusHelper>>
+        getWorkshopsEnrollStatusesList(@Header("Authorization") String accessToken);
     }
 }
