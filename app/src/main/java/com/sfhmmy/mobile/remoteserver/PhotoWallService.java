@@ -170,23 +170,32 @@ public class PhotoWallService {
         protected void onPostExecute(Object[] argsPass) {
             super.onPostExecute(argsPass);
 
-            List<ImagePost> imagePosts = (List<ImagePost>) argsPass[0];
-            int curPage = (Integer) argsPass[1];
-            int lastPage = (Integer) argsPass[2];
+            if (argsPass != null) {
+                List<ImagePost> imagePosts = (List<ImagePost>) argsPass[0];
+                int curPage = (Integer) argsPass[1];
+                int lastPage = (Integer) argsPass[2];
 
-            synchronized (mLoadingLock) {
-                // When during fetching of subsequent pages a refresh request was invoked,
-                // drop received content and allow only tasks fetching first page to notify for
-                // content update.
-                if (!(mIsRefreshing && curPage > 0)) {
-                    mCurPage = curPage + 1;
-                    mLastPage = lastPage;
-                    mIsRefreshing = false;
-                    mIsLoading = false;
+                synchronized (mLoadingLock) {
+                    // When during fetching of subsequent pages a refresh request was invoked,
+                    // drop received content and allow only tasks fetching first page to notify for
+                    // content update.
+                    if (!(mIsRefreshing && curPage > 0)) {
+                        mCurPage = curPage + 1;
+                        mLastPage = lastPage;
+                        mIsRefreshing = false;
+                        mIsLoading = false;
 
-                    // When current page is 0, it means that content is loaded from the beginning.
-                    if (curPage == 0) notifyOnContentRefreshed(imagePosts);
-                    else notifyOnMoreContentReady(imagePosts);
+                        // When current page is 0, it means that content is loaded from the beginning.
+                        if (curPage == 0) notifyOnContentRefreshed(imagePosts);
+                        else notifyOnMoreContentReady(imagePosts);
+                    }
+                }
+            } else {
+                synchronized (mLoadingLock) {
+                    if (!(mIsRefreshing)) {
+                        mIsRefreshing = false;
+                        mIsLoading = false;
+                    }
                 }
             }
         }
