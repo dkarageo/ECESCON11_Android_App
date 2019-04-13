@@ -95,10 +95,12 @@ public class WorkshopDetailFragment extends Fragment {
                 dialog.setEnrollRequestListener(
                         new WorkshopEnrollDialogFragment.EnrollRequestListener() {
                             @Override
-                            public void onEnrollRequest(Workshop workshop, String answer) {
+                            public void onEnrollRequest(Workshop workshop, WorkshopEvent event,
+                                                        String answer) {
+
                                 // When an enroll request takes place on popup dialog, just inform
                                 // the registered listener.
-                                notifyOnEnrollRequest(workshop, answer);
+                                notifyOnEnrollRequest(workshop, event, answer);
                             }
                 });
 
@@ -123,8 +125,8 @@ public class WorkshopDetailFragment extends Fragment {
         mEnrollListener = l;
     }
 
-    public void notifyOnEnrollRequest(Workshop workshop, String answer) {
-        if (mEnrollListener != null) mEnrollListener.onWorkshopEnrollRequest(workshop, answer);
+    public void notifyOnEnrollRequest(Workshop workshop, WorkshopEvent event, String answer) {
+        if (mEnrollListener != null) mEnrollListener.onWorkshopEnrollRequest(workshop, event, answer);
     }
 
     public void updateWorkshop(Workshop workshop) {
@@ -213,6 +215,6 @@ public class WorkshopDetailFragment extends Fragment {
 
 
     public interface WorkshopEnrollListener {
-        void onWorkshopEnrollRequest(Workshop workshop, String answer);
+        void onWorkshopEnrollRequest(Workshop workshop, WorkshopEvent event, String answer);
     }
 }

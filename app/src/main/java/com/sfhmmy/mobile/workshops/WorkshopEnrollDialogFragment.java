@@ -24,11 +24,19 @@ import androidx.fragment.app.DialogFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sfhmmy.mobile.R;
+
+import org.threeten.bp.format.DateTimeFormatter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class WorkshopEnrollDialogFragment extends DialogFragment {
@@ -38,7 +46,10 @@ public class WorkshopEnrollDialogFragment extends DialogFragment {
     private AppCompatActivity mAttachedActivity = null;
 
     private TextView mQuestion;
+    private Spinner  mEventSelector;
     private EditText mAnswer;
+
+    private ArrayAdapter<String> mEventsSelectorAdapter;
 
     private Workshop mWorkshop;
 
@@ -87,10 +98,14 @@ public class WorkshopEnrollDialogFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View root = inflater.inflate(R.layout.workshop_enroll_dialog_layout, null);
 
-        mQuestion = root.findViewById(R.id.workshop_enroll_dialog_question);
-        mAnswer   = root.findViewById(R.id.workshop_enroll_dialog_answer);
+        mQuestion      = root.findViewById(R.id.workshop_enroll_dialog_question);
+        mAnswer        = root.findViewById(R.id.workshop_enroll_dialog_answer);
+        mEventSelector = root.findViewById(R.id.workshop_enroll_dialog_event_selector);
 
         mQuestion.setText(mWorkshop.getJoinQuestion());
+
+        mEventsSelectorAdapter = createEventsAdapter(mWorkshop);
+        mEventSelector.setAdapter(mEventsSelectorAdapter);
 
         builder.setView(root)
                .setPositiveButton(R.string.workshop_enroll_dialog_enroll_button_text, null)
@@ -132,12 +147,43 @@ public class WorkshopEnrollDialogFragment extends DialogFragment {
 
     public void notifyOnEnrollRequest() {
         if (mEnrollRequestListener != null) {
-            mEnrollRequestListener.onEnrollRequest(mWorkshop, mAnswer.getText().toString());
+
+            WorkshopEvent event = mWorkshop.getWorkshopEvents() != null ?
+                    mWorkshop.getWorkshopEvents().get(mEventSelector.getSelectedItemPosition()) :
+                    null;
+
+            mEnrollRequestListener.onEnrollRequest(mWorkshop, event, mAnswer.getText().toString());
         }
     }
 
+    private ArrayAdapter<String> createEventsAdapter(Workshop workshop) {
+        if (workshop == null || workshop.getWorkshopEvents() == null) return null;
+
+        List<WorkshopEvent> events = workshop.getWorkshopEvents();
+        List<String> eventsText = new ArrayList<>();
+
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        for (WorkshopEvent e: events) {
+            String eventText = String.format(
+                    "%s - %s  %s",
+                    e.getBeginDate() != null ? timeFormatter.format(e.getBeginDate()) : "",
+                    e.getEndDate() != null ? timeFormatter.format(e.getEndDate()) : "",
+                    e.getBeginDate() != null ? dateFormatter.format(e.getBeginDate()) : ""
+            );
+            eventsText.add(eventText);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                requireContext(), android.R.layout.simple_spinner_item, eventsText
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        return adapter;
+    }
 
     public interface EnrollRequestListener {
-        void onEnrollRequest(Workshop workshop, String answer);
+        void onEnrollRequest(Workshop workshop, WorkshopEvent event, String answer);
     }
 }

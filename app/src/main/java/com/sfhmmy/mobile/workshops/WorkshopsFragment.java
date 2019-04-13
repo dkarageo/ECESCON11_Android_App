@@ -213,12 +213,13 @@ public class WorkshopsFragment extends UserAwareFragment {
         protected Object[] doInBackground(Object... args) {
             Workshop workshop             = (Workshop) args[0];
             String answer                 = (String) args[1];
-            WorkshopDetailFragment detail = (WorkshopDetailFragment) args[2];
-            WorkshopsFragment listFrag    = (WorkshopsFragment) args[3];
+            WorkshopEvent event           = (WorkshopEvent) args[2];
+            WorkshopDetailFragment detail = (WorkshopDetailFragment) args[3];
+            WorkshopsFragment listFrag    = (WorkshopsFragment) args[4];
 
             User user = UserManager.getUserManager().getCurrentUser();
             RemoteServerProxy.ResponseContainer<Workshop> rc = new RemoteServerProxy()
-                    .enrollToWorkshop(user != null ? user.getToken() : null, workshop, answer);
+                    .enrollToWorkshop(user != null ? user.getToken() : null, workshop, event, answer);
 
             return new Object[] { rc, detail, listFrag };
         }
@@ -249,8 +250,8 @@ public class WorkshopsFragment extends UserAwareFragment {
         }
 
         @Override
-        public void onWorkshopEnrollRequest(Workshop workshop, String answer) {
-            new WorkshopEnrollTask().execute(workshop, answer, mTarget, WorkshopsFragment.this);
+        public void onWorkshopEnrollRequest(Workshop workshop, WorkshopEvent event, String answer) {
+            new WorkshopEnrollTask().execute(workshop, answer, event, mTarget, WorkshopsFragment.this);
         }
     }
 }

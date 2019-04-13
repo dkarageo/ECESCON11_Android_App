@@ -32,6 +32,7 @@ import com.sfhmmy.mobile.users.School;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.workshops.Workshop;
 import com.sfhmmy.mobile.workshops.WorkshopEnrollStatusHelper;
+import com.sfhmmy.mobile.workshops.WorkshopEvent;
 
 import org.threeten.bp.ZonedDateTime;
 
@@ -490,7 +491,7 @@ public class RemoteServerProxy {
     }
 
     public ResponseContainer<Workshop> enrollToWorkshop(String accessToken, Workshop workshop,
-                                                        String answer) {
+                                                        WorkshopEvent event, String answer) {
 
         ResponseContainer<Workshop> rc = new ResponseContainer<>();
 
@@ -499,6 +500,10 @@ public class RemoteServerProxy {
         rc.setObject(workshop);
         rc.setMessage("Success.");
         rc.setCode(RESPONSE_SUCCESS);
+
+        Log.d("enrollToWorkshop", workshop.getName());
+        Log.d("enrollToWorkshop", Long.toString(event.getId()));
+        Log.d("enrollToWorkshop", answer);
 
         return rc;
     }
@@ -547,5 +552,7 @@ public class RemoteServerProxy {
         @GET("workshops")
         Call<ContentPage<WorkshopEnrollStatusHelper>>
         getWorkshopsEnrollStatusesList(@Header("Authorization") String accessToken);
+
+//        @POST("workshops")
     }
 }

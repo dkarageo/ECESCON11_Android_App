@@ -83,6 +83,7 @@
     <string name="workshop_enroll_dialog_enroll_button_text">Enroll</string>
     <string name="workshop_enroll_dialog_cancel_button_text">Cancel</string>
     <string name="workshop_enroll_dialog_answer_needed">An answer is required.</string>
+    <string name="workshop_enroll_dialog_event_selector_header_text">Desired session</string>
 
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Profile Picture</string>

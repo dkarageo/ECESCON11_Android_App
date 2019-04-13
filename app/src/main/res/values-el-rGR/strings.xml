@@ -105,6 +105,7 @@
     <string name="workshop_enroll_dialog_enroll_button_text">Εγγραφή</string>
     <string name="workshop_enroll_dialog_cancel_button_text">Ακύρωση</string>
     <string name="workshop_enroll_dialog_answer_needed">Η απάντηση είναι απαραίτητη.</string>
+    <string name="workshop_enroll_dialog_event_selector_header_text">Επιθυμητή ημερομηνία</string>
 
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
