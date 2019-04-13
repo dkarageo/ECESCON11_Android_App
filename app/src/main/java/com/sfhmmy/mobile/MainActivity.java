@@ -11,7 +11,10 @@
 
 package com.sfhmmy.mobile;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -21,14 +24,18 @@ import androidx.fragment.app.Fragment;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.sfhmmy.mobile.battles.BattlesFragment;
 import com.sfhmmy.mobile.checkins.CheckInActivity;
@@ -190,6 +197,13 @@ public class MainActivity extends AppCompatActivity
         } else {
             mBackStack = (LinkedList<BackstackItem>) getLastCustomNonConfigurationInstance();
         }
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(R.layout.action_bar_layout);
+        }
     }
 
     @Override
@@ -203,6 +217,14 @@ public class MainActivity extends AppCompatActivity
         if (isFirstRun && UserManager.getUserManager() == null)  {
             LoginDialogFragment loginDialog = LoginDialogFragment.newInstance();
             loginDialog.show(getSupportFragmentManager(), "loginDialog");
+        }
+
+        if (mStartupCompleted) {
+            setStatusBarColor(getResources().getColor(R.color.white));
+            setDarkStatusBarIcons(true);
+        } else {
+            setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+            setDarkStatusBarIcons(false);
         }
     }
 
@@ -263,7 +285,14 @@ public class MainActivity extends AppCompatActivity
     // ---- TopLevelFragmentEventsListener methods ----
     @Override
     public void updateTitle(String newTitle) {
-        setTitle(newTitle);
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            View view = actionBar.getCustomView();
+            TextView title = view.findViewById(R.id.action_bar_text);
+            if (title != null) title.setText(newTitle);
+        }
     }
 
     @Override
@@ -362,6 +391,8 @@ public class MainActivity extends AppCompatActivity
             public void onStartupCompleted() {
                 setVisibilityOfStartupLoadingScreen(false);
                 mStartupCompleted = true;
+                setStatusBarColor(getResources().getColor(R.color.white));
+                setDarkStatusBarIcons(true);
             }
         };
 
@@ -425,6 +456,34 @@ public class MainActivity extends AppCompatActivity
         mIsFixingBottomNavigationSelection = false;
     }
 
+    @TargetApi(23)
+    private void setStatusBarColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+
+            // clear FLAG_TRANSLUCENT_STATUS flag:
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+            // finally change the color
+            window.setStatusBarColor(color);
+        }
+    }
+
+    @TargetApi(23)
+    private void setDarkStatusBarIcons(boolean darkIcons) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = getWindow().getDecorView();
+
+            if (darkIcons) {
+                decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            } else {
+                decor.setSystemUiVisibility(0);
+            }
+        }
+    }
 
     private class BackstackItem {
         private NavigableKey mNavigableKey;
