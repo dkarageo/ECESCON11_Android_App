@@ -66,7 +66,7 @@
     <string name="battles_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>
     <string name="battles_photos_list_item_photo_content_desc">Φωτογραφία συμμετοχής στο διαγωνισμό Photoshop Battles.</string>
     <string name="battles_photos_list_item_photo_load_error_text">Αδυναμία φόρτωσης της εικόνας.</string>
-    <string name="battles_photos_list_item_participation_code_hint_text">Participation Code:</string>
+    <string name="battles_photos_list_item_participation_code_hint_text">Κωδικός Συμμετοχής:</string>
 
     <!-- Main Menu related strings -->
     <string name="main_menu_header_bg_content_desc">Θολωμένη εικόνα προφίλ στο παρασκήνιο</string>
