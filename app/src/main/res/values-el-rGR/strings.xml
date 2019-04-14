@@ -138,7 +138,6 @@
     <string name="about_other_credits_text2">Ευχαριστούμε κάθε εθελοντή για την πολύτιμη βοήθεια του κατά τη διεξαγωγή του συνεδρίου!</string>
     <string name="about_other_credits_text3">Ευχαριστούμε όλους εσάς, που προσέρχεστε στο συνέδριο, δίνοντας πνοή στη μεγαλύτερη φοιτητική συνάντηση στην Ελλάδα!</string>
 
-
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
     <string name="camera_scanner_permission_grant_button_text">Παραχώρηση Πρόσβασης</string>
@@ -180,6 +179,8 @@
 
     <!-- Generic strings -->
     <string name="generic_edit_icon_content_description">Εικονίδιο Επεξεργασίας</string>
+    <string name="generic_prompt_for_collapsing_text_view">\tαπόκρυψη</string>
+    <string name="generic_prompt_for_expanding_text_view">\tπερισσότερα</string>
 
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s πριν</string>

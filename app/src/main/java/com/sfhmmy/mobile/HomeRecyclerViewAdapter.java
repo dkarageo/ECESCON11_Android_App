@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.devs.readmoreoption.ReadMoreOption;
 import com.sfhmmy.mobile.utils.DateTimeUtils;
 
 import org.threeten.bp.ZonedDateTime;
@@ -217,10 +218,19 @@ public class HomeRecyclerViewAdapter
         ImagePost curPost = mImagePosts.get(position);
 
         holder.mUploader.setText(curPost.getUploader());
-        holder.mDescription.setText(curPost.getDescription());
         holder.mUploadDate.setText(DateTimeUtils.getElapsedTimeInLocalizedText(
             curPost.getUploadedDate(), ZonedDateTime.now()
         ));
+
+        ReadMoreOption readMoreOption = new ReadMoreOption.Builder(holder.mDescription.getContext())
+                .textLength(80, ReadMoreOption.TYPE_CHARACTER)
+                .moreLabel(App.getAppResources().getString(R.string.generic_prompt_for_expanding_text_view))
+                .lessLabel(App.getAppResources().getString(R.string.generic_prompt_for_collapsing_text_view))
+                .moreLabelColor(App.getAppResources().getColor(R.color.colorPrimaryDark))
+                .lessLabelColor(App.getAppResources().getColor(R.color.colorPrimaryDark))
+                .build();
+
+        readMoreOption.addReadMoreTo(holder.mDescription, curPost.getDescription());
 
         Glide.with(holder.mPhoto.getContext())
                 .load(curPost.getImageUrl())

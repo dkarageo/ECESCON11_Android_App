@@ -191,6 +191,8 @@
 
     <!-- Generic strings -->
     <string name="generic_edit_icon_content_description">Edit Icon</string>
+    <string name="generic_prompt_for_collapsing_text_view">\tless</string>
+    <string name="generic_prompt_for_expanding_text_view">\tmore</string>
 
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s ago</string>
