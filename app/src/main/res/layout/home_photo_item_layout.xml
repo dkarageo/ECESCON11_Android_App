@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srcCompat="@android:color/background_light"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:contentDescription="@string/home_photos_list_item_photo_content_desc"
             app:layout_constraintTop_toTopOf="parent"
