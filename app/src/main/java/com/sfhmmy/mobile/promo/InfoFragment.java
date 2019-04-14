@@ -1,9 +1,18 @@
+/*
+ * InfoFragment.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
+
 package com.sfhmmy.mobile.promo;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,55 +20,27 @@ import android.webkit.WebView;
 
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
+import com.sfhmmy.mobile.UserAwareFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link InfoFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link InfoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class InfoFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class InfoFragment extends UserAwareFragment {
 
     private TopLevelFragmentEventsListener mTopListener;
+
 
     public InfoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment InfoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static InfoFragment newInstance(String param1, String param2) {
-        InfoFragment fragment = new InfoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof TopLevelFragmentEventsListener) {
+            mTopListener = (TopLevelFragmentEventsListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implent TopLevelFragmentEventsListener");
         }
     }
 
@@ -78,13 +59,6 @@ public class InfoFragment extends Fragment {
         webView.loadUrl("https://sfhmmy.gr/%CF%80%CE%BB%CE%B7%CF%81%CE%BF%CF%86%CE%BF%CF%81%CE%AF%CE%B5%CF%82/%CE%B3%CE%B5%CE%BD%CE%B9%CE%BA%CE%AC");
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -95,35 +69,8 @@ public class InfoFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof TopLevelFragmentEventsListener) {
-            mTopListener = (TopLevelFragmentEventsListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implent TopLevelFragmentEventsListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         mTopListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 }
