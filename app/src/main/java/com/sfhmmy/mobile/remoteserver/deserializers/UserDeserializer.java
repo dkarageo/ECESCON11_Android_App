@@ -96,18 +96,10 @@ public class UserDeserializer implements JsonDeserializer<User> {
                 );
         }
 
-        long organizationId      = data.get("institution_id").getAsLong();
-        long departmentId        = data.get("faculty_id").getAsLong();
-        long departmentSpecialId = data.get("school_id").getAsLong();
-        long educationRankId     = data.get("education_rank_id").getAsLong();
-
-        // Fetch organization detail from remote API.
-        RemoteServerProxy proxy = new RemoteServerProxy();
-
-        Institution organization  = proxy.getInstitution(organizationId);
-        Faculty department        = proxy.getFaculty(departmentId);
-        School departmentSpecial  = proxy.getSchool(departmentSpecialId);
-        EducationRank rank        = proxy.getEducationRank(educationRankId);
+        Institution organization  = gson.fromJson(data.get("institution"), Institution.class);
+        Faculty department        = gson.fromJson(data.get("faculty_id"), Faculty.class);
+        School departmentSpecial  = gson.fromJson(data.get("school_id"), School.class);
+        EducationRank rank        = gson.fromJson(data.get("education_rank"), EducationRank.class);
 
         if (organization != null) user.setOrganization(organization.getName());
         if (department != null) user.setDepartment(department.getName());
