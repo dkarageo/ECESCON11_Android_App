@@ -96,6 +96,14 @@
     <string name="passport_unlogged_user_notification_text">By logging in you have the ability to check-in simply by your smartphone. Don\'t miss it!</string>
     <string name="passport_unlogged_user_notification_login_button_text">Give me simple check-ins</string>
 
+    <!-- Strings related to photoshop battles -->
+    <string name="battles_unlogged_user_notification_text">You have not logged in yet. In order to access all amazing content about the conference, please log in!</string>
+    <string name="battles_unlogged_user_notification_login_button_text">Login</string>
+    <string name="battles_unlogged_user_notification_icon_content_desc">Info Icon</string>
+    <string name="battles_photos_list_item_photo_content_desc">Photoshop Battles Contest Photo</string>
+    <string name="battles_photos_list_item_photo_load_error_text">Could not load image.</string>
+    <string name="battles_photos_list_item_participation_code_hint_text">Participation Code:</string>
+
     <!-- Main Menu related strings -->
     <string name="main_menu_header_bg_content_desc">Blurry Profile Image As Background</string>
     <string name="main_menu_header_user_name_hint">Name Surname</string>

@@ -1,80 +1,169 @@
+/*
+ * BattlesFragment.java
+ *
+ * Created for ECESCON11 Android Application by:
+ *  Dimitrios Karageorgiou (dkarageo) - soulrain@outlook.com
+ *
+ * This file is licensed under the license of ECESCON11 Android Application project.
+ *
+ * Version: 0.1
+ */
+
 package com.sfhmmy.mobile.battles;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sfhmmy.mobile.PaginationRecyclerViewScrollListener;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
+import com.sfhmmy.mobile.UserAwareFragment;
+import com.sfhmmy.mobile.remoteserver.PhotoshopBattlesService;
+import com.sfhmmy.mobile.users.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link BattlesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link BattlesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class BattlesFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class BattlesFragment extends UserAwareFragment {
 
     private TopLevelFragmentEventsListener mTopListener;
 
-    public BattlesFragment() {
-        // Required empty public constructor
-    }
+    // Layout views handlers.
+    private RecyclerView       mRecyclerView;
+    private SwipeRefreshLayout mRefreshWrapper;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BattlesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BattlesFragment newInstance(String param1, String param2) {
-        BattlesFragment fragment = new BattlesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private List<BattlesPost> mBattlesPosts;  // Posts to be displayed on photo wall.
+    private BattlesRecyclerViewAdapter mAdapter;
+
+    private PhotoshopBattlesService mBattlesService;
+
+
+    public BattlesFragment() {
+        mBattlesPosts = new ArrayList<>();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (context instanceof TopLevelFragmentEventsListener) {
+            mTopListener = (TopLevelFragmentEventsListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implent TopLevelFragmentEventsListener");
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_battles, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mBattlesService = new PhotoshopBattlesService();
+        mAdapter = new BattlesRecyclerViewAdapter(mBattlesPosts);
+
+        // Setup adapter.
+        mAdapter.setLoginRequestListener(new BattlesRecyclerViewAdapter.LoginRequestListener() {
+            @Override
+            public void onLoginRequest() {
+                displayLoginDialog();
+            }
+        });
+        // Initially, display the loading indicator at the end of recycler view. It should be
+        // hidden when all content has been loaded from service.
+        mAdapter.setMoreContentAfterLoadedContentExists(true);
+
+        // Setup PhotoshopBattlesService.
+        mBattlesService.setPhotoshopBattlesServiceListener(new PhotoshopBattlesService.PhotoshopBattlesServiceListener() {
+            @Override
+            public void onMoreContentReady(List<BattlesPost> morePosts) {
+                for (BattlesPost p : morePosts) mAdapter.addBattlesPost(p);
+
+                // Every time new content is loaded, check whether it's the last one or not.
+                // If it's the last one, then stop displaying loading icons.
+                if (mBattlesService.hasAllContentBeenLoaded()) {
+                    mAdapter.setMoreContentAfterLoadedContentExists(false);
+                }
+            }
+
+            @Override
+            public void onContentRefreshed(List<BattlesPost> newPosts) {
+                mAdapter.clearBattlesPosts();
+                for (BattlesPost p : newPosts) mAdapter.addBattlesPost(p);
+
+                // Catch the case where content is loaded in a single page.
+                if (mBattlesService.hasAllContentBeenLoaded()) {
+                    mAdapter.setMoreContentAfterLoadedContentExists(false);
+                }
+
+                mRecyclerView.smoothScrollToPosition(0);
+
+                mRefreshWrapper.setRefreshing(false);
+            }
+        });
+        // Initialize service after all views have been created.
+        mBattlesService.initService();
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View root = inflater.inflate(R.layout.fragment_battles, container, false);
+
+        mRecyclerView   = root.findViewById(R.id.battles_recyclerview);
+        mRefreshWrapper = root.findViewById(R.id.battles_refresh_wrapper);
+
+        // Set color of spinning arrow.
+        mRefreshWrapper.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
+        // Set a listener for handling the user request for content refresh.
+        mRefreshWrapper.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // When the user asks for content refresh, assume that new content will not be
+                // loaded in a single page. If it is, that case will be handled on callback from
+                // service object.
+                mAdapter.setMoreContentAfterLoadedContentExists(true);
+
+                if (!mBattlesService.isRefreshing()) mBattlesService.refreshContent();
+            }
+        });
+
+        // Use a linear layout manager.
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(
+                new PaginationRecyclerViewScrollListener(
+                        layoutManager, mBattlesService.getPageSize()) {
+
+                    @Override
+                    protected void loadMoreItems() {
+                        mBattlesService.prepareMoreContent();
+                    }
+
+                    @Override
+                    public boolean isLoading() {
+                        return mBattlesService.isLoading();
+                    }
+
+                    @Override
+                    public boolean isLastPage() {
+                        return mBattlesService.hasAllContentBeenLoaded();
+                    }
+                });
+
+        return root;
     }
 
     @Override
@@ -87,34 +176,23 @@ public class BattlesFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof TopLevelFragmentEventsListener) {
-            mTopListener = (TopLevelFragmentEventsListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement TopLevelFragmentEventsListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
         mTopListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRecyclerView.clearOnScrollListeners();
+    }
+
+    @Override
+    protected void onCreateUserSpecificContent(User user) {
+        super.onCreateUserSpecificContent(user);
+
+        // Currently, there is no user specific content, so no need to display warning dialog.
+//        if (user == null) mAdapter.displayUnloggedUserItem(true);
+//        else mAdapter.displayUnloggedUserItem(false);
     }
 }

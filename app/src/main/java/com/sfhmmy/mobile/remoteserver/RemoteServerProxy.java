@@ -17,6 +17,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sfhmmy.mobile.ImagePost;
+import com.sfhmmy.mobile.battles.BattlesPost;
 import com.sfhmmy.mobile.cache.CacheProvider;
 import com.sfhmmy.mobile.remoteserver.deserializers.AccessTokenDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ContentPageDeserializer;
@@ -384,6 +385,21 @@ public class RemoteServerProxy {
         return pageContainer;
     }
 
+    public ContentPage<BattlesPost> getPhotoshopBattlesPage(int page) {
+
+        ContentPage<BattlesPost> pageContainer;
+
+        EcesconAPI api = createService(EcesconAPI.class);
+        Call<ContentPage<BattlesPost>> call = api.getPhotoshopBattlesList(page);
+        try {
+            pageContainer = call.execute().body();
+        } catch (IOException ex) {
+            pageContainer = null;
+        }
+
+        return pageContainer;
+    }
+
     public ResponseContainer<List<User>> getUsersList(String accessToken) {
 
         ResponseContainer<List<User>> rc = new ResponseContainer<>();
@@ -545,6 +561,9 @@ public class RemoteServerProxy {
 
         @GET("public/pictures")
         Call<ContentPage<ImagePost>> getPhotoWallList(@Query("page") int page);
+
+        @GET("public/photoshop_battles_submissions")
+        Call<ContentPage<BattlesPost>>getPhotoshopBattlesList(@Query("page") int page);
 
         @GET("public/workshops")
         Call<ContentPage<Workshop>> getWorkshopsList();

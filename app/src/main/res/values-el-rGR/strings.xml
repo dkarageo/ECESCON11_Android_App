@@ -45,7 +45,7 @@
     <string name="home_photos_list_item_description_hint_text">Περιγραφή</string>
     <string name="home_photos_list_item_photo_load_error_text">Αδυναμία φόρτωσης της εικόνας.</string>
     <string name="home_photos_list_item_photo_content_desc">Photo of the post.</string>
-    <string name="home_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένονυ να αποκτήσετε πρόσβαση σε όλο το περιεχόμενο του συνεδρίου, παρακαλούμε συνδεθείτε!</string>
+    <string name="home_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένου να αποκτήσετε πρόσβαση σε όλο το περιεχόμενο του συνεδρίου, παρακαλούμε συνδεθείτε!</string>
     <string name="home_unlogged_user_notification_login_button_text">Είσοδος</string>
     <string name="home_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>
 
@@ -59,6 +59,14 @@
     <string name="passport_user_role_secretary_text">Γραμματέας</string>
     <string name="passport_unlogged_user_notification_text">Η είσοδος στην εφαρμογή σας δίνει τη δυνατότητα για εύκολο και απλό check-in από το κινητό σας!</string>
     <string name="passport_unlogged_user_notification_login_button_text">Θελω ευκολο check-in</string>
+
+    <!-- Strings related to photoshop battles -->
+    <string name="battles_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένου να αποκτήσετε πρόσβαση σε όλο το περιεχόμενο του συνεδρίου, παρακαλούμε συνδεθείτε!</string>
+    <string name="battles_unlogged_user_notification_login_button_text">Είσοδος</string>
+    <string name="battles_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>
+    <string name="battles_photos_list_item_photo_content_desc">Φωτογραφία συμμετοχής στο διαγωνισμό Photoshop Battles.</string>
+    <string name="battles_photos_list_item_photo_load_error_text">Αδυναμία φόρτωσης της εικόνας.</string>
+    <string name="battles_photos_list_item_participation_code_hint_text">Participation Code:</string>
 
     <!-- Main Menu related strings -->
     <string name="main_menu_header_bg_content_desc">Θολωμένη εικόνα προφίλ στο παρασκήνιο</string>
