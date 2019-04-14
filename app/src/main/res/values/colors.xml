@@ -27,7 +27,7 @@
     <color name="colorLightUIBackground">#fbe9e7</color>
     <color name="colorUIOverlay">#ffffff</color>
 
-    <color name="colorAccent">#ff1744</color>
+    <color name="colorAccent">@color/colorPrimary</color>
 
     <!-- Generic colors -->
     <color name="black">#000000</color>
