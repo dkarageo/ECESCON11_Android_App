@@ -85,6 +85,40 @@
     <string name="workshop_enroll_dialog_answer_needed">An answer is required.</string>
     <string name="workshop_enroll_dialog_event_selector_header_text">Desired session</string>
 
+    <!-- Strings related to about screen -->
+    <string name="about_app_name">ECESCON 11 Mobile App</string>
+    <string name="about_app_version">version 0.1 (beta)</string>
+    <string name="about_designer_header">- Architecture Designing -</string>
+    <string name="about_programming_header">- Programming -</string>
+    <string name="about_coordination_header">- IT Team Coordination &amp; Operations -</string>
+    <string name="about_icon_pack_header">- Icon Pack Designing -</string>
+    <string name="about_rest_api_programming_header">- REST API Programming -</string>
+    <string name="about_name_dimitrios_karageorgiou">Dimitrios Karageorgiou</string>
+    <string name="about_email_dimitrios_karageorgiou">soulrain@outlook.com</string>
+    <string name="about_name_ilias_zarka">Ilias Zarka</string>
+    <string name="about_email_ilias_zarka">iliazark@gmail.com</string>
+    <string name="about_name_iosif_chrysostomou">Iosif Chrysostomou</string>
+    <string name="about_email_iosif_chrysostomou">chrysosie@gmail.com</string>
+    <string name="about_name_konstantinos_doumanidis">Konstantinos Doumanidis</string>
+    <string name="about_email_konstantinos_doumanidis">kdoumani98@gmail.com</string>
+    <string name="about_name_thanasis_charisoudis">Thanasis Charisoudis</string>
+    <string name="about_email_thanasis_charisoudis">thanasis.harisoudis@gmail.com</string>
+    <string name="about_name_christina_anagnostou">Christina Anagnostou</string>
+    <string name="about_email_christina_anagnostou">xristinaanag8@gmail.com</string>
+    <string name="about_name_matthieu_ndumbi">Matthieu Ndumbi</string>
+    <string name="about_email_matthieu_ndumbi">matthieundumbi@gmail.com</string>
+    <string name="about_name_konstantinos_strikos">Konstantinos Strikos</string>
+    <string name="about_email_konstantinos_strikos">strikos.kon@gmail.com</string>
+    <string name="about_name_konstantinos_kanavouras">Konstantinos Kanavouras</string>
+    <string name="about_email_konstantinos_kanavouras">electrovesta@gmail.com</string>
+    <string name="about_name_christos_daoulas">Christos Daoulas</string>
+    <string name="about_email_christos_daoulas">daoulas@outlook.com</string>
+    <string name="about_name_chrisa_gkanoudi">Chrysa Gkanoudi</string>
+    <string name="about_email_chrisa_gkanoudi">cgkanoudi@gmail.com</string>
+    <string name="about_other_credits_text">We really thank each member of the organizing committee for making ECESCON 11 conference a reality!</string>
+    <string name="about_other_credits_text2">We really thank each volunteer for carrying out the conference!</string>
+    <string name="about_other_credits_text3">With all our regards, we thank all of you attending the conference, giving life to biggest students meeting in Greece!</string>
+
     <!-- String related to passport -->
     <string name="passport_profile_img_desc">Profile Picture</string>
     <string name="passport_qrcode_img_desc">QR Code</string>

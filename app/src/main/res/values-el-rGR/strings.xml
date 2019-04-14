@@ -115,6 +115,30 @@
     <string name="workshop_enroll_dialog_answer_needed">Η απάντηση είναι απαραίτητη.</string>
     <string name="workshop_enroll_dialog_event_selector_header_text">Επιθυμητή ημερομηνία</string>
 
+    <!-- Strings related to about screen -->
+    <string name="about_app_name">Mobile Εφαρμογή ΣΦΗΜΜΥ 11</string>
+    <string name="about_app_version">έκδοση 0.1 (beta)</string>
+    <string name="about_designer_header">- Σχεδιασμός &amp; Επιμέλεια -</string>
+    <string name="about_programming_header">- Προγραμματισμός -</string>
+    <string name="about_coordination_header">- IT Team Coordination &amp; Operations -</string>
+    <string name="about_icon_pack_header">- Σχεδιασμός Πακέτου Εικονιδίων -</string>
+    <string name="about_rest_api_programming_header">- Προγραμματισμός REST API -</string>
+    <string name="about_name_dimitrios_karageorgiou">Δημήτριος Καραγεωργίου</string>
+    <string name="about_name_ilias_zarka">Ηλίας Ζάρκα</string>
+    <string name="about_name_iosif_chrysostomou">Ιωσήφ Χρυσοστόμου</string>
+    <string name="about_name_konstantinos_doumanidis">Κωνσταντίνος Δουμανίδης</string>
+    <string name="about_name_thanasis_charisoudis">Θανάσης Χαρισούδης</string>
+    <string name="about_name_christina_anagnostou">Χριστίνα Αναγνώστου</string>
+    <string name="about_name_matthieu_ndumbi">Matthieu Ndumbi</string>
+    <string name="about_name_konstantinos_strikos">Κωνσταντίνος Στρίκος</string>
+    <string name="about_name_konstantinos_kanavouras">Κωνσταντίνος Καναβούρας</string>
+    <string name="about_name_christos_daoulas">Χρήστος Νταούλας</string>
+    <string name="about_name_chrisa_gkanoudi">Χρύσα Γκανούδη</string>
+    <string name="about_other_credits_text">Ευχαριστούμε κάθε μέλος της οργανωτικής επιτροπής για τη συμβολή του στο να γίνει το ΣΦΗΜΜΥ 11 πραγματικότητα!</string>
+    <string name="about_other_credits_text2">Ευχαριστούμε κάθε εθελοντή για την πολύτιμη βοήθεια του κατά τη διεξαγωγή του συνεδρίου!</string>
+    <string name="about_other_credits_text3">Ευχαριστούμε όλους εσάς, που προσέρχεστε στο συνέδριο, δίνοντας πνοή στη μεγαλύτερη φοιτητική συνάντηση στην Ελλάδα!</string>
+
+
     <!-- Camera scanner strings -->
     <string name="camera_scanner_permission_missing_warning_text">Απαιτείται πρόσβαση στην κάμερα για τη χρήση του σαρωτή κωδικών QR.</string>
     <string name="camera_scanner_permission_grant_button_text">Παραχώρηση Πρόσβασης</string>
