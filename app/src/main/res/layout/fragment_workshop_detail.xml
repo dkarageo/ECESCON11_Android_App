@@ -25,10 +25,11 @@
 
         <TextView
             android:id="@+id/workshop_detail_enroll_status"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/workshop_detail_enroll_status_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="2dp"
             android:textColor="@color/statusNeutralColor"
             android:hint="@string/workshop_detail_enroll_status_hint_text"
