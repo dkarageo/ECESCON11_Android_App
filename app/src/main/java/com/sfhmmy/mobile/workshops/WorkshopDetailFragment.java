@@ -12,6 +12,8 @@
 package com.sfhmmy.mobile.workshops;
 
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -149,6 +151,7 @@ public class WorkshopDetailFragment extends Fragment {
                     new WorkshopEventsListAdapter(getContext(), workshop.getWorkshopEvents())
             );
             mEventsList.setExpanded(true);
+            mEventsList.setSelector(new ColorDrawable(Color.TRANSPARENT));
         }
     }
 
