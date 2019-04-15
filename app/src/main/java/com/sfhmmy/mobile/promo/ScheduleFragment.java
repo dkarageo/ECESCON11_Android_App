@@ -60,7 +60,7 @@ public class ScheduleFragment extends UserAwareFragment {
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setUserAgentString("ecescon11_user_agent");
-        settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
         webView.loadUrl(getString(R.string.info_conference_schedule_url));
     }
