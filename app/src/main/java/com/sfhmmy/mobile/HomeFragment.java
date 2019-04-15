@@ -33,21 +33,22 @@ import java.util.List;
 
 public class HomeFragment extends UserAwareFragment {
 
+    private static final String IMAGES_LIST_TAG     = "images_list";
+    private static final String SCROLL_POSITION_TAG = "scroll_position";
+
     private TopLevelFragmentEventsListener mTopListener;
 
     // Layout views handlers.
     private RecyclerView       mRecyclerView;
     private SwipeRefreshLayout mRefreshWrapper;
 
-    private List<ImagePost> mImagePosts;  // Posts to be displayed on photo wall.
+    private ArrayList<ImagePost> mImagePosts;  // Posts to be displayed on photo wall.
     private HomeRecyclerViewAdapter mAdapter;
 
     private PhotoWallService mPhotoWallService;
 
 
-    public HomeFragment() {
-        mImagePosts = new ArrayList<>();
-    }
+    public HomeFragment() {}
 
     @Override
     public void onAttach(Context context) {
@@ -65,50 +66,62 @@ public class HomeFragment extends UserAwareFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPhotoWallService = new PhotoWallService();
-        mAdapter = new HomeRecyclerViewAdapter(mImagePosts);
+        if (savedInstanceState != null) {
+            mImagePosts = savedInstanceState.getParcelableArrayList(IMAGES_LIST_TAG);
+        } else {
+            mImagePosts = new ArrayList<>();
+        }
 
-        // Setup adapter.
-        mAdapter.setLoginRequestListener(new HomeRecyclerViewAdapter.LoginRequestListener() {
-            @Override
-            public void onLoginRequest() {
-                displayLoginDialog();
-            }
-        });
-        // Initially, display the loading indicator at the end of recycler view. It should be
-        // hidden when all content has been loaded from service.
-        mAdapter.setMoreContentAfterLoadedContentExists(true);
-
-        // Setup PhotoWallService.
-        mPhotoWallService.setPhotoWallServiceListener(new PhotoWallService.PhotoWallServiceListener() {
-            @Override
-            public void onMoreContentReady(List<ImagePost> morePosts) {
-                for (ImagePost p : morePosts) mAdapter.addImagePost(p);
-
-                // Every time new content is loaded, check whether it's the last one or not.
-                // If it's the last one, then stop displaying loading icons.
-                if (mPhotoWallService.hasAllContentBeenLoaded()) {
-                    mAdapter.setMoreContentAfterLoadedContentExists(false);
+        if (mAdapter == null) {
+            // Setup adapter.
+            mAdapter = new HomeRecyclerViewAdapter(mImagePosts);
+            mAdapter.setLoginRequestListener(new HomeRecyclerViewAdapter.LoginRequestListener() {
+                @Override
+                public void onLoginRequest() {
+                    displayLoginDialog();
                 }
-            }
+            });
+            // Initially, display the loading indicator at the end of recycler view. It should be
+            // hidden when all content has been loaded from service.
+            mAdapter.setMoreContentAfterLoadedContentExists(true);
+        }
 
-            @Override
-            public void onContentRefreshed(List<ImagePost> newPosts) {
-                mAdapter.clearImagePosts();
-                for (ImagePost p : newPosts) mAdapter.addImagePost(p);
+        if (mPhotoWallService == null) {
+            // Setup PhotoWallService.
+            mPhotoWallService = new PhotoWallService();
+            mPhotoWallService.setPhotoWallServiceListener(new PhotoWallService.PhotoWallServiceListener() {
+                @Override
+                public void onMoreContentReady(List<ImagePost> morePosts) {
+                    for (ImagePost p : morePosts) mAdapter.addImagePost(p);
+                    mImagePosts.addAll(morePosts);
 
-                // Catch the case where content is loaded in a single page.
-                if (mPhotoWallService.hasAllContentBeenLoaded()) {
-                    mAdapter.setMoreContentAfterLoadedContentExists(false);
+                    // Every time new content is loaded, check whether it's the last one or not.
+                    // If it's the last one, then stop displaying loading icons.
+                    if (mPhotoWallService.hasAllContentBeenLoaded()) {
+                        mAdapter.setMoreContentAfterLoadedContentExists(false);
+                    }
                 }
 
-                mRecyclerView.smoothScrollToPosition(0);
+                @Override
+                public void onContentRefreshed(List<ImagePost> newPosts) {
+                    mAdapter.clearImagePosts();
+                    for (ImagePost p : newPosts) mAdapter.addImagePost(p);
+                    mImagePosts.clear();
+                    mImagePosts.addAll(newPosts);
 
-                mRefreshWrapper.setRefreshing(false);
-            }
-        });
-        // Initialize service after all views have been created.
-        mPhotoWallService.initService();
+                    // Catch the case where content is loaded in a single page.
+                    if (mPhotoWallService.hasAllContentBeenLoaded()) {
+                        mAdapter.setMoreContentAfterLoadedContentExists(false);
+                    }
+
+                    mRecyclerView.smoothScrollToPosition(0);
+
+                    mRefreshWrapper.setRefreshing(false);
+                }
+            });
+            // Initialize service after all views have been created.
+            mPhotoWallService.initService();
+        }
     }
 
     @Override
@@ -159,6 +172,13 @@ public class HomeFragment extends UserAwareFragment {
             }
         });
 
+        if (savedInstanceState != null) {
+            int scrollPosition = savedInstanceState.getInt(SCROLL_POSITION_TAG, 0);
+            mRecyclerView.scrollToPosition(scrollPosition);
+        }
+
+        setRetainInstance(true);
+
         return root;
     }
 
@@ -189,5 +209,17 @@ public class HomeFragment extends UserAwareFragment {
 
         if (user == null) mAdapter.displayUnloggedUserItem(true);
         else mAdapter.displayUnloggedUserItem(false);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(IMAGES_LIST_TAG, mImagePosts);
+
+        LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+        if (manager != null) {
+            int currentPosition = manager.findFirstVisibleItemPosition();
+            outState.putInt(SCROLL_POSITION_TAG, currentPosition);
+        }
     }
 }

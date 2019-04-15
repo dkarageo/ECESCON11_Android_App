@@ -11,6 +11,7 @@
 
 package com.sfhmmy.mobile;
 
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -235,6 +236,7 @@ public class HomeRecyclerViewAdapter
         Glide.with(holder.mPhoto.getContext())
                 .load(curPost.getImageUrl())
                 .fitCenter()
+                .placeholder(new ColorDrawable(App.getAppResources().getColor(R.color.white)))
                 .into(holder.mPhoto);
     }
 
