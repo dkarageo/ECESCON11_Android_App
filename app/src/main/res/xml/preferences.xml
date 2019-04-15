@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="preferences_locale_selector"
+        android:title="@string/preferences_locale_selector_header_text"
+        android:summary="%s"
+        android:entryValues="@array/preferences_languages_list_ids"
+        android:entries="@array/preferences_languages_list"
+        android:icon="@drawable/icon_language" />
+
+</androidx.preference.PreferenceScreen>

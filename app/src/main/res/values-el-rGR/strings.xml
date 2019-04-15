@@ -81,6 +81,7 @@
     <string name="main_menu_item_about_text">Πληροφορίες εφαρμογής</string>
     <string name="main_menu_item_sign_in">Είσοδος</string>
     <string name="main_menu_header_generic_user_name">Ένας σπουδαίος μηχανικός&#8230;</string>
+    <string name="main_menu_item_settings_text">Ρυθμίσεις</string>
 
     <!-- String related to workshops screen -->
     <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
@@ -178,6 +179,13 @@
     <string name="user_profile_department_field_title">Σχολή</string>
     <string name="user_profile_department_specialization_field_title">Τμήμα</string>
     <string name="user_profile_years_of_experience_field_title">Έτος Φοίτησης</string>
+
+    <!-- Preferences strings -->
+    <string name="preferences_locale_selector_header_text">Γλώσσα</string>
+    <string-array name="preferences_languages_list">
+        <item>Αγγλικά</item>
+        <item>Ελληνικά</item>
+    </string-array>
 
     <!-- Generic strings -->
     <string name="generic_edit_icon_content_description">Εικονίδιο Επεξεργασίας</string>
