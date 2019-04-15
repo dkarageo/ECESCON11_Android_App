@@ -76,7 +76,7 @@
     <string name="main_menu_header_user_role_hint">Ιδιότητα</string>
     <string name="main_menu_item_icon_content_desc">Εικονίδιο Αντικειμένου Μενού</string>
     <string name="main_menu_item_view_profile_text">Το προφίλ μου</string>
-    <string name="main_menu_item_conference_info_text">Το συνέδριο</string>
+    <string name="main_menu_item_conference_info_text">Πρόγραμμα Συνεδρίου</string>
     <string name="main_menu_item_change_account_text">Αλλαγή λογαριασμού</string>
     <string name="main_menu_item_about_text">Πληροφορίες εφαρμογής</string>
     <string name="main_menu_item_sign_in">Είσοδος</string>
@@ -179,6 +179,9 @@
     <string name="user_profile_department_field_title">Σχολή</string>
     <string name="user_profile_department_specialization_field_title">Τμήμα</string>
     <string name="user_profile_years_of_experience_field_title">Έτος Φοίτησης</string>
+
+    <!-- Conference info related strings -->
+    <string name="info_conference_schedule_url">https://sfhmmy.gr/%CF%84%CE%BF-%CF%83%CF%85%CE%BD%CE%AD%CE%B4%CF%81%CE%B9%CE%BF/%CF%80%CF%81%CF%8C%CE%B3%CF%81%CE%B1%CE%BC%CE%BC%CE%B1</string>
 
     <!-- Preferences strings -->
     <string name="preferences_locale_selector_header_text">Γλώσσα</string>

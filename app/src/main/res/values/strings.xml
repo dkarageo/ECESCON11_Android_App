@@ -146,7 +146,7 @@
     <string name="main_menu_header_user_role_hint">Role</string>
     <string name="main_menu_item_icon_content_desc">Menu Item Icon</string>
     <string name="main_menu_item_view_profile_text">My Profile</string>
-    <string name="main_menu_item_conference_info_text">Conference Info</string>
+    <string name="main_menu_item_conference_info_text">Conference Schedule</string>
     <string name="main_menu_item_change_account_text">Change Account</string>
     <string name="main_menu_item_about_text">About</string>
     <string name="main_menu_item_sign_in">Sign In</string>
@@ -191,6 +191,9 @@
     <string name="user_profile_department_field_title">School</string>
     <string name="user_profile_department_specialization_field_title">Department</string>
     <string name="user_profile_years_of_experience_field_title">Year of Study</string>
+
+    <!-- Conference info related strings -->
+    <string name="info_conference_schedule_url">https://sfhmmy.gr/en/the-conference/schedule</string>
 
     <!-- Preferences strings -->
     <string name="preferences_locale_selector_header_text">Language</string>

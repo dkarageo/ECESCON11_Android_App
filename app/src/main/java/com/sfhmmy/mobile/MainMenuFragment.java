@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.sfhmmy.mobile.about.AboutFragment;
-import com.sfhmmy.mobile.promo.InfoFragment;
+import com.sfhmmy.mobile.promo.ScheduleFragment;
 import com.sfhmmy.mobile.settings.SettingsFragment;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
@@ -287,7 +287,7 @@ public class MainMenuFragment extends UserAwareFragment {
 
                     @Override
                     public Fragment createFragment() {
-                        return new InfoFragment();
+                        return new ScheduleFragment();
                     }
                 }, true);
             }
