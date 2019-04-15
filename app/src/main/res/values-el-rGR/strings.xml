@@ -82,6 +82,7 @@
     <string name="main_menu_item_sign_in">Είσοδος</string>
     <string name="main_menu_header_generic_user_name">Ένας σπουδαίος μηχανικός&#8230;</string>
     <string name="main_menu_item_settings_text">Ρυθμίσεις</string>
+    <string name="main_menu_item_conference_sponsors_text">Χορηγοί</string>
 
     <!-- String related to workshops screen -->
     <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
@@ -182,6 +183,7 @@
 
     <!-- Conference info related strings -->
     <string name="info_conference_schedule_url">https://sfhmmy.gr/%CF%84%CE%BF-%CF%83%CF%85%CE%BD%CE%AD%CE%B4%CF%81%CE%B9%CE%BF/%CF%80%CF%81%CF%8C%CE%B3%CF%81%CE%B1%CE%BC%CE%BC%CE%B1</string>
+    <string name="info_sponsors_url">https://sfhmmy.gr/%CF%87%CE%BF%CF%81%CE%B7%CE%B3%CE%BF%CE%AF</string>
 
     <!-- Preferences strings -->
     <string name="preferences_locale_selector_header_text">Γλώσσα</string>

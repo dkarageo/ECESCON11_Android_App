@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.sfhmmy.mobile.about.AboutFragment;
 import com.sfhmmy.mobile.promo.ScheduleFragment;
+import com.sfhmmy.mobile.promo.SponsorsFragment;
 import com.sfhmmy.mobile.settings.SettingsFragment;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
@@ -196,6 +197,11 @@ public class MainMenuFragment extends UserAwareFragment {
                                     getResources().getDrawable(R.drawable.ecescon_icon),
                                     R.color.colorPrimary),
                                     new InfoButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_conference_sponsors_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_sponsors),
+                                    R.color.colorPrimary),
+                            new SponsorsButtonHandler())
                     .addButtonItem(getString(R.string.main_menu_item_change_account_text),
                             DrawableUtils.applyTintToDrawable(
                                     getResources().getDrawable(R.drawable.logout_icon),
@@ -224,6 +230,11 @@ public class MainMenuFragment extends UserAwareFragment {
                                     getResources().getDrawable(R.drawable.ecescon_icon),
                                     R.color.colorPrimary),
                                     new InfoButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_conference_sponsors_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_sponsors),
+                                    R.color.colorPrimary),
+                                    new SponsorsButtonHandler())
                     .addButtonItem(getString(R.string.main_menu_item_settings_text),
                             DrawableUtils.applyTintToDrawable(
                                     getResources().getDrawable(R.drawable.icon_settings),
@@ -288,6 +299,25 @@ public class MainMenuFragment extends UserAwareFragment {
                     @Override
                     public Fragment createFragment() {
                         return new ScheduleFragment();
+                    }
+                }, true);
+            }
+        }
+    }
+
+    private class SponsorsButtonHandler implements  View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (mTopListener != null) {
+                mTopListener.navigateToNavigableKey(new NavigableKey() {
+                    @Override
+                    public String getKey() {
+                        return "conference_sponsors_fragment";
+                    }
+
+                    @Override
+                    public Fragment createFragment() {
+                        return new SponsorsFragment();
                     }
                 }, true);
             }
