@@ -38,6 +38,8 @@
     <string name="error_login_failed">Αποτυχία εισόδου</string>
     <string name="login_dialog_login_button_text">Είσοδος</string>
     <string name="login_dialog_cancel_button_text">Ακύρωση</string>
+    <string name="login_dialog_register_text"><a href="https://sfhmmy.gr/%CE%B1%CF%85%CE%B8%CE%B5%CE%BD%CF%84%CE%B9%CE%BA%CE%BF%CF%80%CE%BF%CE%AF%CE%B7%CF%83%CE%B7/%CE%B5%CE%B3%CE%B3%CF%81%CE%B1%CF%86%CE%AE">Δεν έχετε λογαριασμό ΣΦΗΜΜΥ ακόμη; Εγγραφείτε εύκολα και απλά!</a></string>
+    <string name="login_dialog_password_restore_text"><a href="http://www.sfhmmy.gr/en/authentication/password/reset">Ξεχάσατε τον κωδικά σας;</a></string>
 
     <!-- String related to home screen -->
     <string name="home_photos_list_item_uploader_hint_text">Ανέβηκε από</string>

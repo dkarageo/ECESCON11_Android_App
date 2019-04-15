@@ -39,6 +39,8 @@
     <string name="permission_rationale">Sign in</string>
     <string name="login_dialog_login_button_text">Login</string>
     <string name="login_dialog_cancel_button_text">Cancel</string>
+    <string name="login_dialog_register_text"><a href="https://sfhmmy.gr/en/authentication/register">You don\'t have an ECESCON account yet? Register one now!</a></string>
+    <string name="login_dialog_password_restore_text"><a href="http://www.sfhmmy.gr/en/authentication/password/reset">Forgot password?</a></string>
 
     <!-- String related to home screen -->
     <string name="home_photos_list_item_uploader_hint_text">Uploaded by</string>

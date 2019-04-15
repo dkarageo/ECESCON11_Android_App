@@ -33,8 +33,7 @@
             android:paddingRight="8dp"
             android:scaleType="centerInside"
             android:contentDescription="@string/loginForm_logoDescription"
-            android:src="@drawable/full_logo_light_224_140"
-            android:background="@drawable/login_rounded_logo_background" />
+            android:src="@drawable/full_logo_dark_224_114" />
 
         <!-- TextInputLayout seems to be broken at SDK version 28.0 -->
         <!--<android.support.design.widget.TextInputLayout
@@ -79,6 +78,29 @@
             android:singleLine="true" />
 
         <!--</android.support.design.widget.TextInputLayout> -->
+
+        <TextView
+            android:id="@+id/login_dialog_password_restore_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_dialog_password_restore_text"
+            android:layout_marginTop="32dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/login_dialog_register_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_dialog_register_text"
+            android:layout_marginTop="32dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"/>
     </LinearLayout>
 
     <!-- Login progress -->

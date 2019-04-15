@@ -25,6 +25,7 @@ import androidx.fragment.app.DialogFragment;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,8 @@ public class LoginDialogFragment
     private TextInputEditText    mPassword;            // Handler for pass input field.
     private CircularProgressBar  mProgressSpinner;     // Handler for progress spinner.
     private View                 mCredentialsWrapper;  // Handler for credentials container.
+    private TextView             mRegisterHint;
+    private TextView             mPasswordRestoreHint;
 
     // Indicates whether progress UI elements are visible, instead of login form ones.
     private boolean mIsProgressVisible;
@@ -83,10 +86,12 @@ public class LoginDialogFragment
         LayoutInflater inflater = mAttachedActivity.getLayoutInflater();
         View root = inflater.inflate(R.layout.fragment_login_dialog, null);
 
-        mEmail              = root.findViewById(R.id.login_dialog_email);
-        mPassword           = root.findViewById(R.id.login_dialog_password);
-        mCredentialsWrapper = root.findViewById(R.id.login_dialog_credentials_wrapper);
-        mProgressSpinner    = root.findViewById(R.id.login_dialog_progress_spinner);
+        mEmail               = root.findViewById(R.id.login_dialog_email);
+        mPassword            = root.findViewById(R.id.login_dialog_password);
+        mCredentialsWrapper  = root.findViewById(R.id.login_dialog_credentials_wrapper);
+        mProgressSpinner     = root.findViewById(R.id.login_dialog_progress_spinner);
+        mRegisterHint        = root.findViewById(R.id.login_dialog_register_hint);
+        mPasswordRestoreHint = root.findViewById(R.id.login_dialog_password_restore_hint);
 
         mPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -131,6 +136,9 @@ public class LoginDialogFragment
                 negative.setTextColor(getResources().getColor(R.color.colorPrimary));
             }
         });
+
+        mRegisterHint.setMovementMethod(LinkMovementMethod.getInstance());
+        mPasswordRestoreHint.setMovementMethod(LinkMovementMethod.getInstance());
 
         if (savedInstanceState != null) {
             // Restore any saved state of the dialog.
