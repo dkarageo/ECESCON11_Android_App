@@ -11,6 +11,7 @@
 
 package com.sfhmmy.mobile.battles;
 
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
 
 import java.util.ArrayList;
@@ -212,6 +214,7 @@ public class BattlesRecyclerViewAdapter
 
         Glide.with(holder.mPhoto.getContext())
                 .load(curPost.getImageUrl())
+                .placeholder(new ColorDrawable(App.getAppResources().getColor(R.color.white)))
                 .fitCenter()
                 .into(holder.mPhoto);
     }
