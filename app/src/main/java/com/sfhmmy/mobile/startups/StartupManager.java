@@ -105,17 +105,17 @@ public class StartupManager {
 
     private void saveStartupProperties() {
         SharedPreferences.Editor spe = App.getAppContext().getSharedPreferences(
-                IS_FIRST_RUN_KEY, Context.MODE_PRIVATE
+                STARTUP_PROPERTIES_FILENAME, Context.MODE_PRIVATE
         ).edit();
 
-        spe.putBoolean(STARTUP_PROPERTIES_FILENAME, mStartupProperties.isFirstRun());
+        spe.putBoolean(IS_FIRST_RUN_KEY, mStartupProperties.isFirstRun());
 
         spe.apply();
     }
 
     private void restoreStartupProperties() {
         SharedPreferences sp = App.getAppContext().getSharedPreferences(
-                IS_FIRST_RUN_KEY, Context.MODE_PRIVATE
+                STARTUP_PROPERTIES_FILENAME, Context.MODE_PRIVATE
         );
 
         mStartupProperties = new StartupProperties();

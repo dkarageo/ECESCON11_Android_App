@@ -215,13 +215,6 @@ public class MainActivity extends AppCompatActivity
 
         UserManager.getUserManager().registerUserAuthenticationListener(this);
 
-        // On first run of the application, open login dialog.
-        boolean isFirstRun = StartupManager.getStartupManager().isFirstRun();
-        if (isFirstRun && UserManager.getUserManager() == null)  {
-            LoginDialogFragment loginDialog = LoginDialogFragment.newInstance();
-            loginDialog.show(getSupportFragmentManager(), "loginDialog");
-        }
-
         if (mStartupCompleted) {
             setStatusBarColor(getResources().getColor(R.color.white));
             setDarkStatusBarIcons(true);
@@ -402,6 +395,14 @@ public class MainActivity extends AppCompatActivity
                 mStartupCompleted = true;
                 setStatusBarColor(getResources().getColor(R.color.white));
                 setDarkStatusBarIcons(true);
+
+                // On first run of the application, open login dialog.
+                StartupManager suManager = StartupManager.getStartupManager();
+                if (suManager.isFirstRun() && UserManager.getUserManager().getCurrentUser() == null)  {
+                    LoginDialogFragment loginDialog = LoginDialogFragment.newInstance();
+                    loginDialog.show(getSupportFragmentManager(), "loginDialog");
+                    suManager.terminateFirstRun();
+                }
             }
         };
 
