@@ -84,9 +84,7 @@ public class HomeFragment extends UserAwareFragment {
             // Initially, display the loading indicator at the end of recycler view. It should be
             // hidden when all content has been loaded from service.
             mAdapter.setMoreContentAfterLoadedContentExists(true);
-        }
-
-        if (mPhotoWallService == null) {
+        
             // Setup PhotoWallService.
             mPhotoWallService = new PhotoWallService();
             mPhotoWallService.setPhotoWallServiceListener(new PhotoWallService.PhotoWallServiceListener() {
