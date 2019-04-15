@@ -212,8 +212,10 @@ public class WorkshopDetailFragment extends Fragment {
         mEnrollStatus.setText(getText(textRes));
         mEnrollStatus.setTextColor(getResources().getColor(colorRes));
 
-        if (displayEnrollButton) mEnrollButton.setVisibility(View.VISIBLE);
-        else mEnrollButton.setVisibility(View.GONE);
+        // TODO: Wait until remote API supports workshops enrollment.
+        mEnrollButton.setVisibility(View.GONE);
+//        if (displayEnrollButton) mEnrollButton.setVisibility(View.VISIBLE);
+//        else mEnrollButton.setVisibility(View.GONE);
     }
 
 
