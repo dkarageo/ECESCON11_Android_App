@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity
     private static final String BATTLES_FRAGMENT_TAG = "battles";
     private static final String MAIN_MENU_FRAGMENT_TAG = "main_menu";
 
+    private static final String STARTUP_COMPLETED_STORE_KEY = "startup_completed";
+
     private BottomNavigationView mNavBar;
     private FrameLayout          mFragmentContainer;
     private View                 mStartupLoadingBg;
@@ -196,6 +198,7 @@ public class MainActivity extends AppCompatActivity
             executeStartupProcess();
         } else {
             mBackStack = (LinkedList<BackstackItem>) getLastCustomNonConfigurationInstance();
+            mStartupCompleted = savedInstanceState.getBoolean(STARTUP_COMPLETED_STORE_KEY);
         }
 
         ActionBar actionBar = getSupportActionBar();
@@ -237,6 +240,12 @@ public class MainActivity extends AppCompatActivity
         if (mStartupCompleted) {
             StartupManager.getStartupManager().unregisterStartupProcessListener(mStartupListener);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STARTUP_COMPLETED_STORE_KEY, mStartupCompleted);
     }
 
     @Override
