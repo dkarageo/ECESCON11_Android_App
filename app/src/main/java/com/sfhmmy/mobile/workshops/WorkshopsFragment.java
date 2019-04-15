@@ -34,6 +34,7 @@ import com.sfhmmy.mobile.users.UserManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 
 public class WorkshopsFragment extends UserAwareFragment {
@@ -182,7 +183,7 @@ public class WorkshopsFragment extends UserAwareFragment {
     }
 
     private void fetchWorkshops() {
-        new WorkshopsFetcher().execute(this);
+        new WorkshopsFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
     }
 
     private static class WorkshopsFetcher extends AsyncTask<WorkshopsFragment, Void, Object[]> {
@@ -251,7 +252,10 @@ public class WorkshopsFragment extends UserAwareFragment {
 
         @Override
         public void onWorkshopEnrollRequest(Workshop workshop, WorkshopEvent event, String answer) {
-            new WorkshopEnrollTask().execute(workshop, answer, event, mTarget, WorkshopsFragment.this);
+            new WorkshopEnrollTask().executeOnExecutor(
+                    AsyncTask.THREAD_POOL_EXECUTOR,
+                    workshop, answer, event, mTarget, WorkshopsFragment.this
+            );
         }
     }
 }

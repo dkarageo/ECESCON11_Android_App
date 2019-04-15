@@ -85,7 +85,7 @@ public class PhotoWallService {
                 mIsLoading = true;
                 mIsRefreshing = fromBeginning;
                 if (fromBeginning) mCurPage = 0;
-                new PhotoWallServerFetcher().execute(mCurPage);
+                new PhotoWallServerFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mCurPage);
             }
         }
     }
@@ -93,7 +93,7 @@ public class PhotoWallService {
     private void loadFromCache() {
         synchronized (mCacheLoadingLock) {
             mIsLoadingFromCache = true;
-            new PhotoWallCacheFetcher().execute();
+            new PhotoWallCacheFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 

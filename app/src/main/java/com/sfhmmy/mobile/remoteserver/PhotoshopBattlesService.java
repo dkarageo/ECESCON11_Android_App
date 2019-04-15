@@ -86,7 +86,9 @@ public class PhotoshopBattlesService {
                 mIsLoading = true;
                 mIsRefreshing = fromBeginning;
                 if (fromBeginning) mCurPage = 0;
-                new PhotoshopBattlesServerFetcher().execute(mCurPage);
+                new PhotoshopBattlesServerFetcher().executeOnExecutor(
+                        AsyncTask.THREAD_POOL_EXECUTOR, mCurPage
+                );
             }
         }
     }
@@ -94,7 +96,7 @@ public class PhotoshopBattlesService {
     private void loadFromCache() {
         synchronized (mCacheLoadingLock) {
             mIsLoadingFromCache = true;
-            new PhotoshopBattlesCacheFetcher().execute();
+            new PhotoshopBattlesCacheFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
