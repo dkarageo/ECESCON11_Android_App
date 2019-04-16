@@ -6,7 +6,7 @@
  *
  * This file is licensed under the license of ECESCON11 Android Application project.
  *
- * Version: 0.2
+ * Version: 0.3
  */
 
 package com.sfhmmy.mobile.users;
@@ -20,8 +20,12 @@ import com.sfhmmy.mobile.R;
 import org.threeten.bp.ZonedDateTime;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class User implements Parcelable {
+
+public class User implements Parcelable, Serializable {
 
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         @Override
@@ -63,11 +67,12 @@ public class User implements Parcelable {
     private String mProfilePictureURL;
     @SerializedName("passport_id")
     private String mPassportValue;
-    private ZonedDateTime mLastCheckInDate;
     private Gender mGender;
     private String mPreferedLanguage;
     @SerializedName("created_at")
     private ZonedDateTime mRegistrationDate;
+    @SerializedName("checkins")
+    private ArrayList<CheckinDate> mCheckInDates;
 
     public User() {}
 
@@ -91,7 +96,7 @@ public class User implements Parcelable {
         mRole              = (Role) source.readSerializable();
         mProfilePictureURL = source.readString();
         mPassportValue     = source.readString();
-        mLastCheckInDate   = (ZonedDateTime) source.readSerializable();
+        source.readTypedList(mCheckInDates, CheckinDate.CREATOR);
         mGender            = (Gender) source.readSerializable();
         mPreferedLanguage  = source.readString();
         mRegistrationDate  = (ZonedDateTime) source.readSerializable();
@@ -110,10 +115,14 @@ public class User implements Parcelable {
     public String getProfilePictureURL() { return mProfilePictureURL; }
     public String getOrganization() { return mOrganization; }
     public String getPassportValue() { return mPassportValue; }
-    public ZonedDateTime getLastCheckInDate() { return mLastCheckInDate; }
     public Gender getGender() { return mGender; }
     public String getPreferedLanguage() { return mPreferedLanguage; }
     public ZonedDateTime getRegistrationDate() { return mRegistrationDate; }
+    public ArrayList<CheckinDate> getCheckinDates() { return mCheckInDates; }
+
+    public ZonedDateTime getLastCheckInDate() {
+        return mCheckInDates != null ? mCheckInDates.get(0).getDate() : null;
+    }
 
     public void setUid(long uid) { mUid = uid; }
     public void setEmail(String email) { mEmail = email; }
@@ -126,8 +135,7 @@ public class User implements Parcelable {
     public void setProfilePictureURL(String profilePictureURL) { mProfilePictureURL = profilePictureURL; }
     public void setOrganization(String organization) { mOrganization = organization; }
     public void setPassportValue(String passportValue) { mPassportValue = passportValue; }
-    public void setLastCheckInDate(ZonedDateTime lastCheckInDate) { mLastCheckInDate = lastCheckInDate; }
-    public void setGender(Gender gender) { mGender = gender; }
+       public void setGender(Gender gender) { mGender = gender; }
     public void setPreferedLanguage(String preferedLanguage) { mPreferedLanguage = preferedLanguage; }
     public void setRegistrationDate(ZonedDateTime registrationDate) { mRegistrationDate = registrationDate; }
 
@@ -137,6 +145,15 @@ public class User implements Parcelable {
 
     public void setYearsOfExperience(int yearsOfExperience) {
         mYearsOfExperience = yearsOfExperience;
+    }
+
+    public void setCheckinDates(List<CheckinDate> checkinDates) {
+        if (checkinDates instanceof ArrayList) {
+            mCheckInDates = (ArrayList<CheckinDate>) checkinDates;
+        } else {
+            mCheckInDates = new ArrayList<>();
+            mCheckInDates.addAll(checkinDates);
+        }
     }
 
     public boolean hasRoleOf(Role role) {
@@ -207,7 +224,7 @@ public class User implements Parcelable {
         dest.writeSerializable(mRole);
         dest.writeString(mProfilePictureURL);
         dest.writeString(mPassportValue);
-        dest.writeSerializable(mLastCheckInDate);
+        dest.writeTypedList(mCheckInDates);
         dest.writeSerializable(mGender);
         dest.writeString(mPreferedLanguage);
         dest.writeSerializable(mRegistrationDate);

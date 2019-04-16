@@ -6,7 +6,7 @@
  *
  * This file is licensed under the license of ECESCON11 Android Application project.
  *
- * Version: 0.2
+ * Version: 0.3
  */
 
 package com.sfhmmy.mobile.users;
@@ -48,8 +48,12 @@ public class UserManager {
             = "com.sfhmmy.mobile.users.organization";
     private static final String USER_PREFERENCES_PASSPORT_VALUE_KEY
             = "com.sfhmmy.mobile.users.passport_value";
-    private static final String USER_PREFERENCES_LAST_CHECKIN_DATE_KEY
-            = "com.sfhmmy.mobile.users.last_checkin_date";
+    private static final String USER_PREFERENCES_FIRST_CHECKIN_DATE_KEY
+            = "com.sfhmmy.mobile.users.first_checkin_date";
+    private static final String USER_PREFERENCES_SECOND_CHECKIN_DATE_KEY
+            = "com.sfhmmy.mobile.users.second_checkin_date";
+    private static final String USER_PREFERENCES_THIRD_CHECKIN_DATE_KEY
+            = "com.sfhmmy.mobile.users.third_checkin_date";
     private static final String USER_PREFERENCES_EDUCATION_LEVEL_KEY
             = "com.sfhmmy.mobile.users.education_level";
     private static final String USER_PREFERENCES_DEPARTMENT_KEY
@@ -174,11 +178,6 @@ public class UserManager {
             spe.putString(USER_PREFERENCES_PROFILE_PIC_URL_KEY, u.getProfilePictureURL());
             spe.putString(USER_PREFERENCES_ORGANIZATION_KEY, u.getOrganization());
             spe.putString(USER_PREFERENCES_PASSPORT_VALUE_KEY, u.getPassportValue());
-            spe.putString(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY,
-                          u.getLastCheckInDate() != null ?
-                                  u.getLastCheckInDate().format(DateTimeFormatter.ISO_ZONED_DATE_TIME) :
-                                  null
-            );
             spe.putString(USER_PREFERENCES_EDUCATION_LEVEL_KEY, u.getEducationLevel());
             spe.putString(USER_PREFERENCES_DEPARTMENT_KEY, u.getDepartment());
             spe.putString(USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY,
@@ -195,6 +194,31 @@ public class UserManager {
                                   null
             );
 
+            // Save check-ins of three days in different shared preferences fields.
+            if (u.getCheckinDates() != null) {
+                for (CheckinDate c : u.getCheckinDates()) {
+                    if (c.getDayTag() == null || c.getDate() == null) continue;
+
+                    String key = null;
+
+                    switch (c.getDayTag()) {
+                        case "first":
+                            key = USER_PREFERENCES_FIRST_CHECKIN_DATE_KEY;
+                            break;
+                        case "second":
+                            key = USER_PREFERENCES_SECOND_CHECKIN_DATE_KEY;
+                            break;
+                        case "third":
+                            key = USER_PREFERENCES_THIRD_CHECKIN_DATE_KEY;
+                            break;
+                    }
+
+                    if (key != null) {
+                        spe.putString(key, c.getDate().format(DateTimeFormatter.ISO_ZONED_DATE_TIME));
+                    }
+                }
+            }
+
         } else {
             spe.remove(USER_PREFERENCES_UID_KEY);
             spe.remove(USER_PREFERENCES_EMAIL_KEY);
@@ -205,7 +229,6 @@ public class UserManager {
             spe.remove(USER_PREFERENCES_PROFILE_PIC_URL_KEY);
             spe.remove(USER_PREFERENCES_ORGANIZATION_KEY);
             spe.remove(USER_PREFERENCES_PASSPORT_VALUE_KEY);
-            spe.remove(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY);
             spe.remove(USER_PREFERENCES_EDUCATION_LEVEL_KEY);
             spe.remove(USER_PREFERENCES_DEPARTMENT_KEY);
             spe.remove(USER_PREFERENCES_DEPARTMENT_SPECIALIZATION_KEY);
@@ -213,6 +236,9 @@ public class UserManager {
             spe.remove(USER_PREFERENCES_GENDER_KEY);
             spe.remove(USER_PREFERENCES_PREFERED_LANGUAGE_KEY);
             spe.remove(USER_PREFERENCES_REGISTRATION_DATE_KEY);
+            spe.remove(USER_PREFERENCES_FIRST_CHECKIN_DATE_KEY);
+            spe.remove(USER_PREFERENCES_SECOND_CHECKIN_DATE_KEY);
+            spe.remove(USER_PREFERENCES_THIRD_CHECKIN_DATE_KEY);
         }
 
         spe.apply();
@@ -265,14 +291,6 @@ public class UserManager {
                 u.setGender(null);
             }
 
-            String dateString = sp.getString(USER_PREFERENCES_LAST_CHECKIN_DATE_KEY, null);
-            if (dateString != null) {
-                ZonedDateTime dateTime = ZonedDateTime.parse(
-                        dateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
-                );
-                u.setLastCheckInDate(dateTime);
-            }
-
             String registrationDateString = sp.getString(USER_PREFERENCES_REGISTRATION_DATE_KEY, null);
             if (registrationDateString != null) {
                 ZonedDateTime dateTime = ZonedDateTime.parse(
@@ -280,6 +298,42 @@ public class UserManager {
                 );
                 u.setRegistrationDate(dateTime);
             }
+
+            // Restore check-ins for all three days.
+            List<CheckinDate> checkinsList = new ArrayList<>();
+
+            String firstCheckinDateString = sp.getString(USER_PREFERENCES_FIRST_CHECKIN_DATE_KEY, null);
+            if (firstCheckinDateString != null) {
+                ZonedDateTime dateTime = ZonedDateTime.parse(
+                        firstCheckinDateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
+                );
+                CheckinDate checkin = new CheckinDate();
+                checkin.setDayTag("first");
+                checkin.setDate(dateTime);
+                checkinsList.add(checkin);
+            }
+            String secondCheckinDateString = sp.getString(USER_PREFERENCES_SECOND_CHECKIN_DATE_KEY, null);
+            if (secondCheckinDateString != null) {
+                ZonedDateTime dateTime = ZonedDateTime.parse(
+                        secondCheckinDateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
+                );
+                CheckinDate checkin = new CheckinDate();
+                checkin.setDayTag("second");
+                checkin.setDate(dateTime);
+                checkinsList.add(checkin);
+            }
+            String thirdCheckinDateString = sp.getString(USER_PREFERENCES_THIRD_CHECKIN_DATE_KEY, null);
+            if (thirdCheckinDateString != null) {
+                ZonedDateTime dateTime = ZonedDateTime.parse(
+                        thirdCheckinDateString, DateTimeFormatter.ISO_ZONED_DATE_TIME
+                );
+                CheckinDate checkin = new CheckinDate();
+                checkin.setDayTag("third");
+                checkin.setDate(dateTime);
+                checkinsList.add(checkin);
+            }
+
+            u.setCheckinDates(checkinsList);
         }
 
         return u;
