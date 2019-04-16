@@ -29,3 +29,7 @@ build/
 # NDK
 obj/
 .externalNativeBuild
+
+*.log
+
+app/release/
