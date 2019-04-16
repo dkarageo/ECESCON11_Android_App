@@ -35,6 +35,11 @@ import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
 import com.sfhmmy.mobile.utils.DrawableUtils;
 import com.sfhmmy.mobile.utils.TextUtils;
 
+import org.threeten.bp.ZonedDateTime;
+import org.threeten.bp.format.DateTimeFormatter;
+
+import java.util.List;
+
 
 public class UserProfileFragment extends Fragment {
 
@@ -232,6 +237,42 @@ public class UserProfileFragment extends Fragment {
                                 null,
                                 null,
                                 false);
+
+        // Display check-in dates.
+        List<CheckinDate> checkins = user.getCheckinDates();
+        if (checkins != null) {
+
+            adapter.addEditableItem(
+                    Integer.toString(checkins.size()),
+                    getString(R.string.user_profile_checkins_count_field_title),
+                    null, null, false
+            );
+
+            for (CheckinDate c : checkins) {
+                if (c.getDate() == null) continue;
+
+                ZonedDateTime time = c.getDate();
+                String title = null;
+
+                switch(c.getDayTag()) {
+                    case "first":
+                        title = getString(R.string.user_profile_first_checkin_field_title);
+                        break;
+                    case "second":
+                        title = getString(R.string.user_profile_second_checkin_field_title);
+                        break;
+                    case "third":
+                        title = getString(R.string.user_profile_third_checkin_field_title);
+                        break;
+                }
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy  HH:mm");
+                adapter.addEditableItem(
+                        time.format(formatter), title,null, null,false
+                );
+            }
+        }
+
         mUserDetailList.setAdapter(adapter);
         mUserDetailList.setExpanded(true);
         mUserDetailList.setVerticalScrollBarEnabled(false);

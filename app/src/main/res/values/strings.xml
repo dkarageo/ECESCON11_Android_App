@@ -192,6 +192,10 @@
     <string name="user_profile_department_field_title">School</string>
     <string name="user_profile_department_specialization_field_title">Department</string>
     <string name="user_profile_years_of_experience_field_title">Year of Study</string>
+    <string name="user_profile_checkins_count_field_title">Number of Check-ins done</string>
+    <string name="user_profile_first_checkin_field_title">1st day check-in</string>
+    <string name="user_profile_second_checkin_field_title">2nd day check-in</string>
+    <string name="user_profile_third_checkin_field_title">3rd day check-in</string>
 
     <!-- Conference info related strings -->
     <string name="info_conference_schedule_url">https://sfhmmy.gr/en/the-conference/schedule</string>
