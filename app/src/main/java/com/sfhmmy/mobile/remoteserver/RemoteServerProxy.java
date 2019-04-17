@@ -11,6 +11,7 @@
 
 package com.sfhmmy.mobile.remoteserver;
 
+import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,6 +20,7 @@ import com.google.gson.GsonBuilder;
 import com.sfhmmy.mobile.ImagePost;
 import com.sfhmmy.mobile.battles.BattlesPost;
 import com.sfhmmy.mobile.cache.CacheProvider;
+import com.sfhmmy.mobile.checkins.CheckinDateForCheckinProcess;
 import com.sfhmmy.mobile.remoteserver.deserializers.AccessTokenDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ContentPageDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ListDeserializer;
@@ -26,6 +28,7 @@ import com.sfhmmy.mobile.remoteserver.deserializers.UserDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.WorkshopEnrollStatusDeserializer;
 import com.sfhmmy.mobile.remoteserver.deserializers.ZonedDateTimeDeserializer;
 import com.sfhmmy.mobile.users.AccessToken;
+import com.sfhmmy.mobile.users.CheckinDate;
 import com.sfhmmy.mobile.users.EducationRank;
 import com.sfhmmy.mobile.users.Faculty;
 import com.sfhmmy.mobile.users.Institution;
@@ -35,6 +38,7 @@ import com.sfhmmy.mobile.workshops.Workshop;
 import com.sfhmmy.mobile.workshops.WorkshopEnrollStatusHelper;
 import com.sfhmmy.mobile.workshops.WorkshopEvent;
 
+import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZonedDateTime;
 
 import java.io.IOException;
@@ -49,6 +53,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 
@@ -70,6 +75,10 @@ public class RemoteServerProxy {
             = "remoteserver.RemoteServerProxy.EDUCATION_RANKS_LIST_CACHE_KEY";
     private static final String WORKSHOPS_LIST_CACHE_KEY
             = "remoteserver.RemoteServerProxy.WORKSHOPS_LIST_CACHE_KEY";
+    private static final String USERS_LIST_CACHE_KEY
+            = "remoteserver.RemoteServerProxy.USERS_LIST_CACHE_KEY";
+    private static final String USERS_LIST_CACHE_LAST_UPDATE_KEY
+            = "remoteserver.RemoteServerProxy.USERS_LIST_CACHE_LAST_UPDATE_KEY";
 
     // - Static networking objects -
 
@@ -94,6 +103,12 @@ public class RemoteServerProxy {
 
     private static HttpLoggingInterceptor loggingInterceptor
             = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
+
+    private static ArrayList<User> mCachedUsersList;  // Cached users list.
+    private static List<UsersListFetcherListener> mUsersListFetcherListeners = new ArrayList<>();
+    private static final Object mUserListFetchingLock = new Object();
+    private static boolean mIsUserListFetching = false;
+    private static ZonedDateTime mUserListLastUpdate;
 
 
     private static <S> S createService(Class<S> serviceClass) {
@@ -404,47 +419,186 @@ public class RemoteServerProxy {
 
         ResponseContainer<List<User>> rc = new ResponseContainer<>();
 
-        if (accessToken.equals("secretary123token")) {
-            List<User> users = new ArrayList<>();
-            users.add(getUserProfile("secretary123token"));
-            users.add(getUserProfile("user123token"));
+        ArrayList<User> list = null;
 
-            rc.setObject(users);
-            rc.setCode(RESPONSE_SUCCESS);
-            rc.setMessage("Success");
+        CacheProvider cache = CacheProvider.getCacheProvider();
 
-        } else if (accessToken.equals("user123token")) {
-            rc.setObject(new ArrayList<User>());
-            rc.setCode(RESPONSE_SUCCESS);
-            rc.setMessage("Success");
+        synchronized (mUserListFetchingLock) {
+
+            if (mCachedUsersList != null) {  // Firstly, check if there is a copy in memory.
+                list = mCachedUsersList;
+            } else {  // Then, try to restore from cache.
+                mCachedUsersList = (ArrayList<User>) cache.retrieveObject(USERS_LIST_CACHE_KEY);
+                mUserListLastUpdate = (ZonedDateTime) cache.retrieveObject(
+                        USERS_LIST_CACHE_LAST_UPDATE_KEY
+                );
+                list = mCachedUsersList;
+            }
+
+            // When no copy is available locally, fetch it from remote api.
+            if (list == null) asyncUpdateUsersList(accessToken);
+
+            // Wait until data becomes available or fetcher has stopped.
+            while (mCachedUsersList == null && mIsUserListFetching) {
+                try {
+                    mUserListFetchingLock.wait();
+                } catch (InterruptedException ex) {}
+            }
         }
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {}
+        if (list != null) {
+            rc.setObject(list);
+            rc.setCode(RESPONSE_SUCCESS);
+            rc.setMessage("Success.");
+        } else {
+            rc.setObject(new ArrayList<>());
+            rc.setCode(RESPONSE_ERROR);
+            rc.setMessage("Failed to retrieve users list.");
+        }
 
         return rc;
     }
 
-    public ResponseContainer<User> checkInUser(String accessToken, String codeValue) {
+    public int getCachedUsersListCount() {
+
+        ArrayList<User> list = null;
+
+        CacheProvider cache = CacheProvider.getCacheProvider();
+
+        synchronized (mUserListFetchingLock) {
+
+            if (mCachedUsersList != null) {  // Firstly, check if there is a copy in memory.
+                list = mCachedUsersList;
+            } else {  // Then, try to restore from cache.
+                mCachedUsersList = (ArrayList<User>) cache.retrieveObject(USERS_LIST_CACHE_KEY);
+                list = mCachedUsersList;
+            }
+        }
+
+        return list != null ? list.size() : 0;
+    }
+
+    public ZonedDateTime getCachedUsersListLastUpdate() {
+        ZonedDateTime lastUpdate;
+
+        CacheProvider cache = CacheProvider.getCacheProvider();
+
+        synchronized (mUserListFetchingLock) {
+            if (mUserListLastUpdate != null) {  // Firstly, check if there is a copy in memory.
+                lastUpdate = mUserListLastUpdate;
+            } else {  // Then, try to restore from cache.
+                mUserListLastUpdate = (ZonedDateTime) cache.retrieveObject(
+                        USERS_LIST_CACHE_LAST_UPDATE_KEY
+                );
+                lastUpdate = mUserListLastUpdate;
+            }
+        }
+
+        return lastUpdate;
+    }
+
+    public ResponseContainer<User> checkInUser(String accessToken, String codeValue, String dayTag) {
         ResponseContainer<User> rc = new ResponseContainer<>();
 
-        try {
-            Thread.sleep(2000);
-        } catch(InterruptedException ex) {}
+        final String prefix = "ecescon11://";
+        final String prefixOld = "sfhmmy11://";
 
-        if (codeValue.equals("ecescon11://user")) {
-            rc.setObject(getUserProfile("user123token"));
-            rc.setMessage("User has already checked in today");
-            rc.setCode(RESPONSE_WARNING);
-        } else if (codeValue.equals("ecescon11://secretary")) {
-            rc.setObject(getUserProfile("secretary123token"));
-            rc.setMessage("Success");
-            rc.setCode(RESPONSE_SUCCESS);
+        User userToCheckin = null;
+        String error = null;
+        String warning = null;
+        String passportId = null;
+
+        // Strip given code from prefix.
+        if (codeValue.startsWith(prefix)) {
+            passportId = codeValue.substring(prefix.length());
+        } else if (codeValue.startsWith(prefixOld)) {
+            passportId = codeValue.substring(prefixOld.length());
         } else {
-            rc.setObject(null);
-            rc.setMessage("Invalid code.");
+            error = "Invalid code provided.";
+        }
+
+        // If no token provided, no need to attempt api call.
+        if (TextUtils.isEmpty(accessToken)) {
+            error = "Unauthorized to check-in.";
+        }
+
+        // If no day specified, no need to attempt api call.
+        if (dayTag == null) {
+            error = "No day specified.";
+        }
+
+        // Find user whose passport id is the given one.
+        if (error == null) {
+            synchronized (mUserListFetchingLock) {
+                List<User> users = getUsersList(accessToken).getObject();
+                if (users != null) {
+                    for (User u : users) {
+                        if (u.getPassportValue().equals(passportId)) {
+                            userToCheckin = u;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (userToCheckin == null) {
+                error = "User passport not found.";
+            }
+        }
+
+        // Check if user has already checked-in at given day.
+        if (error == null && userToCheckin.getCheckinDates() != null) {
+            for (CheckinDate c : userToCheckin.getCheckinDates()) {
+                if (c.getDayTag().equals(dayTag)) {
+                    warning = String.format("User has already checked-in for %s day.", dayTag);
+                    break;
+                }
+            }
+        }
+
+        // If a valid user is found, then attempt to check-in him.
+        if (error == null && warning == null) {
+            CheckinDateForCheckinProcess checkin = null;
+
+            EcesconAPI api = createService(EcesconAPI.class);
+            Call<CheckinDateForCheckinProcess> call = api.checkinUser(
+                    "Bearer " + accessToken, userToCheckin.getUid(), dayTag
+            );
+
+            try {
+                checkin = call.execute().body();
+            } catch (IOException ex) {
+                userToCheckin = null;
+                error = "Server refused to check-in user";
+            }
+
+            // Add check-in data to user.
+            if (checkin != null) {
+                CheckinDate properCheckin = new CheckinDate();
+                properCheckin.setDate(checkin.getDate());
+                properCheckin.setDayTag(dayTag);
+                properCheckin.setId(checkin.getId());
+                ArrayList<CheckinDate> checkinsList = userToCheckin.getCheckinDates();
+                checkinsList = checkinsList != null ? checkinsList : new ArrayList<>();
+                checkinsList.add(properCheckin);
+                userToCheckin.setCheckinDates(checkinsList);
+            } else {
+                // There is currently no way to check why server did not complete check-in.
+                // Assume that the user has already checked-in for this day.
+                warning = String.format("User has already checked-in for %s day.", dayTag);
+            }
+        }
+
+        rc.setObject(userToCheckin);
+        if (error != null) {
+            rc.setMessage(error);
             rc.setCode(RESPONSE_ERROR);
+        } else if (warning != null) {
+            rc.setMessage(warning);
+            rc.setCode(RESPONSE_WARNING);
+        } else {
+            rc.setMessage("Success.");
+            rc.setCode(RESPONSE_SUCCESS);
         }
 
         return rc;
@@ -524,6 +678,29 @@ public class RemoteServerProxy {
         return rc;
     }
 
+    public void asyncUpdateUsersList(String accessToken) {
+        synchronized (mUserListFetchingLock) {
+            if (!mIsUserListFetching) {
+                new UsersListFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, accessToken);
+                mIsUserListFetching = true;
+            }
+        }
+    }
+
+    public void registerUsersListFetcherListener(UsersListFetcherListener listener) {
+        mUsersListFetcherListeners.add(listener);
+    }
+
+    public void unregisterUsersListFetcherListener(UsersListFetcherListener listener) {
+        mUsersListFetcherListeners.remove(listener);
+    }
+
+    public void notifyUsersListFetcherListener(int fetchedCount, int totalCount) {
+        for (UsersListFetcherListener l : mUsersListFetcherListeners) {
+            l.onProgressOnUserFetching(fetchedCount, totalCount);
+        }
+    }
+
 
     public class ResponseContainer<T> {
         private T      mObject;
@@ -537,6 +714,10 @@ public class RemoteServerProxy {
         public void setObject(T object) { mObject = object; }
         public void setCode(int code) { mCode = code; }
         public void setMessage(String message) { mMessage = message; }
+    }
+
+    public interface UsersListFetcherListener {
+        void onProgressOnUserFetching(int fetchedCount, int totalCount);
     }
 
 
@@ -572,6 +753,73 @@ public class RemoteServerProxy {
         Call<ContentPage<WorkshopEnrollStatusHelper>>
         getWorkshopsEnrollStatusesList(@Header("Authorization") String accessToken);
 
+        @GET("users")
+        Call<ContentPage<User>> getUsersPage(@Header("Authorization") String accessToken,
+                                             @Query("page") int page);
+
+        @POST("users/{user_id}/checkins")
+        Call<CheckinDateForCheckinProcess> checkinUser(@Header("Authorization") String accessToken,
+                                                       @Path("user_id") long userId,
+                                                       @Query("day") String dayTag);
+
 //        @POST("workshops")
+    }
+
+
+    private class UsersListFetcher extends AsyncTask<String, Integer, Void> {
+        @Override
+        protected Void doInBackground(String... args) {
+
+            String accessToken = args[0];
+            ArrayList<User> list = null;
+
+            CacheProvider cache = CacheProvider.getCacheProvider();
+
+            if (!TextUtils.isEmpty(accessToken)) {
+                list = new ArrayList<>();
+
+                EcesconAPI api = createService(EcesconAPI.class);
+                ContentPage<User> page = null;
+                int curPage = 1;
+
+                do {
+                    Call<ContentPage<User>> call = api.getUsersPage("Bearer " + accessToken, curPage);
+
+                    try {
+                        page = call.execute().body();
+                    } catch(Exception ex) {
+                        list = null;
+                        break;
+                    }
+
+                    if (page != null) {
+                        list.addAll(page.getContentList());
+                        publishProgress(page.getCurrentPage(), page.getTotalPages());
+                    }
+                    ++curPage;
+
+                } while (page != null && page.getContentList().size() > 0);
+            }
+
+            synchronized (mUserListFetchingLock) {
+                // Update memory and disk cache.
+                if (list != null) {
+                    cache.storeObject(USERS_LIST_CACHE_KEY, list);
+                    mCachedUsersList = list;
+                    mUserListLastUpdate = ZonedDateTime.now(ZoneId.systemDefault());
+                    cache.storeObject(USERS_LIST_CACHE_LAST_UPDATE_KEY, mUserListLastUpdate);
+                }
+
+                mIsUserListFetching = false;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            notifyUsersListFetcherListener(values[0], values[1]);
+        }
     }
 }

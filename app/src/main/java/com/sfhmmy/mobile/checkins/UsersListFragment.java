@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.users.User;
+import com.sfhmmy.mobile.users.UserProfileFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class UsersListFragment extends Fragment {
     private SearchView mSearchBar;
 
     private List<OnCheckInRequestListener> mCheckInRequestListeners;
+    private OnViewProfileRequestListener mViewProfileRequestListener;
 
 
     public UsersListFragment() {
@@ -65,8 +68,14 @@ public class UsersListFragment extends Fragment {
         mAdapter = new UsersListRecyclerAdapter(mUsers);
         mAdapter.setOnCheckInRequesListener(new UsersListRecyclerAdapter.OnCheckInRequestListener() {
             @Override
-            public void onCheckInRequested(User user) {
-                notifyOnCheckInRequest(user);
+            public void onCheckInRequested(User user, String dayTag) {
+                notifyOnCheckInRequest(user, dayTag);
+            }
+        });
+        mAdapter.setOnViewProfileRequestListener(new UsersListRecyclerAdapter.OnViewProfileRequestListener() {
+            @Override
+            public void onViewProfile(User user) {
+                notifyOnViewProfileRequest(user);
             }
         });
         mRecyclerView.setAdapter(mAdapter);
@@ -117,9 +126,19 @@ public class UsersListFragment extends Fragment {
         mCheckInRequestListeners.remove(l);
     }
 
-    public void notifyOnCheckInRequest(User user) {
+    public void notifyOnCheckInRequest(User user, String dayTag) {
         for (OnCheckInRequestListener l : mCheckInRequestListeners) {
-            l.onCheckInRequested(user);
+            l.onCheckInRequested(user, dayTag);
+        }
+    }
+
+    public void setOnViewProfileRequestListener(OnViewProfileRequestListener l) {
+        mViewProfileRequestListener = l;
+    }
+
+    public void notifyOnViewProfileRequest(User user) {
+        if (mViewProfileRequestListener != null) {
+            mViewProfileRequestListener.onViewProfileRequested(user);
         }
     }
 
@@ -140,7 +159,12 @@ public class UsersListFragment extends Fragment {
     }
 
 
+    interface OnViewProfileRequestListener {
+        void onViewProfileRequested(User user);
+    }
+
+
     interface OnCheckInRequestListener {
-        void onCheckInRequested(User user);
+        void onCheckInRequested(User user, String dayTag);
     }
 }

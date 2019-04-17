@@ -121,7 +121,7 @@ public class User implements Parcelable, Serializable {
     public ArrayList<CheckinDate> getCheckinDates() { return mCheckInDates; }
 
     public ZonedDateTime getLastCheckInDate() {
-        return mCheckInDates != null ? mCheckInDates.get(0).getDate() : null;
+        return mCheckInDates != null && mCheckInDates.size() > 0 ? mCheckInDates.get(0).getDate() : null;
     }
 
     public void setUid(long uid) { mUid = uid; }

@@ -14,14 +14,18 @@ package com.sfhmmy.mobile.checkins;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.R;
+import com.sfhmmy.mobile.users.CheckinDate;
 import com.sfhmmy.mobile.users.User;
+import com.sfhmmy.mobile.utils.DateTimeUtils;
 
 import org.threeten.bp.ZonedDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -48,6 +52,7 @@ public class UsersListRecyclerAdapter
     private CharSequence mActiveFilter;
 
     private OnCheckInRequestListener mCheckInRequestListener;
+    private OnViewProfileRequestListener mViewProfileRequestListener;
 
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
@@ -55,8 +60,10 @@ public class UsersListRecyclerAdapter
         public TextView mNameSurname;
         public TextView mEmail;
         public Button   mCheckInButton;
+        public Button   mProfileButton;
         public View     mContentArea;
         public TextView mLastCheckIn;
+        public Spinner  mDaySelector;
 
         public UserViewHolder(View v) {
             super(v);
@@ -64,8 +71,10 @@ public class UsersListRecyclerAdapter
             mNameSurname   = v.findViewById(R.id.checkin_users_list_item_name_surname);
             mEmail         = v.findViewById(R.id.checkin_users_list_item_email);
             mCheckInButton = v.findViewById(R.id.checkin_users_list_item_checkin_button);
+            mProfileButton = v.findViewById(R.id.checkin_users_list_item_view_profile_button);
             mContentArea   = v.findViewById(R.id.checkin_users_list_item_content);
             mLastCheckIn   = v.findViewById(R.id.checkin_users_list_item_last_checkin_date_text);
+            mDaySelector   = v.findViewById(R.id.checkin_users_list_item_checkin_day_selector);
         }
     }
 
@@ -94,12 +103,21 @@ public class UsersListRecyclerAdapter
         holder.mNameSurname.setText(String.format("%s %s", curUser.getName(), curUser.getSurname()));
         holder.mEmail.setText(curUser.getEmail());
 
-        ZonedDateTime lastCheckInDate = curUser.getLastCheckInDate();
-        holder.mLastCheckIn.setText(
-                lastCheckInDate == null ?
-                        App.getAppResources().getString(R.string.checkin_users_list_item_no_checkin) :
-                        lastCheckInDate.format(DateTimeFormatter.ofPattern("HH:mm  dd-MM-yyyy"))
-        );
+        // Display time since the last check-in.
+        List<CheckinDate> checkins = curUser.getCheckinDates();
+        ZonedDateTime lastCheckInDate =
+                 checkins != null && checkins.size() > 0 ?
+                        checkins.get(checkins.size()-1).getDate() : null;
+        if (lastCheckInDate != null) {
+            String intervalText = DateTimeUtils.getElapsedTimeInLocalizedText(
+                    lastCheckInDate, ZonedDateTime.now()
+            );
+            holder.mLastCheckIn.setText(intervalText);
+        } else {
+            holder.mLastCheckIn.setText(
+                    App.getAppResources().getString(R.string.checkin_users_list_item_no_checkin)
+            );
+        }
 
         holder.mItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,8 +127,30 @@ public class UsersListRecyclerAdapter
                         content.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
             }
         });
+        holder.mContentArea.setVisibility(View.GONE);
 
-        holder.mCheckInButton.setOnClickListener(new CheckInButtonListener(curUser));
+        ArrayAdapter<CharSequence> selectorAdapter = ArrayAdapter.createFromResource(
+                holder.mDaySelector.getContext(),
+                R.array.checkin_users_list_item_day_selector_options,
+                android.R.layout.simple_spinner_item
+        );
+
+        selectorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        holder.mDaySelector.setAdapter(selectorAdapter);
+
+        holder.mCheckInButton.setOnClickListener(
+                new CheckInButtonListener(curUser, holder.mDaySelector)
+        );
+
+        holder.mProfileButton.setOnClickListener(new View.OnClickListener() {
+
+            User attachedUser = curUser;
+
+            @Override
+            public void onClick(View v) {
+                notifyOnViewProfileRequest(attachedUser);
+            }
+        });
     }
 
     @Override
@@ -130,13 +170,30 @@ public class UsersListRecyclerAdapter
         mCheckInRequestListener = l;
     }
 
-    void notifyOnCheckInRequest(User user) {
-        mCheckInRequestListener.onCheckInRequested(user);
+    void notifyOnCheckInRequest(User user, String dayTag) {
+        if (mCheckInRequestListener != null){
+            mCheckInRequestListener.onCheckInRequested(user, dayTag);
+        }
+    }
+
+    void setOnViewProfileRequestListener(OnViewProfileRequestListener l) {
+        mViewProfileRequestListener = l;
+    }
+
+    void notifyOnViewProfileRequest(User user) {
+        if (mViewProfileRequestListener != null) {
+            mViewProfileRequestListener.onViewProfile(user);
+        }
     }
 
 
     interface OnCheckInRequestListener {
-        void onCheckInRequested(User user);
+        void onCheckInRequested(User user, String dayTag);
+    }
+
+
+    interface OnViewProfileRequestListener {
+        void onViewProfile(User user);
     }
 
 
@@ -186,13 +243,32 @@ public class UsersListRecyclerAdapter
 
     private class CheckInButtonListener implements View.OnClickListener {
         User mAttachedUser;
+        Spinner mSpinner;
 
-        public CheckInButtonListener(User user) {
+        public CheckInButtonListener(User user, Spinner spinner) {
             mAttachedUser = user;
+            mSpinner = spinner;
         }
 
         public void onClick(View v) {
-            notifyOnCheckInRequest(mAttachedUser);
+
+            String dayTag;
+
+            switch(mSpinner.getSelectedItemPosition()) {
+                case 0:
+                    dayTag = "first";
+                    break;
+                case 1:
+                    dayTag = "second";
+                    break;
+                case 2:
+                    dayTag = "third";
+                    break;
+                default:
+                    throw new RuntimeException("Invalid check in day provided.");
+            }
+
+            notifyOnCheckInRequest(mAttachedUser, dayTag);
         }
     }
 }

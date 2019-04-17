@@ -15,18 +15,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
+import com.sfhmmy.mobile.users.UserProfileFragment;
+
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -40,6 +46,8 @@ public class CheckInActivity extends AppCompatActivity {
     UsersListFragment     mUsersFragment;
     ViewPager             mViewPager;
 
+    private boolean mIsProfileViewVisible;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +60,21 @@ public class CheckInActivity extends AppCompatActivity {
                 new CameraScannerFragment.OnCodeFoundEventListener() {
             @Override
             public void onCodeFound(String value) {
-                checkIn(value);
+
+                ZonedDateTime secondDayBegin = ZonedDateTime.parse(
+                        getString(R.string.conference_second_day_starts_at)
+                );
+                ZonedDateTime thirdDayBegin = ZonedDateTime.parse(
+                        getString(R.string.conference_third_day_starts_at)
+                );
+                ZonedDateTime now = ZonedDateTime.now();
+
+                String dayTag;
+                if (now.isBefore(secondDayBegin)) dayTag = "first";
+                else if (now.isBefore(thirdDayBegin)) dayTag = "second";
+                else dayTag = "third";
+
+                checkIn(value, dayTag);
             }
         });
 
@@ -61,8 +83,20 @@ public class CheckInActivity extends AppCompatActivity {
         mUsersFragment.registerOnCheckInRequestListener(
                 new UsersListFragment.OnCheckInRequestListener() {
             @Override
-            public void onCheckInRequested(User user) {
-                checkIn(user.getPassportValue());
+            public void onCheckInRequested(User user, String dayTag) {
+                checkIn("ecescon11://"+user.getPassportValue(), dayTag);
+            }
+        });
+        mUsersFragment.setOnViewProfileRequestListener(new UsersListFragment.OnViewProfileRequestListener() {
+            @Override
+            public void onViewProfileRequested(User user) {
+                UserProfileFragment profileFrag = UserProfileFragment.newInstance(user);
+                FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+                t.replace(R.id.check_in_activity_base_wrapper, profileFrag);
+                t.addToBackStack("checkin_user_profile");
+                t.commit();
+                mIsProfileViewVisible = true;
+                mViewPager.setVisibility(View.GONE);
             }
         });
 
@@ -78,10 +112,10 @@ public class CheckInActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new UsersListFetcher().execute(mUsersFragment);
+        new UsersListFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mUsersFragment);
     }
 
-    private void checkIn(String value) {
+    private void checkIn(String value, String dayTag) {
         // Firstly, display the dialog with its loading spinner.
         CheckInStatusDialogFragment statusDialog = new CheckInStatusDialogFragment();
         statusDialog.show(getSupportFragmentManager(), "statusDialog");
@@ -95,7 +129,7 @@ public class CheckInActivity extends AppCompatActivity {
         });
 
         // Then, handle check-in process on a new thread.
-        new CheckInProcess().execute(value, statusDialog);
+        new CheckInProcess().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dayTag, statusDialog);
     }
 
 
@@ -138,11 +172,12 @@ public class CheckInActivity extends AppCompatActivity {
         @Override
         protected Object[] doInBackground(Object... args) {
             String code = (String) args[0];
-            CheckInStatusDialogFragment dialog = (CheckInStatusDialogFragment) args[1];
+            String dayTag = (String) args[1];
+            CheckInStatusDialogFragment dialog = (CheckInStatusDialogFragment) args[2];
 
             return new Object[] {
                     new RemoteServerProxy().checkInUser(
-                            UserManager.getUserManager().getCurrentUser().getToken(), code),
+                            UserManager.getUserManager().getCurrentUser().getToken(), code, dayTag),
                     dialog
             };
         }
@@ -176,6 +211,15 @@ public class CheckInActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if (mIsProfileViewVisible) {
+            mViewPager.setVisibility(View.VISIBLE);
+            mIsProfileViewVisible = false;
+        }
+    }
 
     /**
      * AsyncTask that fetches the complete user list (includes every registered user).

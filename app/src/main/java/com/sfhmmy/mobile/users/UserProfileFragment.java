@@ -76,9 +76,6 @@ public class UserProfileFragment extends Fragment {
 
         if (context instanceof TopLevelFragmentEventsListener) {
             mTopListener = (TopLevelFragmentEventsListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement TopLevelFragmentEventsListener");
         }
     }
 

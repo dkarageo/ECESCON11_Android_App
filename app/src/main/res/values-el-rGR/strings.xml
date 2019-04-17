@@ -160,6 +160,12 @@
     <string name="checkin_users_list_item_checkin_button_text">Check In</string>
     <string name="checkin_users_list_item_no_checkin">Δεν έχει πραγματοποιηθεί ακόμη</string>
     <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
+    <string name="checkin_users_list_item_view_profile_button_text">Προφιλ</string>
+    <string-array name="checkin_users_list_item_day_selector_options">
+        <item>1η Μέρα</item>
+        <item>2η Μέρα</item>
+        <item>3η Μέρα</item>
+    </string-array>
 
     <!-- User related strings -->
     <string name="user_role_visitor_text">Σύνεδρος</string>

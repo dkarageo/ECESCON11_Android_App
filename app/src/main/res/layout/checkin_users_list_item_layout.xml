@@ -1,98 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:id="@+id/checkin_users_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp">
+    app:cardBackgroundColor="@color/white"
+    card_view:card_elevation="2dp"
+    card_view:cardCornerRadius="4dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/checkin_users_list_item"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white">
+        android:padding="8dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <GridLayout
+            android:id="@+id/checkin_users_list_item_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:columnCount="2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <GridLayout
-                android:id="@+id/checkin_users_list_item_header"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/checkin_users_list_item_name_surname"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:columnCount="2"
+                android:hint="@string/checkin_users_list_item_name_surname_hint"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:layout_columnSpan="2"
+                android:layout_gravity="start"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/checkin_users_list_item_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/checkin_users_list_item_email_hint"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_columnSpan="2"
+                android:layout_gravity="start"
+                android:layout_marginBottom="4dp" />
+        </GridLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/checkin_users_list_item_content"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/checkin_users_list_item_header"
+            android:visibility="visible"
+            android:columnCount="2">
+
+            <View
+                android:id="@+id/checkin_users_list_item_header_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="@color/colorPrimaryDark"
+                android:layout_columnSpan="2"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
-                    android:id="@+id/checkin_users_list_item_name_surname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/checkin_users_list_item_name_surname_hint"
-                    android:textSize="16sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"
-                    android:layout_columnSpan="2"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:id="@+id/checkin_users_list_item_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/checkin_users_list_item_email_hint"
-                    android:textSize="14sp"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:textStyle="bold"
-                    android:layout_columnSpan="2"
-                    android:layout_gravity="start"
-                    android:layout_marginBottom="4dp" />
-            </GridLayout>
-
-            <GridLayout
-                android:id="@+id/checkin_users_list_item_content"
+            <TextView
+                android:id="@+id/checkin_users_list_item_last_checkin_date_hint"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@id/checkin_users_list_item_header"
-                android:visibility="gone"
-                android:columnCount="2">
+                android:text="@string/checkin_users_list_last_checkin_date_hint_text"
+                android:textColor="@color/colorSecondary"
+                app:layout_constraintTop_toBottomOf="@id/checkin_users_list_item_header_divider"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="4dp" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/colorSecondary"
-                    android:layout_columnSpan="2"
-                    android:layout_marginBottom="4dp" />
+            <TextView
+                android:id="@+id/checkin_users_list_item_last_checkin_date_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkin_users_list_last_checkin_date_hint_text"
+                android:textColor="@color/colorSecondary"
+                app:layout_constraintStart_toEndOf="@id/checkin_users_list_item_last_checkin_date_hint"
+                app:layout_constraintTop_toBottomOf="@id/checkin_users_list_item_header_divider"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="4dp"/>
 
-                <TextView
-                    android:id="@+id/checkin_users_list_item_last_checkin_date_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/checkin_users_list_last_checkin_date_hint_text"
-                    android:textColor="@color/colorSecondary"
-                    android:layout_marginEnd="4dp"/>
+            <Spinner
+                android:id="@+id/checkin_users_list_item_checkin_day_selector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/checkin_users_list_item_view_profile_button"
+                app:layout_constraintTop_toBottomOf="@id/checkin_users_list_item_last_checkin_date_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="16dp" />
 
-                <TextView
-                    android:id="@+id/checkin_users_list_item_last_checkin_date_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/checkin_users_list_last_checkin_date_hint_text"
-                    android:textColor="@color/colorSecondary"/>
+            <Button
+                android:id="@+id/checkin_users_list_item_view_profile_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorTextOnPrimaryDark"
+                android:text="@string/checkin_users_list_item_view_profile_button_text"
+                android:layout_marginTop="2dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toStartOf="@id/checkin_users_list_item_checkin_button"
+                app:layout_constraintTop_toBottomOf="@id/checkin_users_list_item_last_checkin_date_hint"
+                android:layout_marginEnd="16dp"/>
 
-                <Button
-                    android:id="@+id/checkin_users_list_item_checkin_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorPrimaryDark"
-                    android:textColor="@color/colorTextOnPrimaryDark"
-                    android:text="@string/checkin_users_list_item_checkin_button_text"
-                    android:layout_marginTop="2dp"
-                    android:visibility="visible"
-                    android:layout_gravity="end"
-                    android:layout_columnSpan="2"/>
-            </GridLayout>
+            <Button
+                android:id="@+id/checkin_users_list_item_checkin_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorTextOnPrimaryDark"
+                android:text="@string/checkin_users_list_item_checkin_button_text"
+                android:layout_marginTop="2dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/checkin_users_list_item_last_checkin_date_hint"
+                app:layout_constraintEnd_toEndOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-</FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

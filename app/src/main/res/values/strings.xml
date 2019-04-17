@@ -172,6 +172,12 @@
     <string name="checkin_users_list_item_checkin_button_text">Check In</string>
     <string name="checkin_users_list_item_no_checkin">No check-in yet</string>
     <string name="checkin_users_list_last_checkin_date_hint_text">Last Check In:</string>
+    <string name="checkin_users_list_item_view_profile_button_text">Profile</string>
+    <string-array name="checkin_users_list_item_day_selector_options">
+        <item>1st Day</item>
+        <item>2nd Day</item>
+        <item>3rd Day</item>
+    </string-array>
 
     <!-- User related strings -->
     <string name="user_role_visitor_text">Visitor</string>
@@ -216,6 +222,9 @@
     <string name="generic_edit_icon_content_description">Edit Icon</string>
     <string name="generic_prompt_for_collapsing_text_view">\tless</string>
     <string name="generic_prompt_for_expanding_text_view">\tmore</string>
+    <string name="conference_first_day_starts_at">2019-04-19T01:00:00.000+03:00[Europe/Athens]</string>
+    <string name="conference_second_day_starts_at">2019-04-20T01:00:00.000+03:00[Europe/Athens]</string>
+    <string name="conference_third_day_starts_at">2019-04-21T01:00:00.000+03:00[Europe/Athens]</string>
 
     <!-- Elapsed time related strings -->
     <string name="utils_elapsed_time_format">%s %s ago</string>
