@@ -11,6 +11,7 @@
 
 package com.sfhmmy.mobile.checkins;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,10 +19,16 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
@@ -107,12 +114,28 @@ public class CheckInActivity extends AppCompatActivity {
         } catch (NullPointerException e) { e.printStackTrace(); }
         mViewPager = findViewById(R.id.qrscanner_viewpager);
         mViewPager.setAdapter(pagerAdapter);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.white)));
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setCustomView(R.layout.action_bar_layout);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         new UsersListFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mUsersFragment);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setStatusBarColor(getResources().getColor(R.color.white));
+        setDarkStatusBarIcons(true);
+        updateTitle(getString(R.string.checkin_activity_action_bar_title));
     }
 
     private void checkIn(String value, String dayTag) {
@@ -258,6 +281,46 @@ public class CheckInActivity extends AppCompatActivity {
                 default:
                     throw new RuntimeException("Unknown code contained in check-in response");
             }
+        }
+    }
+
+    @TargetApi(23)
+    private void setStatusBarColor(int color) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+
+            // clear FLAG_TRANSLUCENT_STATUS flag:
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+            // finally change the color
+            window.setStatusBarColor(color);
+        }
+    }
+
+    @TargetApi(23)
+    private void setDarkStatusBarIcons(boolean darkIcons) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View decor = getWindow().getDecorView();
+
+            if (darkIcons) {
+                decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            } else {
+                decor.setSystemUiVisibility(0);
+            }
+        }
+    }
+
+    private void updateTitle(String newTitle) {
+
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            View view = actionBar.getCustomView();
+            TextView title = view.findViewById(R.id.action_bar_text);
+            if (title != null) title.setText(newTitle);
         }
     }
 }

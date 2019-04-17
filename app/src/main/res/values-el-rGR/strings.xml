@@ -84,6 +84,9 @@
     <string name="main_menu_item_settings_text">Ρυθμίσεις</string>
     <string name="main_menu_item_conference_sponsors_text">Χορηγοί</string>
 
+    <!-- Checkin activity strings -->
+    <string name="checkin_activity_action_bar_title">Διαχείριση</string>
+
     <!-- String related to workshops screen -->
     <string name="workshops_item_name_hint_text">Όνομα Εργαστηρίου</string>
     <string name="workshops_item_image_content_desc">Εικόνα Εργαστηρίου</string>
