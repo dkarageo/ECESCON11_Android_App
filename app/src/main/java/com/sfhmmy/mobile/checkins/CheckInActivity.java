@@ -129,7 +129,7 @@ public class CheckInActivity extends AppCompatActivity {
         });
 
         // Then, handle check-in process on a new thread.
-        new CheckInProcess().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, dayTag, statusDialog);
+        new CheckInProcess().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, value, dayTag, statusDialog);
     }
 
 
