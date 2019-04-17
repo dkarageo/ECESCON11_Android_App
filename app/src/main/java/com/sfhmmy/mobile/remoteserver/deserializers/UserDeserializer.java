@@ -43,7 +43,10 @@ public class UserDeserializer implements JsonDeserializer<User> {
                 .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeDeserializer())
                 .create();
 
-        JsonObject data = je.getAsJsonObject().getAsJsonObject("data");
+        JsonObject data = je.getAsJsonObject();
+        // Single user jsons, encapsulate user data inside a data field, while users lists
+        // contain the whole array inside data field, already parsed be higher level deserializers.
+        if (data.has("data"))data = data.getAsJsonObject("data");
 
         // Initially, bind all matching fields.
         User user = gson.fromJson(data, User.class);
