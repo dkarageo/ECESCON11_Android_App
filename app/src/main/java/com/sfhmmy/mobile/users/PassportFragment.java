@@ -157,7 +157,7 @@ public class PassportFragment extends UserAwareFragment {
             ));
 
             if (serialBitmap == null) {
-                qrImg = generateQRCodeBitmap(String.format("sfhmmy11://%s", user.getPassportValue()));
+                qrImg = generateQRCodeBitmap(String.format("ecescon11://%s", user.getPassportValue()));
 
                 serialBitmap = new SerialBitmap(qrImg);
                 cache.storeObject(String.format(

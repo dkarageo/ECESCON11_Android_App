@@ -217,6 +217,11 @@
         <item>English</item>
         <item>Greek</item>
     </string-array>
+    <string name="preferences_users_list_update">Update users list</string>
+    <string name="preferences_users_list_loading">Loading users list status&#8230;</string>
+    <string name="preferences_users_list_users_count_prefix">Users: </string>
+    <string name="preferences_users_list_updating">Downloading&#8230; %d%% completed.</string>
+    <string name="preferences_users_list_users_last_update_prefix">Updated:</string>
 
     <!-- Generic strings -->
     <string name="generic_edit_icon_content_description">Edit Icon</string>

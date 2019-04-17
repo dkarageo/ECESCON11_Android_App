@@ -201,6 +201,11 @@
         <item>Αγγλικά</item>
         <item>Ελληνικά</item>
     </string-array>
+    <string name="preferences_users_list_update">Ενημέρωση λίστας χρηστών</string>
+    <string name="preferences_users_list_loading">Ενημερώνεται η κατάσταση της λίστας χρηστών&#8230;</string>
+    <string name="preferences_users_list_users_count_prefix">Χρήστες: </string>
+    <string name="preferences_users_list_updating">Ενημέρωση&#8230; %.0f%% ολοκληρώθηκε.</string>
+    <string name="preferences_users_list_users_last_update_prefix">Ενημερώθηκε:</string>
 
     <!-- Generic strings -->
     <string name="generic_edit_icon_content_description">Εικονίδιο Επεξεργασίας</string>
