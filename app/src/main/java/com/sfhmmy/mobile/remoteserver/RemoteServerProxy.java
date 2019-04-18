@@ -116,7 +116,7 @@ public class RemoteServerProxy {
 
         // Add logging interceptor. // TODO: Comment out to disable logging.
         if (!httpClientBuilder.interceptors().contains(loggingInterceptor)) {
-            httpClientBuilder.addInterceptor(loggingInterceptor);
+//            httpClientBuilder.addInterceptor(loggingInterceptor);
             retrofitBuilder.client(httpClientBuilder.build());
             shouldBuild = true;
         }
