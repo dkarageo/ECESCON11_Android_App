@@ -6,10 +6,17 @@
     android:orientation="vertical"
     tools:context=".workshops.WorkshopsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/workshops_recycler_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/workshops_refresh_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="8dp"
-        android:clipToPadding="false" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/workshops_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

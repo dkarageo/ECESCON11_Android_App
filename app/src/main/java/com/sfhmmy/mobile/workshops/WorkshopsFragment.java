@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,8 +45,13 @@ public class WorkshopsFragment extends UserAwareFragment {
     private TopLevelFragmentEventsListener mTopListener;
 
     private RecyclerView             mRecyclerView;
+    private SwipeRefreshLayout       mRefresher;
+
     private WorkshopsRecyclerAdapter mWorkshopsRecyclerAdapter;
     private ArrayList<Workshop>      mWorkshops;
+
+    private boolean mIsRefreshing;
+    private final Object  mRefreshLock = new Object();
 
 
     public WorkshopsFragment() {
@@ -70,6 +76,8 @@ public class WorkshopsFragment extends UserAwareFragment {
         View root = inflater.inflate(R.layout.fragment_workshops, container, false);
 
         mRecyclerView = root.findViewById(R.id.workshops_recycler_view);
+        mRefresher    = root.findViewById(R.id.workshops_refresh_wrapper);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mWorkshopsRecyclerAdapter = new WorkshopsRecyclerAdapter(mWorkshops);
@@ -112,9 +120,17 @@ public class WorkshopsFragment extends UserAwareFragment {
         });
         mRecyclerView.setAdapter(mWorkshopsRecyclerAdapter);
 
+        mRefresher.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
+        mRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchWorkshops(true);
+            }
+        });
+
         if (savedInstanceState == null) {
             // The first time fragment is created, fetch the latest copy of workshops.
-            fetchWorkshops();
+            fetchWorkshops(false);
         } else {
             ArrayList<Workshop> restored
                     = savedInstanceState.getParcelableArrayList(WORKSHOPS_LIST_KEY);
@@ -162,7 +178,7 @@ public class WorkshopsFragment extends UserAwareFragment {
 
         // Every time the user changes, fetch workshops again, so their state keeps consistent with
         // the new user.
-        fetchWorkshops();
+        fetchWorkshops(false);
     }
 
     private void updateWorkshopsList(List<Workshop> workshops) {
@@ -182,19 +198,34 @@ public class WorkshopsFragment extends UserAwareFragment {
         mWorkshopsRecyclerAdapter.updateWorkshopsList(mWorkshops);
     }
 
-    private void fetchWorkshops() {
-        new WorkshopsFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+    private void fetchWorkshops(boolean forceRefresh) {
+        synchronized (mRefreshLock) {
+            if (!mIsRefreshing) {
+                mIsRefreshing = true;
+                new WorkshopsFetcher().executeOnExecutor(
+                        AsyncTask.THREAD_POOL_EXECUTOR, this, forceRefresh
+                );
+            } else {
+                mRefresher.setRefreshing(false);
+            }
+        }
     }
 
-    private static class WorkshopsFetcher extends AsyncTask<WorkshopsFragment, Void, Object[]> {
+    private static class WorkshopsFetcher extends AsyncTask<Object, Void, Object[]> {
 
         @Override
-        protected Object[] doInBackground(WorkshopsFragment... workshopsFragments) {
+        protected Object[] doInBackground(Object... args) {
+
+            WorkshopsFragment fragment = (WorkshopsFragment) args[0];
+            boolean forceRefresh = (Boolean) args[1];
+
             User user = UserManager.getUserManager().getCurrentUser();
             RemoteServerProxy.ResponseContainer<List<Workshop>> rc =
-                    new RemoteServerProxy().getWorkshopsList(user != null ? user.getToken() : null, false);
+                    new RemoteServerProxy().getWorkshopsList(
+                            user != null ? user.getToken() : null, forceRefresh
+                    );
 
-            return new Object[] { rc, workshopsFragments[0] };
+            return new Object[] { rc, fragment };
         }
 
         @Override
@@ -204,6 +235,13 @@ public class WorkshopsFragment extends UserAwareFragment {
             List<Workshop> workshops = rc.getObject();
             WorkshopsFragment target = (WorkshopsFragment) args[1];
             if (target != null && workshops != null) target.updateWorkshopsList(workshops);
+
+            if (target != null) {
+                synchronized (target.mRefreshLock) {
+                    target.mIsRefreshing = false;
+                    target.mRefresher.setRefreshing(false);
+                }
+            }
         }
     }
 
