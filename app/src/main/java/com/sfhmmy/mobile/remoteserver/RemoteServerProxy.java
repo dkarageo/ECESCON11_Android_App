@@ -12,11 +12,13 @@
 package com.sfhmmy.mobile.remoteserver;
 
 import android.os.AsyncTask;
+import android.os.PowerManager;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.ImagePost;
 import com.sfhmmy.mobile.battles.BattlesPost;
 import com.sfhmmy.mobile.cache.CacheProvider;
@@ -417,6 +419,14 @@ public class RemoteServerProxy {
 
     public ResponseContainer<List<User>> getUsersList(String accessToken) {
 
+        PowerManager pm = (PowerManager) App.getAppContext().getSystemService(
+                App.getAppContext().POWER_SERVICE
+        );
+        PowerManager.WakeLock wakeLock = pm.newWakeLock(
+                PowerManager.PARTIAL_WAKE_LOCK,"ECESCON11::users_list_fetching_wakelock"
+        );
+        wakeLock.acquire();
+
         ResponseContainer<List<User>> rc = new ResponseContainer<>();
 
         ArrayList<User> list = null;
@@ -455,6 +465,8 @@ public class RemoteServerProxy {
             rc.setCode(RESPONSE_ERROR);
             rc.setMessage("Failed to retrieve users list.");
         }
+
+        wakeLock.release();
 
         return rc;
     }
