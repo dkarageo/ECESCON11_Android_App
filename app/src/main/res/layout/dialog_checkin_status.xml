@@ -51,12 +51,10 @@
             android:textSize="@dimen/labels_text_size" />
     </FrameLayout>
 
-    <GridLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/checkin_status_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:columnCount="2"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/checkin_status_warning_area"
         app:layout_constraintRight_toRightOf="parent"
@@ -71,74 +69,87 @@
             android:visibility="visible"
             android:layout_columnSpan="2"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp" />
-
-        <TextView
-            android:id="@+id/checkin_status_user_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/checkin_status_user_name_label_text"
             android:layout_marginTop="16dp"
-            android:textSize="@dimen/labels_text_size" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <TextView
-            android:id="@+id/checkin_status_user_name"
+        <GridLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="@string/checkin_status_user_name_label_text"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="8dp"
-            android:textSize="@dimen/labels_text_size" />
+            android:orientation="horizontal"
+            android:columnCount="2"
+            app:layout_constraintTop_toBottomOf="@id/checkin_status_checkmark"
+            app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/checkin_status_user_surname_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/checkin_status_user_surname_label_text"
-            android:layout_marginTop="8dp"
-            android:textSize="@dimen/labels_text_size" />
+            <TextView
+                android:id="@+id/checkin_status_user_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkin_status_user_name_label_text"
+                android:layout_marginTop="16dp"
+                android:textSize="@dimen/labels_text_size" />
 
-        <TextView
-            android:id="@+id/checkin_status_user_surname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/checkin_status_user_surname_label_text"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:textSize="@dimen/labels_text_size" />
+            <TextView
+                android:id="@+id/checkin_status_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/checkin_status_user_name_label_text"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                android:textSize="@dimen/labels_text_size" />
 
-        <TextView
-            android:id="@+id/checkin_status_user_email_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/checkin_status_user_email_label_text"
-            android:layout_marginTop="8dp"
-            android:textSize="@dimen/labels_text_size" />
+            <TextView
+                android:id="@+id/checkin_status_user_surname_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkin_status_user_surname_label_text"
+                android:layout_marginTop="8dp"
+                android:textSize="@dimen/labels_text_size" />
 
-        <TextView
-            android:id="@+id/checkin_status_user_email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/checkin_status_user_email_label_text"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:textSize="@dimen/labels_text_size" />
+            <TextView
+                android:id="@+id/checkin_status_user_surname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/checkin_status_user_surname_label_text"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:textSize="@dimen/labels_text_size" />
 
-        <TextView
-            android:id="@+id/checkin_status_user_org_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/checkin_status_user_org_label_text"
-            android:layout_marginTop="8dp"
-            android:textSize="@dimen/labels_text_size" />
+            <TextView
+                android:id="@+id/checkin_status_user_email_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkin_status_user_email_label_text"
+                android:layout_marginTop="8dp"
+                android:textSize="@dimen/labels_text_size" />
 
-        <TextView
-            android:id="@+id/checkin_status_user_org"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/checkin_status_user_org_label_text"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:textSize="@dimen/labels_text_size" />
-    </GridLayout>
+            <TextView
+                android:id="@+id/checkin_status_user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/checkin_status_user_email_label_text"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:textSize="@dimen/labels_text_size" />
+
+            <TextView
+                android:id="@+id/checkin_status_user_org_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkin_status_user_org_label_text"
+                android:layout_marginTop="8dp"
+                android:textSize="@dimen/labels_text_size" />
+
+            <TextView
+                android:id="@+id/checkin_status_user_org"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/checkin_status_user_org_label_text"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"
+                android:textSize="@dimen/labels_text_size"
+                android:singleLine="false"/>
+        </GridLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
