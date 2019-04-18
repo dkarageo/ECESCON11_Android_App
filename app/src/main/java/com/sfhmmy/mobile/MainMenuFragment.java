@@ -29,8 +29,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.sfhmmy.mobile.about.AboutFragment;
+import com.sfhmmy.mobile.promo.PresentationsFragment;
 import com.sfhmmy.mobile.promo.ScheduleFragment;
 import com.sfhmmy.mobile.promo.SponsorsFragment;
+import com.sfhmmy.mobile.promo.SpotsFragment;
 import com.sfhmmy.mobile.settings.SettingsFragment;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
@@ -197,6 +199,16 @@ public class MainMenuFragment extends UserAwareFragment {
                                     getResources().getDrawable(R.drawable.ecescon_icon),
                                     R.color.colorPrimary),
                                     new InfoButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_conference_presentations_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_presentation),
+                                    R.color.colorPrimary),
+                            new PresentationsButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_conference_spots_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_cheers),
+                                    R.color.colorPrimary),
+                            new SpotsButtonHandler())
                     .addButtonItem(getString(R.string.main_menu_item_conference_sponsors_text),
                             DrawableUtils.applyTintToDrawable(
                                     getResources().getDrawable(R.drawable.icon_sponsors),
@@ -230,6 +242,16 @@ public class MainMenuFragment extends UserAwareFragment {
                                     getResources().getDrawable(R.drawable.ecescon_icon),
                                     R.color.colorPrimary),
                                     new InfoButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_conference_presentations_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_presentation),
+                                    R.color.colorPrimary),
+                            new PresentationsButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_conference_spots_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_cheers),
+                                    R.color.colorPrimary),
+                            new SpotsButtonHandler())
                     .addButtonItem(getString(R.string.main_menu_item_conference_sponsors_text),
                             DrawableUtils.applyTintToDrawable(
                                     getResources().getDrawable(R.drawable.icon_sponsors),
@@ -318,6 +340,44 @@ public class MainMenuFragment extends UserAwareFragment {
                     @Override
                     public Fragment createFragment() {
                         return new SponsorsFragment();
+                    }
+                }, true);
+            }
+        }
+    }
+
+    private class PresentationsButtonHandler implements  View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (mTopListener != null) {
+                mTopListener.navigateToNavigableKey(new NavigableKey() {
+                    @Override
+                    public String getKey() {
+                        return "conference_presentations_fragment";
+                    }
+
+                    @Override
+                    public Fragment createFragment() {
+                        return new PresentationsFragment();
+                    }
+                }, true);
+            }
+        }
+    }
+
+    private class SpotsButtonHandler implements  View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (mTopListener != null) {
+                mTopListener.navigateToNavigableKey(new NavigableKey() {
+                    @Override
+                    public String getKey() {
+                        return "conference_spots_fragment";
+                    }
+
+                    @Override
+                    public Fragment createFragment() {
+                        return new SpotsFragment();
                     }
                 }, true);
             }

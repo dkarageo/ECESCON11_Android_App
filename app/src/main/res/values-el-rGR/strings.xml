@@ -18,6 +18,8 @@
     <string name="profile_menu_tile">Λογαριασμός</string>
     <string name="about_action_bar_title">Σχετικά</string>
     <string name="user_profile_action_bar_title">Το προφίλ μου</string>
+    <string name="presentations_title">Παρουσιάσεις</string>
+    <string name="spots_title">ΣΦΗΜΜΥ Spots</string>
 
     <!-- Main Action Bar Titles -->
     <string name="mainactivity_actionbar_menu_profile_title">Προφίλ</string>
@@ -83,6 +85,8 @@
     <string name="main_menu_header_generic_user_name">Ένας σπουδαίος μηχανικός&#8230;</string>
     <string name="main_menu_item_settings_text">Ρυθμίσεις</string>
     <string name="main_menu_item_conference_sponsors_text">Χορηγοί</string>
+    <string name="main_menu_item_conference_presentations_text">Παρουσιάσεις</string>
+    <string name="main_menu_item_conference_spots_text">ΣΦΗΜΜΥ Spots</string>
 
     <!-- Checkin activity strings -->
     <string name="checkin_activity_action_bar_title">Διαχείριση</string>
@@ -197,6 +201,8 @@
     <!-- Conference info related strings -->
     <string name="info_conference_schedule_url">https://sfhmmy.gr/%CF%84%CE%BF-%CF%83%CF%85%CE%BD%CE%AD%CE%B4%CF%81%CE%B9%CE%BF/%CF%80%CF%81%CF%8C%CE%B3%CF%81%CE%B1%CE%BC%CE%BC%CE%B1</string>
     <string name="info_sponsors_url">https://sfhmmy.gr/%CF%87%CE%BF%CF%81%CE%B7%CE%B3%CE%BF%CE%AF</string>
+    <string name="info_presentations_url">https://sfhmmy.gr/%CF%84%CE%BF-%CF%83%CF%85%CE%BD%CE%AD%CE%B4%CF%81%CE%B9%CE%BF/%CF%80%CE%B1%CF%81%CE%BF%CF%85%CF%83%CE%B9%CE%AC%CF%83%CE%B5%CE%B9%CF%82</string>
+    <string name="info_spots_url">https://sfhmmy.gr/%CF%84%CE%BF-%CF%83%CF%85%CE%BD%CE%AD%CE%B4%CF%81%CE%B9%CE%BF/%CE%B4%CF%81%CE%B1%CF%83%CF%84%CE%B7%CF%81%CE%B9%CF%8C%CF%84%CE%B7%CF%84%CE%B5%CF%82/%CE%A3%CE%A6%CE%97%CE%9C%CE%9C%CE%A5-spots</string>
 
     <!-- Preferences strings -->
     <string name="preferences_locale_selector_header_text">Γλώσσα</string>
