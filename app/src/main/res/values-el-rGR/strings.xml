@@ -131,7 +131,7 @@
 
     <!-- Strings related to about screen -->
     <string name="about_app_name">Mobile Εφαρμογή ΣΦΗΜΜΥ 11</string>
-    <string name="about_app_version">έκδοση 0.1 (beta)</string>
+    <string name="about_app_version">έκδοση 1.0</string>
     <string name="about_designer_header">- Σχεδιασμός &amp; Επιμέλεια -</string>
     <string name="about_programming_header">- Προγραμματισμός -</string>
     <string name="about_coordination_header">- IT Team Coordination &amp; Operations -</string>

@@ -94,7 +94,7 @@
 
     <!-- Strings related to about screen -->
     <string name="about_app_name">ECESCON 11 Mobile App</string>
-    <string name="about_app_version">version 0.1 (beta)</string>
+    <string name="about_app_version">version 1.0</string>
     <string name="about_designer_header">- Architecture Designing -</string>
     <string name="about_programming_header">- Programming -</string>
     <string name="about_coordination_header">- IT Team Coordination &amp; Operations -</string>
