@@ -16,6 +16,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -62,14 +63,18 @@ public class LocalFirebaseMessagingService extends FirebaseMessagingService {
 
         String channelId = "fcm_default_channel";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ecescon_icon)
                         .setContentTitle(messageTitle)
                         .setColor(getResources().getColor(R.color.colorPrimary))
                         .setContentText(messageBody)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(messageBody))
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
+                        .setVibrate(new long[] { 1000, 1000, 1000 })
+                        .setLights(Color.YELLOW, 2000, 2000)
                         .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
