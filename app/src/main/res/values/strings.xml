@@ -160,6 +160,7 @@
     <string name="main_menu_item_conference_sponsors_text">Sponsors</string>
     <string name="main_menu_item_conference_presentations_text">Presentations</string>
     <string name="main_menu_item_conference_spots_text">ECESCON Spots</string>
+    <string name="main_menu_item_panelsensor_text" translatable="false">PanelSensor</string>
 
     <!-- Checkin activity strings -->
     <string name="checkin_activity_action_bar_title">Management</string>

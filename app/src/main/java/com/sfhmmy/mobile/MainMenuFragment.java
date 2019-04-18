@@ -13,6 +13,8 @@ package com.sfhmmy.mobile;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -214,6 +216,11 @@ public class MainMenuFragment extends UserAwareFragment {
                                     getResources().getDrawable(R.drawable.icon_sponsors),
                                     R.color.colorPrimary),
                             new SponsorsButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_panelsensor_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_panelsensor),
+                                    R.color.colorPrimary),
+                            new PanelSensorButtonHandler())
                     .addButtonItem(getString(R.string.main_menu_item_change_account_text),
                             DrawableUtils.applyTintToDrawable(
                                     getResources().getDrawable(R.drawable.logout_icon),
@@ -256,7 +263,12 @@ public class MainMenuFragment extends UserAwareFragment {
                             DrawableUtils.applyTintToDrawable(
                                     getResources().getDrawable(R.drawable.icon_sponsors),
                                     R.color.colorPrimary),
-                                    new SponsorsButtonHandler())
+                            new SponsorsButtonHandler())
+                    .addButtonItem(getString(R.string.main_menu_item_panelsensor_text),
+                            DrawableUtils.applyTintToDrawable(
+                                    getResources().getDrawable(R.drawable.icon_panelsensor),
+                                    R.color.colorPrimary),
+                            new PanelSensorButtonHandler())
                     .addButtonItem(getString(R.string.main_menu_item_settings_text),
                             DrawableUtils.applyTintToDrawable(
                                     getResources().getDrawable(R.drawable.icon_settings),
@@ -419,6 +431,17 @@ public class MainMenuFragment extends UserAwareFragment {
                     }
                 }, true);
             }
+        }
+    }
+
+    private class PanelSensorButtonHandler implements  View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Intent browserIntent = new Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("http://app.panelsensor.com/site/feed/sfhmmy")
+            );
+            startActivity(browserIntent);
         }
     }
 }
