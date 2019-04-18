@@ -46,6 +46,12 @@ public class UsersListFragment extends Fragment {
     private List<OnCheckInRequestListener> mCheckInRequestListeners;
     private OnViewProfileRequestListener mViewProfileRequestListener;
 
+    private final Object mUpdateAdapterLock = new Object();
+    private boolean mHasInitialized = false;
+
+    private String mPendingErrorMessage;
+    private boolean mIsPendingErrorMessageWarning;
+
 
     public UsersListFragment() {
         mUsers = new ArrayList<>();
@@ -65,7 +71,10 @@ public class UsersListFragment extends Fragment {
         // Use a linear layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        mAdapter = new UsersListRecyclerAdapter(mUsers);
+        synchronized (mUpdateAdapterLock) {
+            mAdapter = new UsersListRecyclerAdapter(mUsers);
+        }
+
         mAdapter.setOnCheckInRequesListener(new UsersListRecyclerAdapter.OnCheckInRequestListener() {
             @Override
             public void onCheckInRequested(User user, String dayTag) {
@@ -86,35 +95,51 @@ public class UsersListFragment extends Fragment {
         mErrorWrapper = rootView.findViewById(R.id.checkin_users_list_warning_area);
         mErrorText = rootView.findViewById(R.id.checkin_users_list_warning_text);
 
+        mHasInitialized = true;
+        if (mPendingErrorMessage != null) {
+            displayError(mPendingErrorMessage, mIsPendingErrorMessageWarning);
+            mPendingErrorMessage = null;
+        }
+        mAdapter.updateDataset(mUsers);
+
         return rootView;
     }
 
     public void updateUsersList(List<User> users) {
         if (users != null) {
-            mUsers.clear();
-            mUsers.addAll(users);
-            mAdapter.updateDataset(mUsers);
+            synchronized (mUpdateAdapterLock) {
+                mUsers.clear();
+                mUsers.addAll(users);
+
+                if (mHasInitialized) mAdapter.updateDataset(mUsers);
+            }
         }
     }
 
     public void displayError(String message, boolean isWarning) {
-        if (message != null) {
-            mErrorWrapper.setVisibility(View.VISIBLE);
-            mErrorText.setText(message);
 
-            if (isWarning) {
-                mErrorWrapper.setBackgroundColor(
-                        getResources().getColor(R.color.warningBackgroundColor));
-                mErrorText.setTextColor(
-                        getResources().getColor(R.color.warningTextOnWarningBackgroundColor));
-            } else {
-                mErrorWrapper.setBackgroundColor(
-                        getResources().getColor(R.color.errorBackgroundColor));
-                mErrorText.setTextColor(
-                        getResources().getColor(R.color.errorTextOnErrorBackgroundColor));
-            }
+        if (!mHasInitialized) {
+            mPendingErrorMessage = message;
+            mIsPendingErrorMessageWarning = isWarning;
         } else {
-            mErrorWrapper.setVisibility(View.GONE);
+            if (message != null) {
+                mErrorWrapper.setVisibility(View.VISIBLE);
+                mErrorText.setText(message);
+
+                if (isWarning) {
+                    mErrorWrapper.setBackgroundColor(
+                            getResources().getColor(R.color.warningBackgroundColor));
+                    mErrorText.setTextColor(
+                            getResources().getColor(R.color.warningTextOnWarningBackgroundColor));
+                } else {
+                    mErrorWrapper.setBackgroundColor(
+                            getResources().getColor(R.color.errorBackgroundColor));
+                    mErrorText.setTextColor(
+                            getResources().getColor(R.color.errorTextOnErrorBackgroundColor));
+                }
+            } else {
+                mErrorWrapper.setVisibility(View.GONE);
+            }
         }
     }
 

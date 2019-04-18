@@ -62,7 +62,7 @@ public class CheckInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_checkin);
 
         // Create and setup a new camera scanner fragment.
-        mScannerFragment = new CameraScannerFragment();
+        if (mScannerFragment == null) mScannerFragment = new CameraScannerFragment();
         mScannerFragment.registerOnCodeFoundEventListener(
                 new CameraScannerFragment.OnCodeFoundEventListener() {
             @Override
@@ -86,7 +86,7 @@ public class CheckInActivity extends AppCompatActivity {
         });
 
         // Create and setup a new users list fragment.
-        mUsersFragment = new UsersListFragment();
+        if (mUsersFragment == null) mUsersFragment = new UsersListFragment();
         mUsersFragment.registerOnCheckInRequestListener(
                 new UsersListFragment.OnCheckInRequestListener() {
             @Override
@@ -170,6 +170,23 @@ public class CheckInActivity extends AppCompatActivity {
                     return mUsersFragment;
                 default:
                     return null;
+            }
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            switch (position) {
+                case 0:
+                    return mScannerFragment.hashCode();
+                case 1:
+                    return mUsersFragment.hashCode();
+                default:
+                    return POSITION_NONE;
             }
         }
 
