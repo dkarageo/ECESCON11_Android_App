@@ -76,6 +76,9 @@ public class UserManager {
 
     // Current active user of the application.
     private User mCurrentUser = null;
+    private final Object mCurrentUserModifyLock = new Object();
+    private boolean mIsUserRefreshing = false;
+
 
     private UserManager() {
         authenticationListeners = new ArrayList<>();
@@ -129,6 +132,19 @@ public class UserManager {
         mCurrentUser = null;
         saveUserObject(null);
         notifyOnSessionDestroyed();
+    }
+
+    public void refreshUser() {
+        synchronized (mCurrentUserModifyLock) {
+            if (!mIsUserRefreshing) {
+                mIsUserRefreshing = true;
+                new UserRefreshTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        }
+    }
+
+    public boolean isUserRefreshing() {
+        return mIsUserRefreshing;
     }
 
     /**
@@ -373,10 +389,13 @@ public class UserManager {
             String token = proxy.acquireOAuth2Token(email, pass);
             if (token == null) return null;
 
-            mCurrentUser = proxy.getUserProfile(token);
+            User newUser = proxy.getUserProfile(token);
 
-            // If a user object is returned, save it. It now represents the logged in user.
-            if (mCurrentUser != null) saveUserObject(mCurrentUser);
+            synchronized (mCurrentUserModifyLock) {
+                mCurrentUser = newUser;
+                // If a user object is returned, save it. It now represents the logged in user.
+                if (mCurrentUser != null) saveUserObject(mCurrentUser);
+            }
 
             return mCurrentUser;
         }
@@ -403,7 +422,9 @@ public class UserManager {
             boolean isAlive = new RemoteServerProxy().isOAuth2TokenValid(u.getToken());
 
             if (isAlive) {
-                mCurrentUser = u;
+                synchronized (mCurrentUserModifyLock) {
+                    mCurrentUser = u;
+                }
                 return u;
             } else return null;
         }
@@ -415,6 +436,41 @@ public class UserManager {
             // TODO: Implement cause specific errors.
             if (u != null) notifyOnSessionCreated(getCurrentUser());
             else notifyOnSessionRestorationFailure();
+
+            // Always start a user refresh process at the end.
+            refreshUser();
+        }
+    }
+
+    /**
+     * Async task for refreshing user state.
+     */
+    private class UserRefreshTask extends AsyncTask<Void, Void, User> {
+        @Override
+        protected User doInBackground(Void... params) {
+            if (getCurrentUser() != null && getCurrentUser().getToken() != null) {
+                RemoteServerProxy proxy = new RemoteServerProxy();
+                User refreshed = proxy.getUserProfile(getCurrentUser().getToken());
+
+                synchronized (mCurrentUserModifyLock) {
+                    mCurrentUser = refreshed;
+                    saveUserObject(refreshed);
+                }
+            }
+
+            return mCurrentUser;
+        }
+
+        @Override
+        protected void onPostExecute(User u) {
+            // When background worker returns no users, notify authentication listeners
+            // about the error.
+            if (u != null) notifyOnSessionCreated(u);
+            else notifyOnSessionRestorationFailure();
+
+            synchronized (mCurrentUserModifyLock) {
+                mIsUserRefreshing = false;
+            }
         }
     }
 }
