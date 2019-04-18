@@ -170,7 +170,7 @@ public class PassportFragment extends UserAwareFragment {
         if (qrImg == null && user.getPassportValue() != null) {
             CacheProvider cache = CacheProvider.getCacheProvider();
             SerialBitmap serialBitmap = (SerialBitmap) cache.retrieveObject(String.format(
-                    "%s%s", QR_IMAGE_CACHE_KEY_BASE, user.getPassportValue()
+                    "%s%s", QR_IMAGE_CACHE_KEY_BASE+user.getPassportValue(), user.getPassportValue()
             ));
 
             if (serialBitmap == null) {
@@ -178,7 +178,7 @@ public class PassportFragment extends UserAwareFragment {
 
                 serialBitmap = new SerialBitmap(qrImg);
                 cache.storeObject(String.format(
-                        "%s%s", QR_IMAGE_CACHE_KEY_BASE, user.getPassportValue()),
+                        "%s%s", QR_IMAGE_CACHE_KEY_BASE+user.getPassportValue(), user.getPassportValue()),
                         serialBitmap
                 );
 
