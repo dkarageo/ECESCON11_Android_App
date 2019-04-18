@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import androidx.annotation.NonNull;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -54,15 +55,16 @@ public class PassportFragment extends UserAwareFragment {
 
     private TopLevelFragmentEventsListener mTopListener;
 
-    private ImageView       mQRCode;
-    private CircleImageView mProfilePicture;
-    private TextView        mNameSurname;
-    private TextView        mUserEmail;
-    private TextView        mUserOrg;
-    private TextView        mUserRole;
-    private View            mUserCardContainer;
-    private View            mUserMissingCardContainer;
-    private Button          mLoginButton;
+    private ImageView          mQRCode;
+    private CircleImageView    mProfilePicture;
+    private TextView           mNameSurname;
+    private TextView           mUserEmail;
+    private TextView           mUserOrg;
+    private TextView           mUserRole;
+    private View               mUserCardContainer;
+    private View               mUserMissingCardContainer;
+    private Button             mLoginButton;
+    private SwipeRefreshLayout mRefresher;
 
     private Bitmap qrImg = null;  // Bitmap of QR Code, generated once upon fragment's creation.
 
@@ -103,6 +105,7 @@ public class PassportFragment extends UserAwareFragment {
         mUserCardContainer        = root.findViewById(R.id.passport_user_card_container);
         mUserMissingCardContainer = root.findViewById(R.id.passport_user_missing_card_container);
         mLoginButton              = root.findViewById(R.id.passport_unlogged_user_notification_login_button);
+        mRefresher                = root.findViewById(R.id.passport_refresher);
 
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +116,18 @@ public class PassportFragment extends UserAwareFragment {
 
         // Make sure that profile picture is not hidden by qr code wrapper.
         mProfilePicture.bringToFront();
+
+        // Setup user refresher.
+        mRefresher.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark));
+        mRefresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                UserManager manager = UserManager.getUserManager();
+                // Make sure that spinning icon is displayed only when user manager is going to
+                // start a new refresh process, so it will be cleared on refresh.
+                if (!manager.isUserRefreshing()) UserManager.getUserManager().refreshUser();
+            }
+        });
 
         return root;
     }
@@ -135,6 +150,8 @@ public class PassportFragment extends UserAwareFragment {
 
         if (user != null) displayUserCard(user);
         else displayUserMissingCard();
+
+        mRefresher.setRefreshing(false);
     }
 
     private void displayUserCard(User user) {
@@ -181,11 +198,15 @@ public class PassportFragment extends UserAwareFragment {
                 .load(user.getProfilePictureURL())
                 .dontAnimate()
                 .into(mProfilePicture);
+
+        mRefresher.setEnabled(true);
     }
 
     private void displayUserMissingCard() {
         mUserCardContainer.setVisibility(View.GONE);
         mUserMissingCardContainer.setVisibility(View.VISIBLE);
+
+        mRefresher.setEnabled(false);
     }
 
     private void updateUserRole(User user) {
