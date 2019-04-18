@@ -14,10 +14,11 @@
     <string name="workshops_title">Τα εργαστήριά μου</string>
     <string name="passport_title">Κάρτα συνεδρίου</string>
     <string name="battles_title">Photoshop Battles</string>
-    <string name="info_title">Το συνέδριό μας</string>
+    <string name="schedule_title">Πρόγραμμα Συνεδρίου</string>
     <string name="profile_menu_tile">Λογαριασμός</string>
     <string name="about_action_bar_title">Σχετικά</string>
     <string name="user_profile_action_bar_title">Το προφίλ μου</string>
+    <string name="sponsors_title">Χορηγοί</string>
     <string name="presentations_title">Παρουσιάσεις</string>
     <string name="spots_title">ΣΦΗΜΜΥ Spots</string>
 

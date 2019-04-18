@@ -13,10 +13,11 @@
     <string name="workshops_title">Workshops</string>
     <string name="passport_title">My Conference Card</string>
     <string name="battles_title">Photoshop Battles</string>
-    <string name="info_title">The Conference</string>
+    <string name="schedule_title">Schedule</string>
     <string name="profile_menu_tile">Account</string>
     <string name="about_action_bar_title">About</string>
     <string name="user_profile_action_bar_title">My Profile</string>
+    <string name="sponsors_title">Sponsors</string>
     <string name="presentations_title">Presentations</string>
     <string name="spots_title">ECESCON Spots</string>
 

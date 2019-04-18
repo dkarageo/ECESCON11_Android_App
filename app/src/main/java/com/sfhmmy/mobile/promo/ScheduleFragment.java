@@ -70,7 +70,7 @@ public class ScheduleFragment extends UserAwareFragment {
         super.onStart();
 
         if (mTopListener != null) {
-            mTopListener.updateTitle(getString(R.string.info_title));
+            mTopListener.updateTitle(getString(R.string.schedule_title));
         }
     }
 
