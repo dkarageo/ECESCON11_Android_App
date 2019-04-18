@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-crash'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -50,6 +51,7 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.github.paolorotolo:expandableheightlistview:1.0.0'
+    implementation 'com.google.firebase:firebase-crash:16.2.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'jp.wasabeef:glide-transformations:4.0.1'
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
