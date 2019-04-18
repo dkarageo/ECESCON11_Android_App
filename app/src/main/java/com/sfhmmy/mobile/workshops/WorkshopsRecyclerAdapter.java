@@ -30,6 +30,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+import cdflynn.android.library.checkview.CheckView;
 
 
 public class WorkshopsRecyclerAdapter
@@ -53,6 +54,7 @@ public class WorkshopsRecyclerAdapter
         TextView  mTime;
         TextView  mMoreSessionsNotifier;
         CardView  mContainerCard;
+        CheckView mAcceptedMark;
 
         WorkshopVH(View v) {
             super(v);
@@ -63,6 +65,7 @@ public class WorkshopsRecyclerAdapter
             mTime                 = v.findViewById(R.id.workshops_item_time);
             mContainerCard        = v.findViewById(R.id.workshops_item_container);
             mMoreSessionsNotifier = v.findViewById(R.id.workshops_item_more_dates);
+            mAcceptedMark         = v.findViewById(R.id.workshops_item_check_mark);
         }
     }
 
@@ -176,7 +179,6 @@ public class WorkshopsRecyclerAdapter
         Workshop curWorkshop = mWorkshops.get(position);
         List<WorkshopEvent> events = curWorkshop.getWorkshopEvents();
 
-
         holder.mName.setText(curWorkshop.getName());
 
         if (events != null) {
@@ -219,6 +221,12 @@ public class WorkshopsRecyclerAdapter
                 holder.mMoreSessionsNotifier.setVisibility(View.GONE);
             }
 
+            if (curWorkshop.getEnrollStatus() == Workshop.EnrollStatus.ACCEPTED) {
+                holder.mAcceptedMark.setVisibility(View.VISIBLE);
+                holder.mAcceptedMark.check();
+            } else {
+                holder.mAcceptedMark.setVisibility(View.GONE);
+            }
         }
 
         holder.mContainerCard.setOnClickListener(new WorkshopCardClickListener(curWorkshop));
