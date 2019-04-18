@@ -11,6 +11,7 @@
 
 package com.sfhmmy.mobile.workshops;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,13 +26,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sfhmmy.mobile.App;
 import com.sfhmmy.mobile.NavigableKey;
 import com.sfhmmy.mobile.R;
 import com.sfhmmy.mobile.UserAwareFragment;
 import com.sfhmmy.mobile.TopLevelFragmentEventsListener;
+import com.sfhmmy.mobile.notifications.LocalNotificationsManager;
+import com.sfhmmy.mobile.notifications.Notification;
 import com.sfhmmy.mobile.remoteserver.RemoteServerProxy;
 import com.sfhmmy.mobile.users.User;
 import com.sfhmmy.mobile.users.UserManager;
+
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -185,6 +191,8 @@ public class WorkshopsFragment extends UserAwareFragment {
         mWorkshops.clear();
         mWorkshops.addAll(workshops);
         mWorkshopsRecyclerAdapter.updateWorkshopsList(mWorkshops);
+
+        new WorkshopsNotificationSetter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void updateWorkshop(Workshop updated) {
@@ -294,6 +302,42 @@ public class WorkshopsFragment extends UserAwareFragment {
                     AsyncTask.THREAD_POOL_EXECUTOR,
                     workshop, answer, event, mTarget, WorkshopsFragment.this
             );
+        }
+    }
+
+    private class WorkshopsNotificationSetter extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            LocalNotificationsManager manager = LocalNotificationsManager.getNotificationsManager();
+
+            for (Workshop w : mWorkshops) {
+                if (w.getWorkshopEvents() == null || w.getWorkshopEvents().size() == 0) continue;
+
+                if (w.getEnrollStatus() == Workshop.EnrollStatus.ACCEPTED) {
+
+                    int eventCount = 0;
+
+                    for (WorkshopEvent ev : w.getWorkshopEvents()) {
+
+                        Notification n = new Notification();
+                        n.setId(10000*w.getId() + eventCount);
+                        n.setTitle(App.getAppContext().getString(R.string.workshops_notification_title));
+                        n.setBody(String.format(App.getAppContext().getString(R.string.workshops_notification_body),
+                                                w.getName()));
+
+                        // Set notification for each
+                        n.setTime(ev.getBeginDate().minusHours(1));
+
+                        ++eventCount;
+
+                        manager.sendNotification(n);
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -68,6 +68,8 @@
     <string name="workshops_unlogged_user_notification_text">You have not logged in yet. In order to enroll into workshops, please log in!</string>
     <string name="workshops_unlogged_user_notification_login_button_text">Login</string>
     <string name="workshops_unlogged_user_notification_icon_content_desc">Info Icon</string>
+    <string name="workshops_notification_title">A workshop is about to begin&#8230;</string>
+    <string name="workshops_notification_body">A session of workshop %s is starting in less than an hour!</string>
 
     <!-- String related to workshops detail screen -->
     <string name="workshop_detail_description_header_text">What to expect?</string>

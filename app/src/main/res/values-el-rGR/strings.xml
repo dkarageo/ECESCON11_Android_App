@@ -105,6 +105,8 @@
     <string name="workshops_unlogged_user_notification_text">Δεν έχετε πραγματοποιήσει είσοδο. Προκειμένου να εγγραφείτε στα εργαστήρια, παρακαλούμε συνδεθείτε!</string>
     <string name="workshops_unlogged_user_notification_login_button_text">Είσοδος</string>
     <string name="workshops_unlogged_user_notification_icon_content_desc">Εικονίδιο Πληροφοριών</string>
+    <string name="workshops_notification_title">Το εργαστήριό σας πλησιάζει!&#8230;</string>
+    <string name="workshops_notification_body">Μια συνεδρία του εργαστηρίου %s ξεκινάει σε λιγότερο από μία ώρα!</string>
 
     <!-- String related to workshops detail screen -->
     <string name="workshop_detail_description_header_text">Τι θα δείτε;</string>
