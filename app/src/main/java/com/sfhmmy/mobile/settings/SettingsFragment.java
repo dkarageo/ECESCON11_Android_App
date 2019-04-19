@@ -90,8 +90,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     R.color.colorPrimary
             ));
 
-            new UsersListStatusFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
             mUsersListUpdate.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -109,6 +107,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onResume() {
         super.onResume();
         mProxy.registerUsersListFetcherListener(mUsersListFetcherListener);
+        new UsersListStatusFetcher().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -125,8 +124,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             RemoteServerProxy proxy = new RemoteServerProxy();
             int usersCount = proxy.getCachedUsersListCount();
             ZonedDateTime lastUpdate = proxy.getCachedUsersListLastUpdate();
+            int[] checkinsPerDay = proxy.getCachedUsersListCheckinsCount();
 
-            return new Object[] { usersCount, lastUpdate };
+            return new Object[] { usersCount, lastUpdate, checkinsPerDay };
         }
 
         @Override
@@ -135,6 +135,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             int usersCount = (Integer) args[0];
             ZonedDateTime lastUpdate = (ZonedDateTime) args[1];
+            int[] checkinsPerDay = (int[]) args[2];
 
             if (mUsersListUpdate != null) {
 
@@ -142,16 +143,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 if (lastUpdate != null) {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
                     lastUpdateText = String.format(
-                            "  -  %s %s",
+                            "%s %s",
                             getString(R.string.preferences_users_list_users_last_update_prefix),
                             lastUpdate.format(formatter)
                     );
                 }
 
-                mUsersListUpdate.setSummary(String.format(Locale.getDefault(), "%s %d%s",
+                String checkinsCountText = String.format(
+                        "%s: %d\n%s: %d\n%s: %d",
+                        getString(R.string.preferences_users_list_first_day_checkins_text),
+                        checkinsPerDay[0],
+                        getString(R.string.preferences_users_list_second_day_checkins_text),
+                        checkinsPerDay[1],
+                        getString(R.string.preferences_users_list_third_day_checkins_text),
+                        checkinsPerDay[2]
+                );
+
+                mUsersListUpdate.setSummary(String.format(Locale.getDefault(), "%s\n%s %d\n%s",
+                        lastUpdateText,
                         getString(R.string.preferences_users_list_users_count_prefix),
                         usersCount,
-                        lastUpdateText
+                        checkinsCountText
                 ));
             }
         }

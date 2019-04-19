@@ -509,6 +509,36 @@ public class RemoteServerProxy {
         return lastUpdate;
     }
 
+    public int[] getCachedUsersListCheckinsCount() {
+        int[] checkinsPerDay = new int[] { 0, 0, 0 };
+
+        synchronized (mUserListFetchingLock) {
+            if (mCachedUsersList != null) {
+                for (User u : mCachedUsersList) {
+                    if (u.getCheckinDates() != null) {
+                        for (CheckinDate c : u.getCheckinDates()) {
+                            switch (c.getDayTag()) {
+                                case "first":
+                                    ++checkinsPerDay[0];
+                                    break;
+                                case "second":
+                                    ++checkinsPerDay[1];
+                                    break;
+                                case "third":
+                                    ++checkinsPerDay[2];
+                                    break;
+                                default:
+                                    // Nothing for now.
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return checkinsPerDay;
+    }
+
     public ResponseContainer<User> checkInUser(String accessToken, String codeValue, String dayTag) {
         ResponseContainer<User> rc = new ResponseContainer<>();
 

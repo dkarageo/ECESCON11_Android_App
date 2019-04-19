@@ -94,7 +94,7 @@
 
     <!-- Strings related to about screen -->
     <string name="about_app_name">ECESCON 11 Mobile App</string>
-    <string name="about_app_version">version 1.0</string>
+    <string name="about_app_version">version 1.0.1</string>
     <string name="about_designer_header">- Architecture Designing -</string>
     <string name="about_programming_header">- Programming -</string>
     <string name="about_coordination_header">- IT Team Coordination &amp; Operations -</string>
@@ -235,6 +235,9 @@
     <string name="preferences_users_list_users_count_prefix">Users: </string>
     <string name="preferences_users_list_updating">Downloading&#8230; %d%% completed.</string>
     <string name="preferences_users_list_users_last_update_prefix">Updated:</string>
+    <string name="preferences_users_list_first_day_checkins_text">First Day Check-Ins</string>
+    <string name="preferences_users_list_second_day_checkins_text">Second Day Check-Ins</string>
+    <string name="preferences_users_list_third_day_checkins_text">Third Day Check-Ins</string>
 
     <!-- Generic strings -->
     <string name="generic_edit_icon_content_description">Edit Icon</string>

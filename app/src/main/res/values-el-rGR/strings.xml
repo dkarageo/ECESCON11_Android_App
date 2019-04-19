@@ -131,7 +131,7 @@
 
     <!-- Strings related to about screen -->
     <string name="about_app_name">Mobile Εφαρμογή ΣΦΗΜΜΥ 11</string>
-    <string name="about_app_version">έκδοση 1.0</string>
+    <string name="about_app_version">έκδοση 1.0.1</string>
     <string name="about_designer_header">- Σχεδιασμός &amp; Επιμέλεια -</string>
     <string name="about_programming_header">- Προγραμματισμός -</string>
     <string name="about_coordination_header">- IT Team Coordination &amp; Operations -</string>
@@ -218,6 +218,9 @@
     <string name="preferences_users_list_users_count_prefix">Χρήστες: </string>
     <string name="preferences_users_list_updating">Ενημέρωση&#8230; %.0f%% ολοκληρώθηκε.</string>
     <string name="preferences_users_list_users_last_update_prefix">Ενημερώθηκε:</string>
+    <string name="preferences_users_list_first_day_checkins_text">Check-Ins Πρώτης Ημέρας</string>
+    <string name="preferences_users_list_second_day_checkins_text">Check-Ins Δεύτερης Ημέρας</string>
+    <string name="preferences_users_list_third_day_checkins_text">Check-Ins Τρίτης Ημέρας</string>
 
     <!-- Generic strings -->
     <string name="generic_edit_icon_content_description">Εικονίδιο Επεξεργασίας</string>
