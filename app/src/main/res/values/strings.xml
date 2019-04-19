@@ -233,7 +233,7 @@
     <string name="preferences_users_list_update">Update users list</string>
     <string name="preferences_users_list_loading">Loading users list status&#8230;</string>
     <string name="preferences_users_list_users_count_prefix">Users: </string>
-    <string name="preferences_users_list_updating">Downloading&#8230; %d%% completed.</string>
+    <string name="preferences_users_list_updating">Downloading&#8230; %.0f%% completed.</string>
     <string name="preferences_users_list_users_last_update_prefix">Updated:</string>
     <string name="preferences_users_list_first_day_checkins_text">First Day Check-Ins</string>
     <string name="preferences_users_list_second_day_checkins_text">Second Day Check-Ins</string>
