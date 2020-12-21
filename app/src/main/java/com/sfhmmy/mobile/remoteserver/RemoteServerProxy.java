@@ -65,7 +65,7 @@ public class RemoteServerProxy {
     public static final int RESPONSE_ERROR = 1;
     public static final int RESPONSE_WARNING = 2;
 
-    private static final String BASE_URL = "https://sfhmmy.gr/api/";
+    private static final String BASE_URL = "https://sfhmmy11.sfhmmy.gr/api/";
 
     private static final String INSTITUTIONS_LIST_CACHE_KEY
             = "remoteserver.RemoteServerProxy.INSTITUTIONS_LIST_CACHE_KEY";
